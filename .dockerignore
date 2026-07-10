@@ -1,0 +1,15 @@
+**/__pycache__/
+**/*.pyc
+**/.venv/
+**/node_modules/
+web/.next/
+data/
+plugins/benchmarks/*/data/
+plugins/benchmarks/*/.ready
+.git/
+.env
+*.db
+*.db-shm
+*.db-wal
+**/.pytest_cache/
+**/.ruff_cache/

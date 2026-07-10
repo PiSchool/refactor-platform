@@ -1,0 +1,5 @@
+type: lsp
+key: jdtls
+name: Eclipse JDT Language Server
+language: java
+entrypoint: plugin:Plugin

@@ -1,0 +1,4358 @@
+tasks:
+- task_key: ansible_refactor/add-log-parameter-get-group-vars#base
+  title: 'ansible_refactor: add-log-parameter-get-group-vars (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Add a log parameter to get_group_vars and keep the base case as true
+    and update the rest of the repository calls to have log=False.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/add-log-parameter-get-group-vars-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/add-log-parameter-get-group-vars#descriptive
+  title: 'ansible_refactor: add-log-parameter-get-group-vars (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Modify the function `get_group_vars` in the file `helpers.py` located
+    within the `ansible/inventory` directory to include a new parameter named `log`
+    with a default value of `true`. Also, update calls to this function throughout
+    the repository to explicitly pass `log=False` where appropriate. This specifically
+    includes modifying the `get_vars` method within the `VariableManager` class in
+    `manager.py` under the `ansible/vars` directory, ensuring `log=False` is used
+    when calling `get_group_vars`. Other instances in the repository where `get_group_vars`
+    is called should not pass the `log` parameter unless explicitly stated.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/add-log-parameter-get-group-vars-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/add-log-parameter-get-group-vars#lazy
+  title: 'ansible_refactor: add-log-parameter-get-group-vars (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Modify get_group_vars to include a logging parameter defaulting to
+    true.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/add-log-parameter-get-group-vars-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/add-log-parameter-is-systemd-managed#base
+  title: 'ansible_refactor: add-log-parameter-is-systemd-managed (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Add a log boolean paramter to is_systemd_managed in service.py in
+    module_utils and keep the base case as false. Make all instances of it as true
+    except for tests.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/add-log-parameter-is-systemd-managed-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/add-log-parameter-is-systemd-managed#descriptive
+  title: 'ansible_refactor: add-log-parameter-is-systemd-managed (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Add a boolean parameter named 'log' to the function 'is_systemd_managed'
+    in the file 'service.py' within the 'module_utils' folder, defaulting the parameter
+    to false. In the files 'service.py' and 'service_facts.py' under the 'modules'
+    folder, update all calls to 'is_systemd_managed' to pass this parameter with the
+    value true. Ensure that for any usages in test environments or modules where this
+    function is used indirectly, such as in 'systemd.py' and 'hostname.py', the parameter
+    is not passed or altered.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/add-log-parameter-is-systemd-managed-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/add-log-parameter-is-systemd-managed#lazy
+  title: 'ansible_refactor: add-log-parameter-is-systemd-managed (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Update the is_systemd_managed parameter in service.py to include a
+    default log option.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/add-log-parameter-is-systemd-managed-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/combine-namespace-compat#base
+  title: 'ansible_refactor: combine-namespace-compat (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Combine all the classes and information from namespace.py in module_utils/facts
+    into compat.py and update all the references throughout the repository.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/combine-namespace-compat-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/combine-namespace-compat#descriptive
+  title: 'ansible_refactor: combine-namespace-compat (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Transfer all classes and related information from the file namespace.py
+    located in the folder module_utils/facts to the file compat.py within the same
+    folder. After completing the transfer, update the references to these classes
+    in relevant files throughout the repository, including ansible_collector.py, facter.py,
+    ohai.py, setup.py, and test_ansible_collector.py, to ensure that they now correctly
+    point to compat.py. Make sure that the classes are not referenced from namespace.py
+    in these files after the transfer.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/combine-namespace-compat-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/combine-namespace-compat#lazy
+  title: 'ansible_refactor: combine-namespace-compat (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Consolidate namespace.py classes into compat.py and adjust references.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/combine-namespace-compat-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/data-to-inventory-data#base
+  title: 'ansible_refactor: data-to-inventory-data (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename data.py in ansible/inventory to inventory_data.py and update
+    all the references/imports throughout the repository based on that.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/data-to-inventory-data-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/data-to-inventory-data#descriptive
+  title: 'ansible_refactor: data-to-inventory-data (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename the file named data.py located in the ansible/inventory directory
+    to inventory_data.py. After renaming, identify and update all references and imports
+    of this file across the entire repository. Specifically, files like manager.py
+    and test_constructed.py will require updates to their import statements to reflect
+    the new filename. Ensure that after renaming, no file in the repository is attempting
+    to import from the old data.py file name.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/data-to-inventory-data-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/data-to-inventory-data#lazy
+  title: 'ansible_refactor: data-to-inventory-data (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename and update references for the data.py file in the inventory
+    folder.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/data-to-inventory-data-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/move-quoting-splitter#base
+  title: 'ansible_refactor: move-quoting-splitter (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Move all the content from quoting to splitter in lib/ansible/parsing
+    and update all the references in the repository.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/move-quoting-splitter-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/move-quoting-splitter#descriptive
+  title: 'ansible_refactor: move-quoting-splitter (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Transfer all functionalities and associated content from the quoting.py
+    file to the splitter.py file within the lib/ansible/parsing directory of the Ansible
+    codebase. After moving the content, ensure that references in important files
+    such as config.py, dataloader.py, schema.py, and test_unquote.py are updated to
+    reflect the use of splitter.py instead of quoting.py. Additionally, ensure that
+    the quoting.py file is removed from the repository after successfully migrating
+    its contents and updating all necessary references.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/move-quoting-splitter-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/move-quoting-splitter#lazy
+  title: 'ansible_refactor: move-quoting-splitter (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Transfer content from quoting to splitter and adjust references.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/move-quoting-splitter-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-inventory-patterns#base
+  title: 'ansible_refactor: new-inventory-patterns (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Can you move the order_patterns and split_host_pattern functions from
+    manager.py in inventory to a new file called patterns.py in inventory. Update
+    all the imports in the repository, but don't create a new testing file for patterns.py.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-inventory-patterns-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-inventory-patterns#descriptive
+  title: 'ansible_refactor: new-inventory-patterns (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Relocate the functions `order_patterns` and `split_host_pattern` from
+    the file `manager.py` within the `inventory` directory to a newly created file
+    named `patterns.py` in the same `inventory` directory. Subsequent to this change,
+    ensure to update all references to these functions throughout the entire repository
+    to reflect their new location in `patterns.py`. However, do not create a new test
+    file specifically for `patterns.py`.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-inventory-patterns-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-inventory-patterns#lazy
+  title: 'ansible_refactor: new-inventory-patterns (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Move specific functions to a new file and adjust imports accordingly.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-inventory-patterns-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-utils-class-connection#base
+  title: 'ansible_refactor: new-utils-class-connection (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Change all the standalone functions in connection.py with a new class
+    called ConnectionUtils and alter all the usages of those functions accordingly.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-utils-class-connection-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-utils-class-connection#descriptive
+  title: 'ansible_refactor: new-utils-class-connection (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Refactor the 'connection.py' file in the Ansible library by creating
+    a new class called ConnectionUtils that combines the standalone functions write_to_stream,
+    send_data, recv_data, exec_command, and request_builder. After creating this class,
+    update all references to these functions in the files 'task_executor.py', 'ansible_connection_cli_stub.py',
+    and within 'connection.py' itself to use the new ConnectionUtils class. Ensure
+    any relevant imports or function usages are adjusted accordingly in these files.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-utils-class-connection-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-utils-class-connection#lazy
+  title: 'ansible_refactor: new-utils-class-connection (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Refactor connection.py to use a new class, ConnectionUtils.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-utils-class-connection-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-utils-from-basic#base
+  title: 'ansible_refactor: new-utils-from-basic (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Move heuristic_log_sanitize and missing_required_lib into a new utils.py
+    file in module_utils, remove the old functions, and update all the references
+    of those throughout the repository.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-utils-from-basic-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-utils-from-basic#descriptive
+  title: 'ansible_refactor: new-utils-from-basic (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Create a new file named utils.py in the module_utils directory and
+    transfer the functions heuristic_log_sanitize and missing_required_lib into this
+    new file from their original locations. Remove these functions from their original
+    locations after transferring. Subsequently, update all the references to these
+    functions in the repository, ensuring files such as basic.py, packages.py, urls.py,
+    deb822_repository.py, expect.py, pip.py, wait_for.py, netconf __init__.py, missing_required_lib.py,
+    test_heuristic_log_sanitize.py in the module_utils library, and network_cli.py
+    in ansible_collections/ansible/netcommon plugins connection directory are pointing
+    to ansible.module_utils.utils. This ensures a cohesive usage across the differing
+    file dependencies that previously utilized these functions.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-utils-from-basic-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/new-utils-from-basic#lazy
+  title: 'ansible_refactor: new-utils-from-basic (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Refactor heuristic_log_sanitize and missing_required_lib into module_utils/utils.py.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/new-utils-from-basic-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/parse_key_value#base
+  title: 'ansible_refactor: parse_key_value (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename parse_kv in splitters to parse_key_value for clarity and then
+    update those references of the function throughout the repo.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/parse_key_value-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/parse_key_value#descriptive
+  title: 'ansible_refactor: parse_key_value (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Please change the function name from `parse_kv` to `parse_key_value`
+    in the `splitter.py` file for enhanced clarity. Following this, go through the
+    repository and update all references to this function in various files like `test-module.py`,
+    `adhoc.py`, `console.py`, `mod_args.py`, `csvfile.py`, `password.py`, `sequence.py`,
+    and `vars.py` among others where this function is imported or called, ensuring
+    the new name is consistently used across all files. This name change will help
+    in maintaining standard naming conventions and improve code readability in the
+    repository.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/parse_key_value-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/parse_key_value#lazy
+  title: 'ansible_refactor: parse_key_value (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename the function for better clarity and adjust all references in
+    the codebase.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/parse_key_value-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/rename-lenient-lowercase#base
+  title: 'ansible_refactor: rename-lenient-lowercase (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Can you rename lenient_lowercase in lib/ansible/module_utils/common/text/formatters.py
+    to lowercase_of_list. Can you update the filenames for the testing and all the
+    references of lenient_lowercase to lowercase_of_list in the repository.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/rename-lenient-lowercase-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/rename-lenient-lowercase#descriptive
+  title: 'ansible_refactor: rename-lenient-lowercase (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Please rename the function `lenient_lowercase` to `lowercase_of_list`
+    in the file named `formatters.py` located in `lib/ansible/module_utils/common/text`.
+    Additionally, update all references to `lenient_lowercase` across the repository,
+    including in the file named `basic.py` located in `lib/ansible/module_utils`,
+    and ensure the test file previously named `test_lenient_lowercase.py` in `test/units/module_utils/common/text/formatters`
+    is renamed to `test_lowercase_of_list.py`. Also, update the content of this test
+    file to reflect the new function name and ensure no traces of the old function
+    name remain in the comments or the code.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/rename-lenient-lowercase-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/rename-lenient-lowercase#lazy
+  title: 'ansible_refactor: rename-lenient-lowercase (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename lenient_lowercase to lowercase_of_list and update all references
+    throughout the repository.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/rename-lenient-lowercase-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/sort-groups-to-group-sort#base
+  title: 'ansible_refactor: sort-groups-to-group-sort (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename sort_groups to group_sort and update all references in the
+    repo.
+  params:
+    mode: base
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/sort-groups-to-group-sort-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/sort-groups-to-group-sort#descriptive
+  title: 'ansible_refactor: sort-groups-to-group-sort (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Please rename the function 'sort_groups' to 'group_sort' in the file
+    'helpers.py' within the 'ansible/inventory' directory, and ensure that this renamed
+    function is appropriately referenced as 'group_sort' in the files 'manager.py'
+    in the 'ansible/vars' directory and elsewhere throughout the repository. Additionally,
+    verify that the 'group_sort' function in 'helpers.py' includes a particular lambda
+    expression for sorting and ensure that it is being correctly called in the methods
+    'get_group_vars' in the same 'helpers.py' file and 'get_vars' of the 'VariableManager'
+    class within 'manager.py'.
+  params:
+    mode: descriptive
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/sort-groups-to-group-sort-test.py
+    cwd_hint: lib
+- task_key: ansible_refactor/sort-groups-to-group-sort#lazy
+  title: 'ansible_refactor: sort-groups-to-group-sort (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/ansible_refactor
+  instructions: Rename and update references of 'sort_groups' to 'group_sort' in the
+    code.
+  params:
+    mode: lazy
+    repo: ansible_refactor
+    test_file: tests/ansible_refactor/sort-groups-to-group-sort-test.py
+    cwd_hint: lib
+- task_key: celery_refactor/add-log-parameter-get-digest-algorithm#base
+  title: 'celery_refactor: add-log-parameter-get-digest-algorithm (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Can you add a log boolean parameter to get_digest_algorithm and keep
+    the base as log=False and then in all references except testing files make log=True
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/add-log-parameter-get-digest-algorithm-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/add-log-parameter-get-digest-algorithm#descriptive
+  title: 'celery_refactor: add-log-parameter-get-digest-algorithm (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Please modify the function 'get_digest_algorithm' in the file named
+    'utils.py' within the 'celery/security' directory to include an additional boolean
+    parameter named 'log'. Set the default value of this parameter to False. In files
+    other than those within the testing directories, adjust all calls to this function
+    to set the 'log' parameter to True. This detailed change affects how logging behavior
+    is controlled through this parameter across different usages in the repository,
+    ensuring that logging is enabled in operational contexts but can be disabled for
+    testing scenarios where the filename is 'test_key.py' or similar test files.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/add-log-parameter-get-digest-algorithm-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/add-log-parameter-get-digest-algorithm#lazy
+  title: 'celery_refactor: add-log-parameter-get-digest-algorithm (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Add a log parameter to get_digest_algorithm, defaulting to False,
+    and set it to True in all non-testing references.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/add-log-parameter-get-digest-algorithm-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/add-log-parameter-node-format#base
+  title: 'celery_refactor: add-log-parameter-node-format (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Add a log boolean parameter to node_format and make the base case
+    False, make all calls throughout the repo log=True
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/add-log-parameter-node-format-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/add-log-parameter-node-format#descriptive
+  title: 'celery_refactor: add-log-parameter-node-format (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Add a boolean parameter named 'log' with a default value of False
+    to the 'node_format' function in the 'nodenames.py' file. Ensure you update all
+    existing calls to 'node_format' within the repository, setting this parameter
+    to True. Specifically, make sure to update the 'node_format' function calls in
+    both 'worker.py' and 'log.py' files to include this parameter with the value True.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/add-log-parameter-node-format-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/add-log-parameter-node-format#lazy
+  title: 'celery_refactor: add-log-parameter-node-format (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Add a log parameter to node_format function and update all relevant
+    calls.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/add-log-parameter-node-format-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/annotation-utils#base
+  title: 'celery_refactor: annotation-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Can you move only resolve_all from annotations to a new file called
+    annotations_utils.py. Make sure to import the match functions from celery.app.annotations
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/annotation-utils-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/annotation-utils#descriptive
+  title: 'celery_refactor: annotation-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Please move the `resolve_all` function from the existing file `annotations.py`
+    to a newly created file named `annotations_utils.py` within the same directory.
+    In the process, make sure to correctly import `_first_match` and `_first_match_any`
+    functions from `celery.app.annotations` into the `annotations_utils.py` file.
+    Update the `__all__` declaration in `annotations_utils.py` to include only `resolve_all`.
+    Ensure that the `annotations.py` file's `__all__` declaration is correctly adjusted
+    to exclude `resolve_all` if previously included, while retaining other necessary
+    exports like `MapAnnotation` and `prepare`.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/annotation-utils-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/annotation-utils#lazy
+  title: 'celery_refactor: annotation-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Move `resolve_all` from `annotations` to `annotations_utils.py` and
+    handle necessary imports.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/annotation-utils-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/autoretry-to-retry#base
+  title: 'celery_refactor: autoretry-to-retry (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename autoretry.py to retry.py and update the repository accordingly.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/autoretry-to-retry-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/autoretry-to-retry#descriptive
+  title: 'celery_refactor: autoretry-to-retry (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename the file named autoretry.py to retry.py within the celery/app
+    directory and ensure all references throughout the repository are updated accordingly.
+    This includes updating imports in code files such as base.py, references in documentation
+    files like index.rst and bandit.json, and ensuring the respective documentation
+    files celery.app.autoretry.rst and celery.app.retry.rst are respectively deleted
+    and created under docs/reference. Ensure any newly created or updated files correctly
+    reflect the changes in their content.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/autoretry-to-retry-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/autoretry-to-retry#lazy
+  title: 'celery_refactor: autoretry-to-retry (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename autoretry file to retry and update the repository.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/autoretry-to-retry-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/combine-unpickle-task#base
+  title: 'celery_refactor: combine-unpickle-task (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Combine _unpickle_task and _unpickle_task_v2 and put the _unpickle_task_v2
+    implementation in _unpickle_task. Update the tests to remove all references to
+    the versons, but have the same core tests.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/combine-unpickle-task-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/combine-unpickle-task#descriptive
+  title: 'celery_refactor: combine-unpickle-task (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Merge the implementation found in the _unpickle_task_v2 function into
+    _unpickle_task in the registry.py file. After combining these functions, remove
+    any remnants of _unpickle_task_v2 from the codebase. Subsequently, update all
+    associated tests, located in files such as task.py, test_registry.py and others
+    within the testing directory, ensuring that only references to _unpickle_task
+    remain without altering the fundamental purpose or nature of the tests.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/combine-unpickle-task-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/combine-unpickle-task#lazy
+  title: 'celery_refactor: combine-unpickle-task (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Merge the unpickle methods and clean up tests.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/combine-unpickle-task-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/dump-message-to-serialization#base
+  title: 'celery_refactor: dump-message-to-serialization (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Move dump_message to utils serialization.py and update the repo based
+    on the new location.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/dump-message-to-serialization-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/dump-message-to-serialization#descriptive
+  title: 'celery_refactor: dump-message-to-serialization (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Transfer the `dump_message` function from the `amqp.py` file in the
+    `celery/bin` directory to the `serialization.py` file located in the `celery/utils`
+    directory. Make sure that the `amqp.py` file no longer includes the `dump_message`
+    function definition and is instead importing it from its new location in `serialization.py`.
+    Update all references and imports throughout the repository to reflect this change,
+    ensuring that `dump_message` is only defined in `serialization.py` and correctly
+    imported where necessary.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/dump-message-to-serialization-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/dump-message-to-serialization#lazy
+  title: 'celery_refactor: dump-message-to-serialization (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Shift dump_message to utils serialization.py and make necessary updates
+    to align with this change.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/dump-message-to-serialization-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/ensure_serialize#base
+  title: 'celery_refactor: ensure_serialize (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename ensure_serializable to ensure_serialize and then update all
+    the references and functions throughout the codebase accordingly.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/ensure_serialize-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/ensure_serialize#descriptive
+  title: 'celery_refactor: ensure_serialize (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Change the name of the function `ensure_serializable` to `ensure_serialize`
+    in the file `serialization.py` located in the `celery/utils` directory. Additionally,
+    make sure to update all references and usage of this function across the entire
+    codebase, particularly ensuring imports and calls are correctly adjusted in `serialization.py`,
+    `base.py` from the `celery/backends` directory, and within `test_serialization.py`
+    and `test_base.py` under the `t/unit/utils` and `t/unit/backends` directories,
+    respectively.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/ensure_serialize-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/ensure_serialize#lazy
+  title: 'celery_refactor: ensure_serialize (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename the function and adjust all its references in the codebase.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/ensure_serialize-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/evaluate-promises-to-serialization#base
+  title: 'celery_refactor: evaluate-promises-to-serialization (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Can you move evaluate_promises from functional into serialization.py
+    and update usage of it.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/evaluate-promises-to-serialization-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/evaluate-promises-to-serialization#descriptive
+  title: 'celery_refactor: evaluate-promises-to-serialization (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Please relocate the function `evaluate_promises` from the file `functional.py`
+    to the file `serialization.py` within the `celery/utils` directory. After moving
+    the function, ensure all references to `evaluate_promises` within the project
+    are updated to reflect its new location in `serialization.py`. Additionally, confirm
+    that the necessary imports for `evaluate_promises` are correctly set up in the
+    `functional.py` file.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/evaluate-promises-to-serialization-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/evaluate-promises-to-serialization#lazy
+  title: 'celery_refactor: evaluate-promises-to-serialization (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Relocate `evaluate_promises` function to `serialization.py` and adjust
+    its references.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/evaluate-promises-to-serialization-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/expand-router-string-to-utils#base
+  title: 'celery_refactor: expand-router-string-to-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Move expand_router_string to celery/app/utils.py and import it into
+    routes.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/expand-router-string-to-utils-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/expand-router-string-to-utils#descriptive
+  title: 'celery_refactor: expand-router-string-to-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Move the `expand_router_string` function to the `utils.py` file within
+    the `celery/app` directory, ensuring it is appropriately defined there. Afterward,
+    update the `routes.py` file in the same directory to import the `expand_router_string`
+    function from `celery.app.utils`. Additionally, make sure `expand_router_string`
+    is included in the `__all__` list inside `utils.py` to maintain proper module
+    exports.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/expand-router-string-to-utils-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/expand-router-string-to-utils#lazy
+  title: 'celery_refactor: expand-router-string-to-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Relocate expand_router_string and adjust imports accordingly.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/expand-router-string-to-utils-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/object-mro-lookup#base
+  title: 'celery_refactor: object-mro-lookup (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Resolve the relay import in test_request of mro_lookup to just import
+    from the file it was defined in.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/object-mro-lookup-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/object-mro-lookup#descriptive
+  title: 'celery_refactor: object-mro-lookup (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: In the file named test_request.py within the unit test directory for
+    the worker, modify the import statements to ensure that the function 'mro_lookup'
+    is directly imported from its original file instead of being relayed through another
+    module. Make sure this change is reflected by directly referencing the source
+    module 'celery.utils.objects' without any intermediate redirection. This ensures
+    that all dependencies and links in the test_request.py file are straightforward
+    and maintain clarity in module relationships.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/object-mro-lookup-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/object-mro-lookup#lazy
+  title: 'celery_refactor: object-mro-lookup (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Update the relay import in test_request of mro_lookup.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/object-mro-lookup-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/rename-host-format#base
+  title: 'celery_refactor: rename-host-format (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename host_format in nodenames.py to format_host and update the entire
+    repository accordingly.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/rename-host-format-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/rename-host-format#descriptive
+  title: 'celery_refactor: rename-host-format (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: In the file "nodenames.py" located within the "celery/utils" directory,
+    rename the function previously known as "host_format" to "format_host." Additionally,
+    ensure all references to this function across the repository are updated to reflect
+    this change, including ensuring "format_host" is present in the "__all__" list
+    within "nodenames.py". Review related files such as "worker.py" in the "celery/bin"
+    directory and "multi.py" in the "celery/apps" directory to verify that these files
+    correctly import and do not mistakenly call the outdated function name.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/rename-host-format-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/rename-host-format#lazy
+  title: 'celery_refactor: rename-host-format (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename host_format to format_host in the codebase.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/rename-host-format-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/truncate-text#base
+  title: 'celery_refactor: truncate-text (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename truncate in text.py to truncate_text and update all the usages
+    of the function throughout the repository.
+  params:
+    mode: base
+    repo: celery_refactor
+    test_file: tests/celery_refactor/truncate-text-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/truncate-text#descriptive
+  title: 'celery_refactor: truncate-text (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: In the repository, locate the file named 'text.py' within the 'celery/utils'
+    directory and rename the function 'truncate' to 'truncate_text'. Ensure this updated
+    function name, 'truncate_text', is also modified across all other occurrences
+    throughout the repository. Additionally, verify and amend any related imports
+    and references in '__all__' declarations in the same 'text.py' and in other files
+    such as 'saferepr.py', 'base.py', 'canvas.py', 'manager.py', 'test_text.py', and
+    'consumer.py' to reflect this change correctly.
+  params:
+    mode: descriptive
+    repo: celery_refactor
+    test_file: tests/celery_refactor/truncate-text-test.py
+    cwd_hint: celery
+- task_key: celery_refactor/truncate-text#lazy
+  title: 'celery_refactor: truncate-text (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/celery_refactor
+  instructions: Rename the truncate function in text.py to truncate_text and adjust
+    all references accordingly.
+  params:
+    mode: lazy
+    repo: celery_refactor
+    test_file: tests/celery_refactor/truncate-text-test.py
+    cwd_hint: celery
+- task_key: django_refactor/add-log-parameter-constant-time-compare#base
+  title: 'django_refactor: add-log-parameter-constant-time-compare (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add logging to the constant_time_compare function with a boolean parameter
+    and update the codebase accordingly. Keep log as false base in the function, but
+    make it true throughout instances in the code except for the test suite.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/constant-time-compare.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-constant-time-compare#descriptive
+  title: 'django_refactor: add-log-parameter-constant-time-compare (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: 'In the file crypto.py found in the django/utils directory, modify
+    the function ''constant_time_compare'' to include an additional boolean parameter
+    named ''log'' with a default value of False. This parameter should control logging
+    within the function. Update the usages of this function to pass the ''log'' parameter
+    as True in the following files: auth/__init__.py, auth/hashers.py, auth/tokens.py,
+    core/signing.py, and middleware/csrf.py in the django/contrib and django/core
+    directories. However, ensure that in the test files, particularly test_crypto.py
+    in the tests/utils_tests directory, the ''log'' parameter is explicitly set to
+    False when calling ''constant_time_compare''.'
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/constant-time-compare.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-constant-time-compare#lazy
+  title: 'django_refactor: add-log-parameter-constant-time-compare (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Integrate optional logging into the constant_time_compare function
+    and adjust usage as needed, excluding the test suite.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/constant-time-compare.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-get-resolver#base
+  title: 'django_refactor: add-log-parameter-get-resolver (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Change get_resolver to have a logging parameter that turns on log
+    statements. Change all references to have the logging set as false.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/get_resolver.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-get-resolver#descriptive
+  title: 'django_refactor: add-log-parameter-get-resolver (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Modify the function 'get_resolver' in the file 'resolvers.py' to include
+    an additional parameter named 'logging' which should default to 'False'. This
+    parameter will enable log statements when set to 'True'. Additionally, update
+    all existing calls to 'get_resolver' across various files including 'base.py',
+    'i18n.py', 'urls.py', 'exception.py', 'autoreload.py', 'views.py', and 'base.py'
+    under different directories to explicitly pass 'False' for this new 'logging'
+    parameter to ensure the log statements remain disabled by default in these existing
+    references.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/get_resolver.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-get-resolver#lazy
+  title: 'django_refactor: add-log-parameter-get-resolver (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add a logging parameter to get_resolver and disable logging in all
+    references.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/get_resolver.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-resolve-error-handler#base
+  title: 'django_refactor: add-log-parameter-resolve-error-handler (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Change resolve_error_handler to have a logging parameter that turns
+    on log statements. Change all references to have the logging set as false.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/resolve_error_handler.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-resolve-error-handler#descriptive
+  title: 'django_refactor: add-log-parameter-resolve-error-handler (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Modify the `resolve_error_handler` method in the `resolvers.py` file
+    to include an additional boolean parameter named `log` that controls the activation
+    of logging within the function, with the default value set to `false`. Ensure
+    that all existing calls to `resolve_error_handler` across the repository within
+    the `exception.py`, `urls.py`, and `tests.py` files specifically set this new
+    `log` parameter to `false`.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/resolve_error_handler.py
+    cwd_hint: django
+- task_key: django_refactor/add-log-parameter-resolve-error-handler#lazy
+  title: 'django_refactor: add-log-parameter-resolve-error-handler (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Update resolve_error_handler to include an optional logging feature,
+    defaulting to off.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/resolve_error_handler.py
+    cwd_hint: django
+- task_key: django_refactor/add-none-handling-duration-string#base
+  title: 'django_refactor: add-none-handling-duration-string (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add the none handling based on django/db/models/fields/__init__ to
+    the duration string function in utils/duration so we can just call the function
+    there. add a test_none in the appropriate place for the none handling too.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/duration-string.py
+    cwd_hint: django
+- task_key: django_refactor/add-none-handling-duration-string#descriptive
+  title: 'django_refactor: add-none-handling-duration-string (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Modify the `duration_string` function in the file `duration.py` located
+    under the `utils` directory to handle cases where its input parameter is `None`,
+    drawing from existing patterns in the `DurationField` class's `value_to_string`
+    method within the `__init__.py` file in the `django/db/models/fields` directory.
+    Additionally, create a new test method named `test_none` in the `TestDurationString`
+    class within the `test_duration.py` file under `tests/utils_tests`, ensuring it
+    correctly checks for appropriate handling of `None` values in `duration_string`.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/duration-string.py
+    cwd_hint: django
+- task_key: django_refactor/add-none-handling-duration-string#lazy
+  title: 'django_refactor: add-none-handling-duration-string (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add none handling to the duration string function and include a corresponding
+    test.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/duration-string.py
+    cwd_hint: django
+- task_key: django_refactor/combine-utils-dates-dateformat#base
+  title: 'django_refactor: combine-utils-dates-dateformat (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Get rid of dates.py and put it all in dateformat.py, update the repository
+    accordingly.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/dates-dateformat.py
+    cwd_hint: django
+- task_key: django_refactor/combine-utils-dates-dateformat#descriptive
+  title: 'django_refactor: combine-utils-dates-dateformat (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Migrate all the relevant content and dependencies from the file named
+    dates.py to dateformat.py within the Django utils directory. Ensure that constants
+    such as WEEKDAYS, WEEKDAYS_ABBR, MONTHS, MONTHS_3, MONTHS_AP, and MONTHS_ALT are
+    transferred correctly to dateformat.py. Following this, verify that the imports
+    in widgets.py and test_selectdatewidget.py are updated to reflect these changes,
+    specifically ensuring that they now import from dateformat.py and no longer reference
+    dates.py, which should be deleted from the repository after the migration.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/dates-dateformat.py
+    cwd_hint: django
+- task_key: django_refactor/combine-utils-dates-dateformat#lazy
+  title: 'django_refactor: combine-utils-dates-dateformat (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Move contents from dates.py to dateformat.py and update the repository.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/dates-dateformat.py
+    cwd_hint: django
+- task_key: django_refactor/combine-utils-hashable-itercompat#base
+  title: 'django_refactor: combine-utils-hashable-itercompat (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Combine the utils files hashable and itercompat as a new file called
+    able.py and remove the two of them, combine the tests too.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/hashable-itercompat.py
+    cwd_hint: django
+- task_key: django_refactor/combine-utils-hashable-itercompat#descriptive
+  title: 'django_refactor: combine-utils-hashable-itercompat (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Combine the functionality of 'hashable.py' and 'itercompat.py' located
+    in the 'django/utils' directory into a new file named 'able.py' within the same
+    directory. Transfer corresponding tests from 'test_hashable.py' and 'test_itercompat.py'
+    in the 'tests/utils_tests' directory to a new test file named 'test_able.py'.
+    After the combination, ensure that the original files ('hashable.py', 'itercompat.py',
+    'test_hashable.py', and 'test_itercompat.py') are deleted. Additionally, update
+    any import statements in different parts of the codebase to import from 'able.py'
+    instead of from 'hashable.py' and 'itercompat.py'.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/hashable-itercompat.py
+    cwd_hint: django
+- task_key: django_refactor/combine-utils-hashable-itercompat#lazy
+  title: 'django_refactor: combine-utils-hashable-itercompat (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Merge hashable and itercompat into a single file named able.py and
+    update their tests accordingly.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/hashable-itercompat.py
+    cwd_hint: django
+- task_key: django_refactor/new-converter-to-python-class#base
+  title: 'django_refactor: new-converter-to-python-class (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add a ConverterToPython class to the utils.py in django/db/backends
+    for the functions that go from string to python. Update the repo accordingly
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/converter-to-python.py
+    cwd_hint: django
+- task_key: django_refactor/new-converter-to-python-class#descriptive
+  title: 'django_refactor: new-converter-to-python-class (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: 'Create a new class named `ConverterToPython` in the existing file
+    `utils.py` located within the `django/db/backends` directory of the Django project
+    repository. This class should include methods for: `typecast_date`, `typecast_time`,
+    and `typecast_timestamp` to handle conversions from string types to Python objects.
+    Additionally, ensure that this class is correctly imported in both the `sqlite3/_functions.py`
+    file and the `mysql/base.py` file under the `django/db/backends` directory tree.
+    Update the repository with these changes to include the new functionality for
+    handling data type conversions.'
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/converter-to-python.py
+    cwd_hint: django
+- task_key: django_refactor/new-converter-to-python-class#lazy
+  title: 'django_refactor: new-converter-to-python-class (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add a string-to-python converter class to the utils in django/db/backends.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/converter-to-python.py
+    cwd_hint: django
+- task_key: django_refactor/new-path-traversal-exception#base
+  title: 'django_refactor: new-path-traversal-exception (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: add a new PathTraversal exception that extends the suspicious operation
+    exception and replaces some of the SuspiciousFileOperation calls. Update the repository
+    accordingly
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/path-traversal.py
+    cwd_hint: django
+- task_key: django_refactor/new-path-traversal-exception#descriptive
+  title: 'django_refactor: new-path-traversal-exception (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Create a new exception class named `PathTraversal` in the `exceptions.py`
+    file, which should inherit from the `SuspiciousOperation` class. Once added, modify
+    the `base.py` file where the `Storage` class methods `get_available_name` and
+    `generate_filename` are defined, ensuring these methods raise the `PathTraversal`
+    exception when needed. Also, remember to ensure the documentation in `exceptions.txt`
+    and functional testing are updated to reflect the changes to `PathTraversal` handling
+    in relevant methods and scenarios.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/path-traversal.py
+    cwd_hint: django
+- task_key: django_refactor/new-path-traversal-exception#lazy
+  title: 'django_refactor: new-path-traversal-exception (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Add a new PathTraversal exception and update the repository.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/path-traversal.py
+    cwd_hint: django
+- task_key: django_refactor/new-reference-context-field-class#base
+  title: 'django_refactor: new-reference-context-field-class (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Create a ReferenceContext class inside /django/db/migrations/utils
+    for all the parameters in field_references. Use this class in all calls to field_references
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/reference-context-field.py
+    cwd_hint: django
+- task_key: django_refactor/new-reference-context-field-class#descriptive
+  title: 'django_refactor: new-reference-context-field-class (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Create a new class named `ReferenceContext` in the `utils.py` file
+    under the `django/db/migrations` directory to encapsulate all parameters used
+    in `field_references`. Then, modify the `field_references` method calls in the
+    `FieldOperation` class in the `fields.py` file and the `CreateModel` class in
+    the `models.py` file under the `django/db/migrations/operations` directory to
+    use instances of this new `ReferenceContext` class instead of the current argument
+    setup. Make sure to add necessary imports of `ReferenceContext` in these files.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/reference-context-field.py
+    cwd_hint: django
+- task_key: django_refactor/new-reference-context-field-class#lazy
+  title: 'django_refactor: new-reference-context-field-class (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Introduce a ReferenceContext class for parameters in field_references
+    and utilize it accordingly.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/reference-context-field.py
+    cwd_hint: django
+- task_key: django_refactor/new-reference-context-graph-class#base
+  title: 'django_refactor: new-reference-context-graph-class (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Create a ReferenceContext class inside /django/db/migrations/graph
+    for all the parameters in add_dependency. Use this class in all calls to add_dependency.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/reference-context-graph.py
+    cwd_hint: django
+- task_key: django_refactor/new-reference-context-graph-class#descriptive
+  title: 'django_refactor: new-reference-context-graph-class (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Develop a new class named `ReferenceContext` within the file `graph.py`
+    located in the `/django/db/migrations/graph` directory. This class should encapsulate
+    all parameters previously used in the `add_dependency` method. Following the creation
+    of this class, ensure that the `add_dependency` method utilizes an instance of
+    `ReferenceContext` for its operations in the files `loader.py`, `test_executor.py`,
+    `test_graph.py`, and `test_autodetector.py`. This new implementation should not
+    be applied to the `deletion.py` file in the `/django/db/models` directory.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/reference-context-graph.py
+    cwd_hint: django
+- task_key: django_refactor/new-reference-context-graph-class#lazy
+  title: 'django_refactor: new-reference-context-graph-class (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Introduce a ReferenceContext class for parameter handling in add_dependency.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/reference-context-graph.py
+    cwd_hint: django
+- task_key: django_refactor/new-timezone-class#base
+  title: 'django_refactor: new-timezone-class (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Create a timezone class for the functions in django/forms/utils and
+    update all the references in the repo.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/timezone.py
+    cwd_hint: django
+- task_key: django_refactor/new-timezone-class#descriptive
+  title: 'django_refactor: new-timezone-class (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Develop a class within the 'utils.py' file located in the 'django/forms'
+    directory that encapsulates the timezone-related functions 'from_current_timezone'
+    and 'to_current_timezone'. Once the class is created, make sure all existing calls
+    to these functions throughout the repository (especially in files like 'fields.py'
+    and 'widgets.py' within the same directory) are updated to use the new class.
+    Additionally, ensure that this new class is imported and utilized correctly in
+    these files.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/timezone.py
+    cwd_hint: django
+- task_key: django_refactor/new-timezone-class#lazy
+  title: 'django_refactor: new-timezone-class (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Implement a timezone class in django/forms/utils and adjust references
+    accordingly.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/timezone.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-adapt-method-mode#base
+  title: 'django_refactor: new-utils-adapt-method-mode (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: In base.py can you take out the adapt_method_mode function and put
+    it in a file called handler_utils.py and update all references in the repo.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/adapt_method_mode.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-adapt-method-mode#descriptive
+  title: 'django_refactor: new-utils-adapt-method-mode (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Please relocate the `adapt_method_mode` function from the `base.py`
+    file to a new file named `handler_utils.py` and ensure all references to this
+    function within the repository are properly updated to reflect this change. This
+    involves not only moving the function but also adjusting any import statements
+    in the `base.py` and ensuring essential imports like `async_to_sync`, `iscoroutinefunction`,
+    and `sync_to_async` from `asgiref.sync` are present in the `handler_utils.py`
+    file. Additionally, confirm that parameters such as `is_async`, `method`, and
+    optional parameters like `method_is_async`, `debug`, and `name` are correctly
+    maintained in the function definition within the new file.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/adapt_method_mode.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-adapt-method-mode#lazy
+  title: 'django_refactor: new-utils-adapt-method-mode (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Move adapt_method_mode from base.py to handler_utils.py and adjust
+    its references.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/adapt_method_mode.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-check-response#base
+  title: 'django_refactor: new-utils-check-response (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Move the check_response function out of the class it is in and put
+    it in a file called handler_utils.py, update the usage of the function based on
+    that.
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/check-response.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-check-response#descriptive
+  title: 'django_refactor: new-utils-check-response (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Extract the `check_response` function from its current location within
+    a class and place it into a separate file named `handler_utils.py`. Ensure that
+    the function accepts parameters 'response', 'callback', and an optional 'name'.
+    Upon relocating the function, update the relevant import statements in the `base.py`
+    file to reflect the new location of the `check_response` function, ensuring it
+    is correctly referenced from `handler_utils.py`.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/check-response.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-check-response#lazy
+  title: 'django_refactor: new-utils-check-response (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Refactor the check_response function to a new module called handler_utils.py.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/check-response.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-path-from-module#base
+  title: 'django_refactor: new-utils-path-from-module (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Move _path_from_module in apps/config.py to a new utils file called
+    apps_utils.py
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/path-from-module.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-path-from-module#descriptive
+  title: 'django_refactor: new-utils-path-from-module (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Transfer the _path_from_module function from the config.py file (located
+    in the 'apps' directory of the Django project) to a newly created file named apps_utils.py
+    within the same 'apps' directory. Ensure that after moving the function, it is
+    correctly imported in the config.py file, where it was originally located. Additionally,
+    verify that the _path_from_module function is implemented with the necessary 'module'
+    parameter in the new apps_utils.py file.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/path-from-module.py
+    cwd_hint: django
+- task_key: django_refactor/new-utils-path-from-module#lazy
+  title: 'django_refactor: new-utils-path-from-module (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Shift the function from config.py to a new file within the same directory.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/path-from-module.py
+    cwd_hint: django
+- task_key: django_refactor/remove-core-cache-utils#base
+  title: 'django_refactor: remove-core-cache-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: remove the django/core/cache utils and put that function where it
+    is called. Update the docs and tests with this new location for the function
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/core-cache-utils.py
+    cwd_hint: django
+- task_key: django_refactor/remove-core-cache-utils#descriptive
+  title: 'django_refactor: remove-core-cache-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Remove the file `utils.py` located within the `django/core/cache`
+    directory and transfer the function `make_template_fragment_key` to the file `cache.py`
+    in the `django/templatetags` directory. Ensure that the documentation updates
+    are made within the file `cache.txt` located under the `docs/topics` directory,
+    modifying all references to reflect the new location of this function. Also, update
+    the `tests.py` in the `tests/cache` directory to properly import `make_template_fragment_key`
+    from its new location in `cache.py`. Ensure that all associated tests and documentation
+    consistently reflect this change.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/core-cache-utils.py
+    cwd_hint: django
+- task_key: django_refactor/remove-core-cache-utils#lazy
+  title: 'django_refactor: remove-core-cache-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Remove the cache utils from django/core and integrate directly where
+    used.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/core-cache-utils.py
+    cwd_hint: django
+- task_key: django_refactor/remove-db-models-constants#base
+  title: 'django_refactor: remove-db-models-constants (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: remove all the content in django/db/models/constants and put it in
+    base and update the repo accordingly
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/db-models-constants.py
+    cwd_hint: django
+- task_key: django_refactor/remove-db-models-constants#descriptive
+  title: 'django_refactor: remove-db-models-constants (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: 'Please transfer all contents from the file named "constants" within
+    the "django/db/models" directory to the file named "base" located within the same
+    directory. Following this transfer, meticulously update all relevant import statements
+    across various files including, but not limited to: ''checks.py'', ''options.py'',
+    ''fields/__init__.py'', ''fields/json.py'', ''fields/related.py'' amongst others
+    in the Django framework codebase, ensuring imports reference "django.db.models.base"
+    instead of "django.db.models.constants" for any components that were moved.'
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/db-models-constants.py
+    cwd_hint: django
+- task_key: django_refactor/remove-db-models-constants#lazy
+  title: 'django_refactor: remove-db-models-constants (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Shift contents from django/db/models/constants to base and make necessary
+    repo updates.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/db-models-constants.py
+    cwd_hint: django
+- task_key: django_refactor/rename-file-move-safe#base
+  title: 'django_refactor: rename-file-move-safe (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: rename file_move_safe to safe_file_move and update repo accordingly.
+    update the old doc releases to say "now changed to safe_file_move" whenever they
+    reference the old function
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/safe-file-move.py
+    cwd_hint: django
+- task_key: django_refactor/rename-file-move-safe#descriptive
+  title: 'django_refactor: rename-file-move-safe (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Rename the function `file_move_safe` to `safe_file_move` in the file
+    `move.py` located within the django/core/files/ directory, and modify other files
+    in the repository where this function is imported or called, specifically within
+    the filebased.py and filesystem.py in the django/core/cache/backends/ and django/core/files/storage/
+    directories respectively, as well as the tests.py in the tests/files/ directory.
+    Additionally, update the old documentation or release note files, especially `1.11.2.txt`
+    in the docs/releases/ directory, to indicate "now changed to safe_file_move" wherever
+    the old function name was referenced. Ensure that all related comments within
+    these files also reflect this new function name.
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/safe-file-move.py
+    cwd_hint: django
+- task_key: django_refactor/rename-file-move-safe#lazy
+  title: 'django_refactor: rename-file-move-safe (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: Rename the file_move_safe function to safe_file_move and adjust documentation
+    references accordingly.
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/safe-file-move.py
+    cwd_hint: django
+- task_key: django_refactor/split-parse-apps-and-model-labels#base
+  title: 'django_refactor: split-parse-apps-and-model-labels (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: split parse_apps_and_model_labels into a function that returns apps
+    and a function that returns models
+  params:
+    mode: base
+    repo: django_refactor
+    test_file: tests/django_refactor/split-parse-apps-models.py
+    cwd_hint: django
+- task_key: django_refactor/split-parse-apps-and-model-labels#descriptive
+  title: 'django_refactor: split-parse-apps-and-model-labels (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: 'Split the existing function ''parse_apps_and_model_labels'' in the
+    file ''utils.py'' into two separate functions: one function named ''get_apps_from_labels''
+    that exclusively handles the extraction of apps and another function named ''get_models_from_labels''
+    for handling the extraction of models. Ensure that after making this change, the
+    original ''parse_apps_and_model_labels'' function no longer exists in the codebase,
+    and both new functions are being correctly imported and utilized in ''loaddata.py''
+    and ''dumpdata.py''.'
+  params:
+    mode: descriptive
+    repo: django_refactor
+    test_file: tests/django_refactor/split-parse-apps-models.py
+    cwd_hint: django
+- task_key: django_refactor/split-parse-apps-and-model-labels#lazy
+  title: 'django_refactor: split-parse-apps-and-model-labels (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/django_refactor
+  instructions: 'Split the function into two: one for apps, one for models.'
+  params:
+    mode: lazy
+    repo: django_refactor
+    test_file: tests/django_refactor/split-parse-apps-models.py
+    cwd_hint: django
+- task_key: fastapi_refactor/add-log-parameter-generate-option-id-for-path#base
+  title: 'fastapi_refactor: add-log-parameter-generate-option-id-for-path (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Add a log boolean parameter in the generate_option_id_for_path function
+    and keep the base case false. For all calls through the codebase make log=True.
+  params:
+    mode: base
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/add-log-parameter-generate-option-id-for-path-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/add-log-parameter-generate-option-id-for-path#descriptive
+  title: 'fastapi_refactor: add-log-parameter-generate-option-id-for-path (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: In the `utils.py` file within the `fastapi` directory, update the
+    `generate_operation_id_for_path` function by adding a new boolean parameter named
+    'log' and set its default value to `False`. Furthermore, for every occurrence
+    where this function is called in the `utils.py` file located in the `fastapi/openapi`
+    directory, ensure the 'log' parameter is explicitly passed with the value `True`.
+  params:
+    mode: descriptive
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/add-log-parameter-generate-option-id-for-path-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/add-log-parameter-generate-option-id-for-path#lazy
+  title: 'fastapi_refactor: add-log-parameter-generate-option-id-for-path (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Introduce an optional logging parameter in the generate_option_id_for_path
+    function, defaulting to false.
+  params:
+    mode: lazy
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/add-log-parameter-generate-option-id-for-path-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/exception-handlers-to-handlers#base
+  title: 'fastapi_refactor: exception-handlers-to-handlers (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename exceptions_handlers.py to handlers.py and update the entire
+    repository based on this change.
+  params:
+    mode: base
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/exception-handlers-to-handlers-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/exception-handlers-to-handlers#descriptive
+  title: 'fastapi_refactor: exception-handlers-to-handlers (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename the file 'exception_handlers.py' to 'handlers.py' in the FastAPI
+    module and ensure all references within the repository are updated to reflect
+    this new file name. Documents in multiple language directories under 'docs', specifically
+    in files like 'handling-errors.md', and source files such as 'applications.py'
+    and 'tutorial006.py' in the 'docs_src/handling_errors' and 'fastapi' directories
+    respectively, should be updated to use 'handlers.py' instead of 'exception_handlers.py'.
+    Ensure that relevant imports in 'applications.py' and 'tutorial006.py' are correctly
+    pointed to 'fastapi.handlers'.
+  params:
+    mode: descriptive
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/exception-handlers-to-handlers-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/exception-handlers-to-handlers#lazy
+  title: 'fastapi_refactor: exception-handlers-to-handlers (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename and update the repository for the renamed exceptions_handlers.py
+    file.
+  params:
+    mode: lazy
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/exception-handlers-to-handlers-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/get-auth-scheme-param#base
+  title: 'fastapi_refactor: get-auth-scheme-param (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename get_authorization_scheme_param to get_auth_scheme_param and
+    update the usages throughout the repo.
+  params:
+    mode: base
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/get-auth-scheme-param-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/get-auth-scheme-param#descriptive
+  title: 'fastapi_refactor: get-auth-scheme-param (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Please rename the function `get_authorization_scheme_param` to `get_auth_scheme_param`
+    in the file `utils.py` located in the `security` directory of the FastAPI repository.
+    Ensure that all instances where it was used or referred to are updated accordingly
+    in that file. Additionally, confirm the usage of this renamed function in the
+    `oauth2.py` and `http.py` files, also under the `security` directory, by updating
+    any imports or function calls that reference the original function name.
+  params:
+    mode: descriptive
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/get-auth-scheme-param-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/get-auth-scheme-param#lazy
+  title: 'fastapi_refactor: get-auth-scheme-param (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename and update the function name across the repo.
+  params:
+    mode: lazy
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/get-auth-scheme-param-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/openapi-get-utils#base
+  title: 'fastapi_refactor: openapi-get-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename utils.py in openapi to get_utils.py and then update all the
+    references throughout the repository with the new file name.
+  params:
+    mode: base
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/openapi-get-utils-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/openapi-get-utils#descriptive
+  title: 'fastapi_refactor: openapi-get-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename the file named 'utils.py' located in the 'openapi' folder of
+    the 'fastapi' directory to 'get_utils.py'. Subsequently, update all references
+    to 'utils.py' in the codebase, including Python scripts and Markdown documentation
+    files, to 'get_utils.py'. This change should reflect in various locations including
+    'applications.py', 'tutorial001.py' under 'docs_src/extending_openapi', and 'extending-openapi.md'
+    files across different language directories in 'docs'. Ensure updates are made
+    wherever 'openapi.utils' is referenced.
+  params:
+    mode: descriptive
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/openapi-get-utils-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/openapi-get-utils#lazy
+  title: 'fastapi_refactor: openapi-get-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename and update references for the file in the openapi directory.
+  params:
+    mode: lazy
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/openapi-get-utils-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/params-to-param#base
+  title: 'fastapi_refactor: params-to-param (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename params.py to param.py and then update the whole repo based
+    on that new name change.
+  params:
+    mode: base
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/params-to-param-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/params-to-param#descriptive
+  title: 'fastapi_refactor: params-to-param (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Please rename the file 'params.py' to 'param.py' in the 'fastapi'
+    directory. After renaming, you need to update relevant import statements and usage
+    across the entire codebase to reflect this change. Specifically, ensure that files
+    like '_compat.py', 'routing.py', 'param_functions.py', 'dependencies/utils.py',
+    'openapi/utils.py', 'applications.py', 'tests/test_param_class.py', and 'tests/test_params_repr.py'
+    reference 'param.py' correctly, replacing any 'params' usage with 'param'. This
+    update should harmonize the naming convention throughout the project.
+  params:
+    mode: descriptive
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/params-to-param-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/params-to-param#lazy
+  title: 'fastapi_refactor: params-to-param (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename and update the repository files for the new script name.
+  params:
+    mode: lazy
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/params-to-param-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/value-is-a-sequence#base
+  title: 'fastapi_refactor: value-is-a-sequence (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename value_is_sequence to value_is_a_sequence and update usage in
+    the repo.
+  params:
+    mode: base
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/value-is-a-sequence-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/value-is-a-sequence#descriptive
+  title: 'fastapi_refactor: value-is-a-sequence (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: In the FastAPI repository, refactor the `value_is_sequence` function
+    to be renamed as `value_is_a_sequence` within the `_compat.py` file. Ensure all
+    references and usage of this function in `_compat.py` and other files such as
+    `utils.py` under `dependencies` reflect this name change. Additionally, verify
+    and update necessary imports to accommodate the new function name ensuring consistency
+    across the repository.
+  params:
+    mode: descriptive
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/value-is-a-sequence-test.py
+    cwd_hint: fastapi
+- task_key: fastapi_refactor/value-is-a-sequence#lazy
+  title: 'fastapi_refactor: value-is-a-sequence (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/fastapi_refactor
+  instructions: Rename the function for clarity and adjust all references accordingly.
+  params:
+    mode: lazy
+    repo: fastapi_refactor
+    test_file: tests/fastapi_refactor/value-is-a-sequence-test.py
+    cwd_hint: fastapi
+- task_key: flask_refactor/add-log-parameter-get-debug-flag#base
+  title: 'flask_refactor: add-log-parameter-get-debug-flag (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Import logging and add a log boolean parameter to get_debug_flag and
+    make the base case false. Make all usages except the ones in tests as log=True.
+  params:
+    mode: base
+    repo: flask_refactor
+    test_file: tests/flask_refactor/add-log-parameter-get-debug-flag-test.py
+    cwd_hint: src
+- task_key: flask_refactor/add-log-parameter-get-debug-flag#descriptive
+  title: 'flask_refactor: add-log-parameter-get-debug-flag (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Update the helpers.py file by adding an import statement for the logging
+    module. Modify the 'get_debug_flag' function to include a new boolean parameter
+    named 'log', defaulting to False. Ensure that all existing calls to 'get_debug_flag'
+    across the files app.py, cli.py, and sansio/app.py pass the argument 'log=True',
+    except for calls made in the test files such as test_helpers.py where 'log' should
+    either be 'False' or omitted.
+  params:
+    mode: descriptive
+    repo: flask_refactor
+    test_file: tests/flask_refactor/add-log-parameter-get-debug-flag-test.py
+    cwd_hint: src
+- task_key: flask_refactor/add-log-parameter-get-debug-flag#lazy
+  title: 'flask_refactor: add-log-parameter-get-debug-flag (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Add logging to the get_debug_flag function and adjust log parameter
+    usage accordingly.
+  params:
+    mode: lazy
+    repo: flask_refactor
+    test_file: tests/flask_refactor/add-log-parameter-get-debug-flag-test.py
+    cwd_hint: src
+- task_key: flask_refactor/add-log-parameter-get-flashed-messages#base
+  title: 'flask_refactor: add-log-parameter-get-flashed-messages (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Can you add a log boolean parameter to get_flashed_messages and keep
+    the base case as false. In the test calls of the function make the log=True.
+  params:
+    mode: base
+    repo: flask_refactor
+    test_file: tests/flask_refactor/add-log-parameter-get-flashed-messages-test.py
+    cwd_hint: src
+- task_key: flask_refactor/add-log-parameter-get-flashed-messages#descriptive
+  title: 'flask_refactor: add-log-parameter-get-flashed-messages (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Please update the file named 'helpers.py' in the Flask framework to
+    include an additional boolean parameter 'log' to the function 'get_flashed_messages',
+    setting its default value to False. Additionally, modify the relevant test cases
+    in the file 'test_basic.py' to ensure that all calls to 'get_flashed_messages'
+    explicitly pass the argument 'log=True'. This change intends to enhance debugging
+    capabilities by allowing the logging of messages when necessary.
+  params:
+    mode: descriptive
+    repo: flask_refactor
+    test_file: tests/flask_refactor/add-log-parameter-get-flashed-messages-test.py
+    cwd_hint: src
+- task_key: flask_refactor/add-log-parameter-get-flashed-messages#lazy
+  title: 'flask_refactor: add-log-parameter-get-flashed-messages (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Add a log parameter to get_flashed_messages, defaulting to false.
+  params:
+    mode: lazy
+    repo: flask_refactor
+    test_file: tests/flask_refactor/add-log-parameter-get-flashed-messages-test.py
+    cwd_hint: src
+- task_key: flask_refactor/debughelpers-to-helpers.py#base
+  title: 'flask_refactor: debughelpers-to-helpers.py (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Move the outside functions, not the classes, from debughelpers to
+    helpers and update the repository imports accordingly
+  params:
+    mode: base
+    repo: flask_refactor
+    test_file: tests/flask_refactor/debughelpers-to-helpers.py-test.py
+    cwd_hint: src
+- task_key: flask_refactor/debughelpers-to-helpers.py#descriptive
+  title: 'flask_refactor: debughelpers-to-helpers.py (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Identify and move all standalone functions (those not contained within
+    any class) from the file debughelpers.py to helpers.py within the Flask project's
+    'src/flask' directory. Ensure that after transferring these functions, you adjust
+    import statements in the repository that might be affected by this move. This
+    task specifically includes transferring functions such as 'attach_enctype_error_multidict',
+    '_dump_loader_info', and 'explain_template_loading_attempts'. Make sure these
+    functions are removed from debughelpers.py and correctly added and refactored
+    in helpers.py to maintain functionality.
+  params:
+    mode: descriptive
+    repo: flask_refactor
+    test_file: tests/flask_refactor/debughelpers-to-helpers.py-test.py
+    cwd_hint: src
+- task_key: flask_refactor/debughelpers-to-helpers.py#lazy
+  title: 'flask_refactor: debughelpers-to-helpers.py (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Shift standalone functions from debughelpers to helpers and adjust
+    imports.
+  params:
+    mode: lazy
+    repo: flask_refactor
+    test_file: tests/flask_refactor/debughelpers-to-helpers.py-test.py
+    cwd_hint: src
+- task_key: flask_refactor/rename-send-from-directory#base
+  title: 'flask_refactor: rename-send-from-directory (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename the helper function send_from_directory to send_from_directory_helper
+    but keep the overall flask usage as send_from_directory
+  params:
+    mode: base
+    repo: flask_refactor
+    test_file: tests/flask_refactor/rename-send-from-directory-test.py
+    cwd_hint: src
+- task_key: flask_refactor/rename-send-from-directory#descriptive
+  title: 'flask_refactor: rename-send-from-directory (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Please update the helper function named `send_from_directory` to `send_from_directory_helper`
+    in the file where it is defined. Ensure that all imports and usages of this function
+    in the `blueprints.py`, `__init__.py`, and `app.py` within the flask source code
+    are updated to reflect this change. Moreover, it's crucial to modify the alias
+    in the `__init__.py` so that `send_from_directory_helper` is still referenced
+    as `send_from_directory` where it’s being imported. This renaming should be done
+    while maintaining the current functionality where the helper function assists
+    in serving files from directories. Ensure also that the usage of this function
+    within tests, specifically in the function calls in `test_helpers.py`, aligns
+    with these changes while still accomplishing the same tasks.
+  params:
+    mode: descriptive
+    repo: flask_refactor
+    test_file: tests/flask_refactor/rename-send-from-directory-test.py
+    cwd_hint: src
+- task_key: flask_refactor/rename-send-from-directory#lazy
+  title: 'flask_refactor: rename-send-from-directory (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename the helper function for clarity but maintain external API usage.
+  params:
+    mode: lazy
+    repo: flask_refactor
+    test_file: tests/flask_refactor/rename-send-from-directory-test.py
+    cwd_hint: src
+- task_key: flask_refactor/render-template-str#base
+  title: 'flask_refactor: render-template-str (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename render_template_string to render_template_str and update the
+    flask usage to also user render_template_str.
+  params:
+    mode: base
+    repo: flask_refactor
+    test_file: tests/flask_refactor/render-template-str-test.py
+    cwd_hint: src
+- task_key: flask_refactor/render-template-str#descriptive
+  title: 'flask_refactor: render-template-str (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename the function `render_template_string` to `render_template_str`
+    in the `templating.py` file of the Flask repository, making sure to update all
+    usages of this function name not only in the `templating.py` file but also in
+    the `__init__.py`, `test_templating.py`, `test_appctx.py`, `test_blueprints.py`,
+    `test_json.py` of the tests directory as well as the documentation files `api.rst`
+    and `templating.rst`. Ensure that after renaming, Flask should reference and use
+    the new function name `render_template_str` consistently across the codebase and
+    documentation.
+  params:
+    mode: descriptive
+    repo: flask_refactor
+    test_file: tests/flask_refactor/render-template-str-test.py
+    cwd_hint: src
+- task_key: flask_refactor/render-template-str#lazy
+  title: 'flask_refactor: render-template-str (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename and update usage of render_template_string in flask.
+  params:
+    mode: lazy
+    repo: flask_refactor
+    test_file: tests/flask_refactor/render-template-str-test.py
+    cwd_hint: src
+- task_key: flask_refactor/stream-template-str#base
+  title: 'flask_refactor: stream-template-str (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename the core function stream_template_string into stream_template_str
+    but keep the package init to be stream_template_string.
+  params:
+    mode: base
+    repo: flask_refactor
+    test_file: tests/flask_refactor/stream-template-str-test.py
+    cwd_hint: src
+- task_key: flask_refactor/stream-template-str#descriptive
+  title: 'flask_refactor: stream-template-str (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: In the file named 'templating.py', change the function name from 'stream_template_string'
+    to 'stream_template_str'. Ensure that in the 'flask/__init__.py' file, the function
+    'stream_template_str' from 'templating.py' is imported and still accessible via
+    the name 'stream_template_string'. This will allow the function to be used with
+    its original name throughout the rest of the codebase while reflecting the updated
+    function name internally.
+  params:
+    mode: descriptive
+    repo: flask_refactor
+    test_file: tests/flask_refactor/stream-template-str-test.py
+    cwd_hint: src
+- task_key: flask_refactor/stream-template-str#lazy
+  title: 'flask_refactor: stream-template-str (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/flask_refactor
+  instructions: Rename the main function but retain the package initialization name.
+  params:
+    mode: lazy
+    repo: flask_refactor
+    test_file: tests/flask_refactor/stream-template-str-test.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-get-encoding-from-headers#base
+  title: 'requests_refactor: add-log-parameter-get-encoding-from-headers (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Add a log parameter to get_encoding_from_headers, make the base case
+    false in the utils file and all the other files except tests should have the log=True
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/get-encoding-from-headers.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-get-encoding-from-headers#descriptive
+  title: 'requests_refactor: add-log-parameter-get-encoding-from-headers (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Enhance the function 'get_encoding_from_headers' located in the 'utils.py'
+    file by adding a new boolean parameter named 'log'. Set the default value of the
+    'log' parameter to False. When this function is called in other files, such as
+    'adapters.py', ensure that this 'log' parameter is explicitly set to True, except
+    in the test file 'test_utils.py', where the 'log' parameter should be set to False.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/get-encoding-from-headers.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-get-encoding-from-headers#lazy
+  title: 'requests_refactor: add-log-parameter-get-encoding-from-headers (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Modify the log parameter in get_encoding_from_headers and adjust defaults
+    accordingly across files.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/get-encoding-from-headers.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-resolve-proxies#base
+  title: 'requests_refactor: add-log-parameter-resolve-proxies (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Add a log parameter to resolve_proxies, make the base case false in
+    the utils file and all the other files except tests should have the log=True
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/resolve-proxies.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-resolve-proxies#descriptive
+  title: 'requests_refactor: add-log-parameter-resolve-proxies (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Update the 'resolve_proxies' function in the 'utils.py' file of the
+    'requests' directory by adding a new boolean parameter named 'log'. Set the default
+    value of 'log' to False in the 'utils.py' file only. In all other files within
+    the 'requests' directory except those in the 'tests' subdirectory, ensure that
+    every invocation of the 'resolve_proxies' function explicitly passes 'log=True'.
+    This includes but is not limited to the 'sessions.py' file where this parameter
+    should certainly be passed.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/resolve-proxies.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-resolve-proxies#lazy
+  title: 'requests_refactor: add-log-parameter-resolve-proxies (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Update `resolve_proxies` to include a logging option, defaulting to
+    off in utils but on elsewhere.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/resolve-proxies.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-select-proxy#base
+  title: 'requests_refactor: add-log-parameter-select-proxy (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Add a log parameter to the select proxy function and make the log=False
+    and base and make log=True in all calls throughout the repository
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/select-proxy.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-select-proxy#descriptive
+  title: 'requests_refactor: add-log-parameter-select-proxy (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Please modify the 'select_proxy' function in the file 'requests/utils.py'
+    to include an additional parameter named 'log' with a default value of False.
+    Then, update all instances where the 'select_proxy' function is called in the
+    file 'requests/adapters.py' to explicitly set the 'log' parameter to True.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/select-proxy.py
+    cwd_hint: src
+- task_key: requests_refactor/add-log-parameter-select-proxy#lazy
+  title: 'requests_refactor: add-log-parameter-select-proxy (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Add a log parameter to the select proxy function and adjust its usage
+    across the repository.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/select-proxy.py
+    cwd_hint: src
+- task_key: requests_refactor/combine-from-key-to-key#base
+  title: 'requests_refactor: combine-from-key-to-key (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Convert the from_key_val_list and the to_key_val_list functions into
+    a singular function key_val_convert(value, to_dict=True) with the behavior that
+    if to_dict is true, it behaves like from_key_val_list and If to_dict is False,
+    it behaves like to_key_val_list. Update the rest of the repo accordingly.
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/combine-from-key-to-key.py
+    cwd_hint: src
+- task_key: requests_refactor/combine-from-key-to-key#descriptive
+  title: 'requests_refactor: combine-from-key-to-key (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Merge the functions `from_key_val_list` and `to_key_val_list` into
+    a single function named `key_val_convert` within the `utils.py` file, which should
+    accept a parameter `to_dict`. If `to_dict` is True, the function should behave
+    like `from_key_val_list`; if False, it should mimic the behavior of `to_key_val_list`.
+    Ensure that files `sessions.py` and `models.py`, which utilize these functions,
+    are appropriately updated to use the new `key_val_convert` function, adjusting
+    both direct function calls and their imports accordingly.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/combine-from-key-to-key.py
+    cwd_hint: src
+- task_key: requests_refactor/combine-from-key-to-key#lazy
+  title: 'requests_refactor: combine-from-key-to-key (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Refactor the key-value list conversion functions into a single function
+    and adjust the repository.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/combine-from-key-to-key.py
+    cwd_hint: src
+- task_key: requests_refactor/combine-internal-utils-utils#base
+  title: 'requests_refactor: combine-internal-utils-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: move everything from _internal_utils to utils and update all the references
+    within the codebase
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/internal-utils-utils.py
+    cwd_hint: src
+- task_key: requests_refactor/combine-internal-utils-utils#descriptive
+  title: 'requests_refactor: combine-internal-utils-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Please transfer all contents from the file '_internal_utils.py' to
+    'utils.py' within the 'requests' module and ensure this file, '_internal_utils.py',
+    is deleted after the transfer. Update all internal references in the application
+    notably in files like 'auth.py', 'cookies.py', 'models.py', 'sessions.py', and
+    'test_utils.py' to import necessary functions directly from 'requests.utils' instead
+    of 'requests._internal_utils'. This should include updates for imports such as
+    'to_native_string' and other specific methods previously used from '_internal_utils'.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/internal-utils-utils.py
+    cwd_hint: src
+- task_key: requests_refactor/combine-internal-utils-utils#lazy
+  title: 'requests_refactor: combine-internal-utils-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Shift all content from _internal_utils to utils and adjust references
+    accordingly.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/internal-utils-utils.py
+    cwd_hint: src
+- task_key: requests_refactor/move-hooks-sessions#base
+  title: 'requests_refactor: move-hooks-sessions (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Remove the hooks.py file and put all that content in sessions.py and
+    update throughout the repo accordingly
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/move-hooks-sessions.py
+    cwd_hint: src
+- task_key: requests_refactor/move-hooks-sessions#descriptive
+  title: 'requests_refactor: move-hooks-sessions (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Remove the 'hooks.py' file from the 'src/requests' directory and integrate
+    its contents into the 'sessions.py' in the same directory. Ensure that all references
+    throughout the repository, including files like 'models.py' and 'test_requests.py',
+    are updated to import the necessary functions from 'sessions.py' instead of 'hooks.py'.
+    Make sure 'sessions.py' does not contain any imports from the now-obsolete 'hooks.py'.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/move-hooks-sessions.py
+    cwd_hint: src
+- task_key: requests_refactor/move-hooks-sessions#lazy
+  title: 'requests_refactor: move-hooks-sessions (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Shift the hooks.py contents to sessions.py and adjust references within
+    the repo.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/move-hooks-sessions.py
+    cwd_hint: src
+- task_key: requests_refactor/new-cookie-utils-class#base
+  title: 'requests_refactor: new-cookie-utils-class (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Create a new class called CookieUtils for the functions in cookies.py
+    'extract_cookies_to_jar', 'get_cookie_header', 'remove_cookie_by_name', 'cookiejar_from_dict',
+    'merge_cookies', '_copy_cookie_jar', 'create_cookie', 'morsel_to_cookie'
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/cookie-utils.py
+    cwd_hint: src
+- task_key: requests_refactor/new-cookie-utils-class#descriptive
+  title: 'requests_refactor: new-cookie-utils-class (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: 'Implement a new class named CookieUtils in the file named cookies.py
+    within the requests directory. This class should encapsulate the following methods:
+    extract_cookies_to_jar, get_cookie_header, remove_cookie_by_name, cookiejar_from_dict,
+    merge_cookies, _copy_cookie_jar, create_cookie, and morsel_to_cookie. Additionally,
+    ensure that this new class, CookieUtils, is properly imported in the following
+    files within the requests directory: adapters.py, auth.py, models.py, sessions.py,
+    and utils.py. Also, confirm that the import of CookieUtils is correct in the test_requests.py
+    file in the tests directory.'
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/cookie-utils.py
+    cwd_hint: src
+- task_key: requests_refactor/new-cookie-utils-class#lazy
+  title: 'requests_refactor: new-cookie-utils-class (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Refactor cookies.py by creating a new class CookieUtils with specified
+    functions.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/cookie-utils.py
+    cwd_hint: src
+- task_key: requests_refactor/rename-lookup-dict-dict-lookup#base
+  title: 'requests_refactor: rename-lookup-dict-dict-lookup (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Rename LookupDict in structures.py to DictLookup and update all the
+    references in the repo
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/rename-lookup-dict-dict-lookup.py
+    cwd_hint: src
+- task_key: requests_refactor/rename-lookup-dict-dict-lookup#descriptive
+  title: 'requests_refactor: rename-lookup-dict-dict-lookup (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Please change the name of the class 'LookupDict' to 'DictLookup' in
+    the file named 'structures.py' within the src/requests directory. Ensure that
+    all references and import statements across the repository are updated accordingly,
+    especially within the 'status_codes.py' and 'test_structures.py' files located
+    in the src/requests and tests directories respectively. Ensure that 'DictLookup'
+    is being used correctly in these files post-renaming.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/rename-lookup-dict-dict-lookup.py
+    cwd_hint: src
+- task_key: requests_refactor/rename-lookup-dict-dict-lookup#lazy
+  title: 'requests_refactor: rename-lookup-dict-dict-lookup (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Rename LookupDict to DictLookup and adjust references accordingly.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/rename-lookup-dict-dict-lookup.py
+    cwd_hint: src
+- task_key: requests_refactor/rename-super-len-complex-len#base
+  title: 'requests_refactor: rename-super-len-complex-len (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Rename the super_len function in utils to complex_len and update the
+    repo and tests
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/super-to-complex-len.py
+    cwd_hint: src
+- task_key: requests_refactor/rename-super-len-complex-len#descriptive
+  title: 'requests_refactor: rename-super-len-complex-len (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Rename the function `super_len` to `complex_len` in the file named
+    `utils.py` located within the `src/requests` directory. Subsequently, update the
+    respective import statements and usage of this function in the files named `models.py`
+    in the `src/requests` directory and `test_utils.py` in the `tests` directory.
+    Ensure that the original `super_len` function is fully replaced by `complex_len`
+    and that there are no remnants of `super_len` in any file.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/super-to-complex-len.py
+    cwd_hint: src
+- task_key: requests_refactor/rename-super-len-complex-len#lazy
+  title: 'requests_refactor: rename-super-len-complex-len (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Rename the function and update references.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/super-to-complex-len.py
+    cwd_hint: src
+- task_key: requests_refactor/split-warnings-exceptions#base
+  title: 'requests_refactor: split-warnings-exceptions (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Create a warnings.py file alongside the exceptions.py file and move
+    all the warnings in exceptions to it and update all the references in the repository
+    accordingly.
+  params:
+    mode: base
+    repo: requests_refactor
+    test_file: tests/requests_refactor/requests-warnings.py
+    cwd_hint: src
+- task_key: requests_refactor/split-warnings-exceptions#descriptive
+  title: 'requests_refactor: split-warnings-exceptions (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Create a new file named `warnings.py` in the same directory as `exceptions.py`
+    within the `requests` module, and transfer all warning-related classes (such as
+    `RequestsWarning`, `FileModeWarning`, and `RequestsDependencyWarning`) from `exceptions.py`
+    to this new file. Ensure you update all the references in the repository such
+    that any module requiring these warnings imports them from `warnings.py` instead
+    of `exceptions.py`. Additionally, remove these classes from `exceptions.py` to
+    avoid duplicate definition of warning classes.
+  params:
+    mode: descriptive
+    repo: requests_refactor
+    test_file: tests/requests_refactor/requests-warnings.py
+    cwd_hint: src
+- task_key: requests_refactor/split-warnings-exceptions#lazy
+  title: 'requests_refactor: split-warnings-exceptions (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/requests_refactor
+  instructions: Move all warnings from exceptions.py to a new file named warnings.py
+    and update references.
+  params:
+    mode: lazy
+    repo: requests_refactor
+    test_file: tests/requests_refactor/requests-warnings.py
+    cwd_hint: src
+- task_key: salt_refactor/add-log-parameter-delete-directory#base
+  title: 'salt_refactor: add-log-parameter-delete-directory (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Add a log boolean parameter to delete_directory function and make
+    the base log=False, but for all calls excepts in tests make log=True.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-delete-directory-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-delete-directory#descriptive
+  title: 'salt_refactor: add-log-parameter-delete-directory (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update the `delete_directory` function in the `smb.py` file by adding
+    a new boolean parameter named `log` with a default value of `False`. For every
+    usage of this `delete_directory` function in the `cloud.py` file, ensure that
+    the `log` parameter is explicitly set to `True`. However, when this function is
+    called within the `test_smb.py` file, the `log` parameter should either be set
+    to `False` or not specified, aligning with its default value.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-delete-directory-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-delete-directory#lazy
+  title: 'salt_refactor: add-log-parameter-delete-directory (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update the delete_directory function to include a logging option,
+    defaulting to off but enabled in most cases.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-delete-directory-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-get-capability-definitions#base
+  title: 'salt_refactor: add-log-parameter-get-capability-definitions (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Add a log boolean parameter in get_capability_definitions with the
+    base log=False and make the log=True in all cases except testing files.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-get-capability-definitions-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-get-capability-definitions#descriptive
+  title: 'salt_refactor: add-log-parameter-get-capability-definitions (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Modify the function 'get_capability_definitions' in the file 'pbm.py'
+    within the 'salt/utils/' directory to include an additional boolean parameter
+    named 'log' which defaults to False. Then, in the file 'vsphere.py' within the
+    'salt/modules/' directory, ensure that all existing calls to 'get_capability_definitions'
+    explicitly set this 'log' parameter to True. However, in the file 'test_pbm.py'
+    within the 'tests/unit/utils/' directory, where this function is used in tests,
+    the 'log' parameter should either be explicitly set to False or not included in
+    the function calls.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-get-capability-definitions-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-get-capability-definitions#lazy
+  title: 'salt_refactor: add-log-parameter-get-capability-definitions (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Introduce a logging parameter to the function that defaults to False,
+    and enable it everywhere except in tests.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-get-capability-definitions-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-recursive-diff#base
+  title: 'salt_refactor: add-log-parameter-recursive-diff (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Add a log boolean parameter to recursive_diff in data.py and keep
+    the base case as false. Then make all usages throughout the repository except
+    for testing files as True. All internal recursive calls from the function should
+    follow the initial log setting as well.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-recursive-diff-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-recursive-diff#descriptive
+  title: 'salt_refactor: add-log-parameter-recursive-diff (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Add a boolean parameter named 'log' to the 'recursive_diff' function
+    in the 'data.py' file and default it to false. Ensure that all calls to this 'recursive_diff'
+    function across the repository, except within testing suites and the 'dictdiffer.py'
+    and 'listdiffer.py' files, pass this parameter as True. Maintain that any recursive
+    calls within the function itself inherit the initial log parameter setting from
+    the first call. Make sure internal function calls do not individually redefine
+    the log setting.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-recursive-diff-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/add-log-parameter-recursive-diff#lazy
+  title: 'salt_refactor: add-log-parameter-recursive-diff (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Add a log parameter to recursive_diff and adjust its usage accordingly.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/add-log-parameter-recursive-diff-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/cant-create#base
+  title: 'salt_refactor: cant-create (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename all the EX_CANTCREAT to EX_CANTCREATE and update the repository
+    based on that.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/cant-create-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/cant-create#descriptive
+  title: 'salt_refactor: cant-create (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Please replace all instances of the misspelled constant name 'EX_CANTCREAT'
+    with the corrected constant name 'EX_CANTCREATE' in the files 'exitcodes.py' and
+    'ssh_py_shim.py' within the 'salt' repository. Additionally, ensure that this
+    constant is correctly referenced everywhere in the repository, including handling
+    its usage in 'ssh_py_shim.py' and '__init__.py' under the 'ssh' client module
+    of 'salt'. Also confirm that no parts of the repository wrongly import or use
+    the old 'EX_CANTCREAT'.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/cant-create-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/cant-create#lazy
+  title: 'salt_refactor: cant-create (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update the repository with renamed instances of EX_CANTCREAT to EX_CANTCREATE.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/cant-create-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/channel-to-transport#base
+  title: 'salt_refactor: channel-to-transport (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename utils channel.py to transport.py and update the repository
+    based on that change.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/channel-to-transport-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/channel-to-transport#descriptive
+  title: 'salt_refactor: channel-to-transport (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Change the filename of 'channel.py' located in the 'salt/utils' directory
+    to 'transport.py'. Ensure that all references to 'channel.py' in the repository,
+    particularly in 'master.py' and 'server.py' under the 'salt/channel' directory,
+    are updated to reflect this change. Additionally, confirm that the 'iter_transport_opts'
+    function within 'transport.py' is correctly imported and utilized in these updated
+    files.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/channel-to-transport-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/channel-to-transport#lazy
+  title: 'salt_refactor: channel-to-transport (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename a file and update references in the repository.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/channel-to-transport-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/ex-pillar-fail#base
+  title: 'salt_refactor: ex-pillar-fail (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename EX_PILLAR_FAILURE to EX_PILLAR_FAIL and update the references
+    throughout the repo.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/ex-pillar-fail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/ex-pillar-fail#descriptive
+  title: 'salt_refactor: ex-pillar-fail (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Please update the constant EX_PILLAR_FAILURE to EX_PILLAR_FAIL in
+    the `exitcodes.py` file within the Salt repository. Make sure to revise all references
+    to this constant in both the `state.py` file located in the `salt/client/ssh/wrapper/`
+    directory and the `state.py` file located in the `salt/modules/` directory so
+    that they reference the updated constant name EX_PILLAR_FAIL instead of the old
+    name EX_PILLAR_FAILURE.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/ex-pillar-fail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/ex-pillar-fail#lazy
+  title: 'salt_refactor: ex-pillar-fail (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename constant and update its references.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/ex-pillar-fail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/ex-state-fail#base
+  title: 'salt_refactor: ex-state-fail (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename EX_STATE_FAILURE to EX_STATE_FAIL and update all references
+    throughout the repository.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/ex-state-fail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/ex-state-fail#descriptive
+  title: 'salt_refactor: ex-state-fail (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: 'Please update the constant named EX_STATE_FAILURE to EX_STATE_FAIL
+    within the ''exitcodes.py'' file located under the ''salt/defaults'' directory.
+    Additionally, you should update all references to this constant in two other files:
+    ''state.py'' within the ''salt/modules'' directory and ''test_salt_call.py'' in
+    the ''tests/pytests/integration/cli'' directory. Make sure that the updated constant
+    name is correctly reflected and there are no references left to the old constant
+    name in these files.'
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/ex-state-fail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/ex-state-fail#lazy
+  title: 'salt_refactor: ex-state-fail (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename the enumeration and update all its references in the repo.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/ex-state-fail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/exactly-n-boto-mod#base
+  title: 'salt_refactor: exactly-n-boto-mod (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Keep the exactly_n and exactly_1 functions in botomod and just define
+    the functions in boto3mod as the import of imported_exactly_n and imported_exactly_1
+    so the code isn't as repetitive.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/exactly-n-boto-mod-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/exactly-n-boto-mod#descriptive
+  title: 'salt_refactor: exactly-n-boto-mod (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Modify the boto3mod.py file by removing any existing definitions for
+    exactly_n and exactly_1 functions, and instead, directly import these functions
+    from botomod.py. Specifically, import exactly_n and exactly_1, and make sure they
+    use the imported functions imported_exactly_n and imported_exactly_1 respectively
+    from the botomod.py file. This adjustment avoids repetitive code definitions in
+    boto3mod.py and keeps the code cleaner.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/exactly-n-boto-mod-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/exactly-n-boto-mod#lazy
+  title: 'salt_refactor: exactly-n-boto-mod (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Refactor boto3mod to import functions from botomod for reduced redundancy.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/exactly-n-boto-mod-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/get-unavail#base
+  title: 'salt_refactor: get-unavail (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename the EX_UNAVAILABLE exitcode to EX_UNAVAIL for brevity and update
+    the repository based on that.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/get-unavail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/get-unavail#descriptive
+  title: 'salt_refactor: get-unavail (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Change the exit code name from EX_UNAVAILABLE to EX_UNAVAIL in the
+    `exitcodes.py` file located in the `salt/defaults/` directory for clarity and
+    ease of use. Make sure to also update all references to this exit code in the
+    `scripts.py` and `parsers.py` files within the `salt` and `salt/utils` directories
+    respectively, as well as in integration tests located in the `tests/pytests/integration/cli/test_salt_call.py`
+    to ensure they are consistent with this change.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/get-unavail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/get-unavail#lazy
+  title: 'salt_refactor: get-unavail (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update the repository by shortening the EX_UNAVAILABLE exitcode to
+    EX_UNAVAIL.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/get-unavail-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/iam-to-aws#base
+  title: 'salt_refactor: iam-to-aws (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Remove the iam.py file and move all of it into the aws utils file
+    and update the repository accordingly.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/iam-to-aws-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/iam-to-aws#descriptive
+  title: 'salt_refactor: iam-to-aws (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Transfer all contents from the 'iam.py' file in the utils directory
+    into the 'aws.py' file located in the salt/utils directory. This consolidation
+    should include any functions, imports, and any other relevant code components
+    from 'iam.py'. Ensure you update the 'aws.py' to retain functionality and cleanly
+    integrate the incoming code. After transferring, make sure to remove the 'iam.py'
+    file permanently from the utils directory.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/iam-to-aws-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/iam-to-aws#lazy
+  title: 'salt_refactor: iam-to-aws (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Shift the content of iam.py to aws utils and update the repo.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/iam-to-aws-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/mksls-to-specific#base
+  title: 'salt_refactor: mksls-to-specific (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename all the mksls to new function names based on the conversions
+    they actually do. Make all three autoyast_to_sls, kickstart_to_sls, and preseed_to_sls
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/mksls-to-specific-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/mksls-to-specific#descriptive
+  title: 'salt_refactor: mksls-to-specific (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: In the repository, rename the function 'mksls' in the files preseed.py,
+    kickstart.py, and yast.py to more descriptive names reflecting the specific conversions
+    each module handles. Specifically, in preseed.py rename it to 'preseed_to_sls',
+    in kickstart.py rename it to 'kickstart_to_sls', and in yast.py rename it to 'autoyast_to_sls'.
+    Ensure that the old function name 'mksls' is no longer used in these files.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/mksls-to-specific-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/mksls-to-specific#lazy
+  title: 'salt_refactor: mksls-to-specific (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update function names to reflect their specific conversions.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/mksls-to-specific-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/namecheap-xmlutil#base
+  title: 'salt_refactor: namecheap-xmlutil (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Move the to_dict and to_value functions in namecheap to xmlutil.py
+    and update all references accordingly.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/namecheap-xmlutil-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/namecheap-xmlutil#descriptive
+  title: 'salt_refactor: namecheap-xmlutil (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Transfer the 'xml_to_dict', 'atts_to_dict', and 'string_to_value'
+    functions from the namecheap.py file to xmlutil.py within the SaltStack repository.
+    Following the transfer, update all references across the codebase that previously
+    referred to these functions in namecheap.py to now point to their new location
+    in xmlutil.py. Ensure that these functions no longer exist in namecheap.py to
+    uphold proper modular functionality.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/namecheap-xmlutil-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/namecheap-xmlutil#lazy
+  title: 'salt_refactor: namecheap-xmlutil (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Refactor the placement of to_dict and to_value functions in the namecheap
+    repository.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/namecheap-xmlutil-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/paged-call-boto-mod#base
+  title: 'salt_refactor: paged-call-boto-mod (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Keep the paged_call function in botomod and just define the function
+    in boto3mod as the import of imported_paged_call so the code isn't as repetitive.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/paged-call-boto-mod-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/paged-call-boto-mod#descriptive
+  title: 'salt_refactor: paged-call-boto-mod (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: In the 'boto3mod.py' file located within the 'salt/utils' directory,
+    update the definition of the 'paged_call' function so that it no longer contains
+    its independent implementation. Instead, it should directly use 'paged_call' imported
+    from 'botomod.py' by renaming it to 'imported_paged_call' within 'boto3mod.py'.
+    Ensure that 'botomod.py' retains its complete version of the 'paged_call' function
+    with all its key elements such as docstrings, the 'pop' operation for 'marker_flag',
+    and the while loop handling.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/paged-call-boto-mod-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/paged-call-boto-mod#lazy
+  title: 'salt_refactor: paged-call-boto-mod (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Refactor boto3mod to import the paged_call function from botomod.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/paged-call-boto-mod-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/pem-fingerprint#base
+  title: 'salt_refactor: pem-fingerprint (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename pem_finger to pem_fingerprint and update the usage of the crypt
+    function throughout the repo without changing any function names or variable names.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/pem-fingerprint-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/pem-fingerprint#descriptive
+  title: 'salt_refactor: pem-fingerprint (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename the attribute 'pem_finger' to 'pem_fingerprint' in relevant
+    files including '__init__.py' in the 'cloud' directory, 'crypt.py', 'key.py' in
+    both the root and 'modules', 'cloud.py' in 'utils', and 'key.py' in 'wheel'. Update
+    all occurrences of this attribute in these files, ensuring that its usage reflects
+    the new attribute name 'pem_fingerprint' while maintaining the existing functionality
+    intact, especially within function calls or definitions related to encryption
+    and key management tasks.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/pem-fingerprint-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/pem-fingerprint#lazy
+  title: 'salt_refactor: pem-fingerprint (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update the identifier 'pem_finger' to 'pem_fingerprint' and adjust
+    its references accordingly in the repository.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/pem-fingerprint-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/perm-denied#base
+  title: 'salt_refactor: perm-denied (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename EX_NOPERM into EX_PERM_DENIED and update the usage within the
+    codebase.
+  params:
+    mode: base
+    repo: salt_refactor
+    test_file: tests/salt_refactor/perm-denied-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/perm-denied#descriptive
+  title: 'salt_refactor: perm-denied (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Rename the constant EX_NOPERM to EX_PERM_DENIED in the 'exitcodes.py'
+    file under the 'salt/defaults' directory. After renaming, ensure that this change
+    is reflected across all usages within the codebase, specifically in 'ssh/__init__.py'
+    within the 'salt/client' directory and 'crypt.py' in the 'salt' directory, where
+    the former constant should no longer be referenced, but the new EX_PERM_DENIED
+    should be in use where necessary.
+  params:
+    mode: descriptive
+    repo: salt_refactor
+    test_file: tests/salt_refactor/perm-denied-test.py
+    cwd_hint: salt
+- task_key: salt_refactor/perm-denied#lazy
+  title: 'salt_refactor: perm-denied (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/salt_refactor
+  instructions: Update the naming and usage of EX_NOPERM across the codebase.
+  params:
+    mode: lazy
+    repo: salt_refactor
+    test_file: tests/salt_refactor/perm-denied-test.py
+    cwd_hint: salt
+- task_key: scrapy_refactor/add-log-parameter-disconnect-all#base
+  title: 'scrapy_refactor: add-log-parameter-disconnect-all (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Add a logging parameter to disconnect_all in signal.py in utils. Make
+    the base case true and make sure any calls in tests have log=False
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-disconnect-all.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-disconnect-all#descriptive
+  title: 'scrapy_refactor: add-log-parameter-disconnect-all (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Modify the 'disconnect_all' function in the file signal.py located
+    in the utils directory to include an additional boolean parameter named 'log'
+    with a default value of True. Additionally, update any existing function calls
+    to 'disconnect_all' in the files test_engine.py and test_pipeline_media.py within
+    the tests directory to explicitly include the parameter 'log' with a value of
+    False. Ensure that signalmanager.py remains unchanged.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-disconnect-all.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-disconnect-all#lazy
+  title: 'scrapy_refactor: add-log-parameter-disconnect-all (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Add a logging parameter to disconnect_all with a default true value.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-disconnect-all.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-job-dir#base
+  title: 'scrapy_refactor: add-log-parameter-job-dir (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Add a boolean log parameter to job_dir with the base as True and update
+    all references in the repo to have log=False.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-job-dir.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-job-dir#descriptive
+  title: 'scrapy_refactor: add-log-parameter-job-dir (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Modify the function definition of `job_dir` in the file `job.py` to
+    include an additional boolean parameter named `log` with a default value of `True`.
+    Ensure to update all instances where the `job_dir` function is called in the files
+    `dupefilters.py`, `spiderstate.py`, and `scheduler.py` to explicitly set this
+    new parameter to `False`. Additionally, ensure that the module `logging` is imported
+    in the `job.py` file where `job_dir` is defined.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-job-dir.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-job-dir#lazy
+  title: 'scrapy_refactor: add-log-parameter-job-dir (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Incorporate a boolean log parameter into job_dir and adjust all relevant
+    references.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-job-dir.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-xmliter#base
+  title: 'scrapy_refactor: add-log-parameter-xmliter (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Add a log boolean parameter to the xmliter function in scrapy/utils/iterators.py
+    and make the base case true. For all testing calls make log=False but otherwise
+    leave it as true.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-xmliter.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-xmliter#descriptive
+  title: 'scrapy_refactor: add-log-parameter-xmliter (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Enhance the xmliter function in the file named 'iterators.py' located
+    in the 'scrapy/utils' directory by adding a new boolean parameter named 'log'.
+    Set the default value of this parameter to 'true'. In the file named 'test_utils_iterators.py',
+    located in the 'tests' directory, ensure that all calls to the xmliter function
+    explicitly set this new parameter to 'false'.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-xmliter.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/add-log-parameter-xmliter#lazy
+  title: 'scrapy_refactor: add-log-parameter-xmliter (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Add a log parameter with a default value to the xmliter function and
+    adjust it in test calls.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/add-log-parameter-xmliter.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/genspider-functions-to-utils-url#base
+  title: 'scrapy_refactor: genspider-functions-to-utils-url (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: move the url functions outside of the main class in commands/genspider
+    to utils url and update the imports accordingly.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/genspider-functions-to-utils-url.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/genspider-functions-to-utils-url#descriptive
+  title: 'scrapy_refactor: genspider-functions-to-utils-url (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Please relocate the functions verify_url_scheme, sanitize_module_name,
+    and extract_domain from the file genspider.py located in the scrapy/commands directory
+    to the utils url file named url.py in the scrapy/utils directory. After moving
+    these functions, ensure that you update the import statements in genspider.py
+    to properly import these functions from their new location in url.py. Modify any
+    necessary import statements in url.py to maintain functionality after the functions
+    are relocated.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/genspider-functions-to-utils-url.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/genspider-functions-to-utils-url#lazy
+  title: 'scrapy_refactor: genspider-functions-to-utils-url (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Refactor URL functions in commands/genspider to a new utils module.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/genspider-functions-to-utils-url.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-downloadermiddlewares-utils#base
+  title: 'scrapy_refactor: new-downloadermiddlewares-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Create a new utils file called downloadermiddlewares.py and move the
+    functions outside the class in stats.py in downloadermiddlewares to it and import
+    them correctly.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-downloadermiddlewares-utils.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-downloadermiddlewares-utils#descriptive
+  title: 'scrapy_refactor: new-downloadermiddlewares-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Create a new file named downloadermiddlewares.py within the utils
+    directory of the Scrapy project and relocate the standalone functions get_status_size
+    and get_header_size from the downloadermiddlewares class in the stats.py file
+    to this new file. Ensure that these functions are correctly imported back into
+    the stats.py file where they are utilized. Follow the necessary conventions for
+    managing imports, such as typing and Scrapy-specific utilities, to maintain functionality.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-downloadermiddlewares-utils.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-downloadermiddlewares-utils#lazy
+  title: 'scrapy_refactor: new-downloadermiddlewares-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Move some functions from stats.py to a new file downloadermiddlewares.py
+    and adjust imports as needed.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-downloadermiddlewares-utils.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-spider-utils-in-spiders#base
+  title: 'scrapy_refactor: new-spider-utils-in-spiders (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Create a new file called spider_utils.py in scrapy/spiders and take
+    all functions outside of a class in all the files in scrapy/spider and put them
+    in it. Update all the imports accordingly, and don't change variable names
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-spider-utils-in-spiders.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-spider-utils-in-spiders#descriptive
+  title: 'scrapy_refactor: new-spider-utils-in-spiders (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Create a new Python file named `spider_utils.py` within the `scrapy/spiders`
+    directory. Transfer all global-level functions (functions not contained within
+    any class) from files such as `sitemap.py` and `crawl.py` located in the same
+    directory into `spider_utils.py`. Subsequently, adjust the import statements in
+    these source files to use the functions from `spider_utils.py`, ensuring you maintain
+    the same variable and function naming conventions as previously established.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-spider-utils-in-spiders.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-spider-utils-in-spiders#lazy
+  title: 'scrapy_refactor: new-spider-utils-in-spiders (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Move standalone functions from scrapy/spider files to a new file called
+    spider_utils.py.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-spider-utils-in-spiders.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-verify-reactor-class#base
+  title: 'scrapy_refactor: new-verify-reactor-class (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Create a new class called VerifyReactor for the verify_installed and
+    is_asyncio_reactor_installed functions within the reactor.py in utils and update
+    the calls of the functions and docs in the repository accordingly.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-verify-reactor-class.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-verify-reactor-class#descriptive
+  title: 'scrapy_refactor: new-verify-reactor-class (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: 'Create a new class called VerifyReactor within the file reactor.py
+    located in the scrapy/utils directory. This class should encapsulate the two functions:
+    verify_installed and is_asyncio_reactor_installed. Once created, update all existing
+    references across the repository to these functions so that they are accessed
+    via the new VerifyReactor class. This includes modifying any relevant import statements
+    in files like defer.py, crawler.py, and various documentation and test files (e.g.,
+    asyncio.rst, test_utils_asyncio.py) to ensure the VerifyReactor class is correctly
+    utilized. Be sure to revise the documentation wherever these methods are mentioned
+    to refer to their new location within the VerifyReactor class.'
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-verify-reactor-class.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/new-verify-reactor-class#lazy
+  title: 'scrapy_refactor: new-verify-reactor-class (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Refactor reactor-related functions into a new VerifyReactor class
+    and update relevant documentation and references.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/new-verify-reactor-class.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/not-supported-exception-to-unsupported#base
+  title: 'scrapy_refactor: not-supported-exception-to-unsupported (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Change the NotSupported exception to Unsupported and update the repository
+    references with the new exception.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/not-supported-exception-to-unsupported.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/not-supported-exception-to-unsupported#descriptive
+  title: 'scrapy_refactor: not-supported-exception-to-unsupported (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Replace all references and uses of the 'NotSupported' exception with
+    the 'Unsupported' exception in the Scrapy project repository. Specifically, update
+    imports, class definitions, and exception raising or handling in the files located
+    in the 'scrapy/core/downloader/handlers/', 'scrapy/http/response/', 'scrapy/spiders/',
+    'tests/', 'scrapy/exceptions.py', and the documentation file 'docs/topics/exceptions.rst'.
+    Ensure that 'Unsupported' inherits from Exception where it is newly defined and
+    is properly employed in place of 'NotSupported' across the indicated modules and
+    documentation.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/not-supported-exception-to-unsupported.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/not-supported-exception-to-unsupported#lazy
+  title: 'scrapy_refactor: not-supported-exception-to-unsupported (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Rename the NotSupported exception to Unsupported in the codebase.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/not-supported-exception-to-unsupported.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/parameterize-gunzip#base
+  title: 'scrapy_refactor: parameterize-gunzip (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Encapsulate the parameters in gunzip into a new class called GunzipParams
+    and update all references within the repository to create a GunzipParams object.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/parameterize-gunzip.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/parameterize-gunzip#descriptive
+  title: 'scrapy_refactor: parameterize-gunzip (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Create a new class named GunzipParams in the file 'gz.py' located
+    within the 'utils' directory of the 'scrapy' repository. This class should include
+    the attributes 'data' and 'max_size'. Update the signature of the 'gunzip' function
+    in the same 'gz.py' file so that it accepts a GunzipParams object as its only
+    parameter and adjusts its usage across the repository. Make sure all references
+    and imports related to gunzip actions in files like 'sitemap.py' and 'httpcompression.py'
+    within the 'spiders' and 'downloadermiddlewares' directories respectively, are
+    updated to utilize this new GunzipParams object.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/parameterize-gunzip.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/parameterize-gunzip#lazy
+  title: 'scrapy_refactor: parameterize-gunzip (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Introduce a GunzipParams class to manage gunzip parameters.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/parameterize-gunzip.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-description-commands#base
+  title: 'scrapy_refactor: rename-description-commands (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Rename the short_desc and the long_desc for all the scrapy/commands
+    to short_description and long_description and update the repository for those
+    references.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-description-commands.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-description-commands#descriptive
+  title: 'scrapy_refactor: rename-description-commands (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: 'In the ''scrapy/commands'' directory, rename all occurrences of ''short_desc''
+    to ''short_description'' and ''long_desc'' to ''long_description'' in the ''__init__.py''
+    file and in each of the following command files: ''bench.py'', ''check.py'', ''crawl.py'',
+    ''edit.py'', ''fetch.py'', ''genspider.py'', ''list.py'', ''parse.py'', ''runspider.py'',
+    ''settings.py'', ''shell.py'', ''startproject.py'', ''version.py'', and ''view.py''.
+    Ensure these changes are also made in any method names and variable references
+    within these files to maintain consistency across the project.'
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-description-commands.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-description-commands#lazy
+  title: 'scrapy_refactor: rename-description-commands (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Update the naming convention for description fields in scrapy commands.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-description-commands.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-engine-status#base
+  title: 'scrapy_refactor: rename-engine-status (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: For all the engine_status functions within scrapy/utils/engine.py,
+    can you start them with an underscore to indicate to only use them in scrapy.
+    Update all the references in the repo with these new function names.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-engine-status.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-engine-status#descriptive
+  title: 'scrapy_refactor: rename-engine-status (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: In the scrapy/utils/engine.py file, prepend an underscore to the names
+    of functions related to engine status, such as renaming 'get_engine_status' to
+    '_get_engine_status'. After modifying these function names, ensure that you update
+    all occurrences and references of these names across the entire repository where
+    they are used or imported—including, but not limited to, debug.py, telnet.py,
+    memusage.py, extensions.rst in the docs, and test_crawl.py—to reflect the new
+    names with prefixed underscores. Ensure that these functions are only used internally
+    within the Scrapy project, as indicated by the new function naming convention.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-engine-status.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-engine-status#lazy
+  title: 'scrapy_refactor: rename-engine-status (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Rename engine_status functions in scrapy/utils/engine.py to start
+    with an underscore and update references accordingly.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-engine-status.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-processtest-testproc#base
+  title: 'scrapy_refactor: rename-processtest-testproc (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Rename the ProcessTest class in scrapy/utils/testproc.py to testproc
+    as that is what the file is named itself. Update all references in the repo accordingly.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-processtest-testproc.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-processtest-testproc#descriptive
+  title: 'scrapy_refactor: rename-processtest-testproc (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: In the file named testproc.py located in the scrapy/utils directory,
+    rename the class ProcessTest to TestProc to match the filename. Additionally,
+    update all occurrences where this class is referenced throughout the repository
+    to reflect this change, including in files such as test_command_fetch.py, test_command_parse.py,
+    test_command_shell.py, and test_command_version.py, ensuring the class and its
+    methods like execute and _process_finished are properly accessed under the new
+    name.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-processtest-testproc.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/rename-processtest-testproc#lazy
+  title: 'scrapy_refactor: rename-processtest-testproc (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Adjust the class name in scrapy/utils/testproc.py to match the filename
+    and update all references throughout the repository.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/rename-processtest-testproc.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/sitemap-url-to-url#base
+  title: 'scrapy_refactor: sitemap-url-to-url (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: move sitemap_urls_from_robots.py in sitemap.py to url.py and update
+    the repository references accordingly. Keep the tests in the same place just change
+    the imports.
+  params:
+    mode: base
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/sitemap-url-to-url.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/sitemap-url-to-url#descriptive
+  title: 'scrapy_refactor: sitemap-url-to-url (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Transfer the function `sitemap_urls_from_robots` from the `sitemap.py`
+    file within the `scrapy/spiders` folder to the `url.py` file in the `scrapy/utils`
+    directory. Ensure all references to this function in the entire repository, such
+    as in test files like `test_utils_sitemap.py` and any spiders like `sitemap.py`,
+    are updated to reflect its new location. Maintain the tests associated with this
+    function in their current files but adjust the import paths correspondingly to
+    import from the new location in `scrapy/utils/url.py`.
+  params:
+    mode: descriptive
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/sitemap-url-to-url.py
+    cwd_hint: scrapy
+- task_key: scrapy_refactor/sitemap-url-to-url#lazy
+  title: 'scrapy_refactor: sitemap-url-to-url (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/scrapy_refactor
+  instructions: Shift sitemap_urls_from_robots.py content from sitemap.py to url.py
+    and adjust all related references.
+  params:
+    mode: lazy
+    repo: scrapy_refactor
+    test_file: tests/scrapy_refactor/sitemap-url-to-url.py
+    cwd_hint: scrapy
+- task_key: tornado_refactor/global-objects#base
+  title: 'tornado_refactor: global-objects (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: tornado.concurrent.dummy_executor is supposed to be referenced globally.
+    Move it into a `_globals.py`.
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/global-objects.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/global-objects#descriptive
+  title: 'tornado_refactor: global-objects (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Rework the handling of 'dummy_executor' in the Tornado framework to
+    centralize its definition. Move the definition of 'dummy_executor' to a new file
+    named `_globals.py`. Ensure that `wsgi.py` and `netutil.py` within the Tornado
+    directory import `dummy_executor` specifically from `tornado._globals`. Also,
+    remove or refactor any existing references or definitions of `dummy_executor`
+    in `concurrent.py` to ensure it is no longer defined or directly referenced there.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/global-objects.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/global-objects#lazy
+  title: 'tornado_refactor: global-objects (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Move `dummy_executor` to `_globals.py`.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/global-objects.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/log-utils#base
+  title: 'tornado_refactor: log-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Move the options related functions in tornado/log.py, `enable_pretty_logging()`
+    and `define_logging_options()`, to a global_log_options.py
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/log-utils.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/log-utils#descriptive
+  title: 'tornado_refactor: log-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Move the functions `enable_pretty_logging()` and `define_logging_options()`
+    from the file `log.py` in the Tornado framework to a new file named `global_log_options.py`.
+    Ensure after moving that `enable_pretty_logging()` and `define_logging_options()`
+    no longer exist in `log.py`, and update any necessary imports in files such as
+    `options.py` and `log_test.py` to reflect this change.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/log-utils.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/log-utils#lazy
+  title: 'tornado_refactor: log-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Relocate logging-related functions to a new module.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/log-utils.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/option-parser-with-pretty-print#base
+  title: 'tornado_refactor: option-parser-with-pretty-print (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Refactor the `enable_pretty_logging()` function from `tornado/log.py`
+    as a method for the class `tornado.option.OptionParser`.
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/option-parser-with-pretty-print.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/option-parser-with-pretty-print#descriptive
+  title: 'tornado_refactor: option-parser-with-pretty-print (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Refactor the `enable_pretty_logging()` function by moving it from
+    the `log.py` file in the Tornado framework to the `OptionParser` class located
+    in the `options.py` file. Ensure that this transition involves proper handling
+    and integration of logging functionalities needed by `OptionParser`, such as importing
+    necessary logging and logging handlers in the `options.py` file. Follow up by
+    removing the `enable_pretty_logging()` function definition from `log.py` to ensure
+    that it does not exist there anymore.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/option-parser-with-pretty-print.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/option-parser-with-pretty-print#lazy
+  title: 'tornado_refactor: option-parser-with-pretty-print (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Refactor `enable_pretty_logging` into a method in `OptionParser`.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/option-parser-with-pretty-print.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/options-utils#base
+  title: 'tornado_refactor: options-utils (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Move all the stray functions in `tornado/options.py` and move them
+    into a newly created `global_options.py`. Update all the imports in the repository
+    accordingly.
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/options-utils.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/options-utils#descriptive
+  title: 'tornado_refactor: options-utils (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Transfer all independent functions from the file `options.py` in the
+    `tornado` directory to a new file named `global_options.py` in the same directory.
+    Additionally, update all relevant import statements across various files in the
+    repository, ensuring that places such as `blog.py`, `facebook.py`, `file_uploader.py`,
+    and others correctly reference `global_options.py` instead. This update should
+    address all occurrences of these functions, including in any demo or test files.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/options-utils.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/options-utils#lazy
+  title: 'tornado_refactor: options-utils (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Refactor `tornado/options.py` by relocating its functions to `global_options.py`
+    and adjust imports throughout the repository.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/options-utils.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/remove-locale-data#base
+  title: 'tornado_refactor: remove-locale-data (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: tornado._locale_data is only used by tornado.locale. Move the locale
+    data into locale, and remove the original file.
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/remove-locale-data.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/remove-locale-data#descriptive
+  title: 'tornado_refactor: remove-locale-data (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Refactor the code in the 'tornado' module by integrating the 'LOCALE_NAMES'
+    constant directly into the 'locale.py' file from '_locale_data.py', and subsequently
+    eliminate the '_locale_data.py' file. Ensure that after moving 'LOCALE_NAMES',
+    no import statements in 'locale.py' are trying to import it from '_locale_data.py',
+    preserving the functionality but consolidating related data and simplifying the
+    module structure.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/remove-locale-data.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/remove-locale-data#lazy
+  title: 'tornado_refactor: remove-locale-data (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Move the locale data to a more appropriate location.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/remove-locale-data.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/rename-http1connection#base
+  title: 'tornado_refactor: rename-http1connection (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Rename the HTTP1Connection class to HTTP1xConnection and do not change
+    any related classes function or filenames because of this. Update all references
+    and files though with the new name.
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/rename-http1connection.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/rename-http1connection#descriptive
+  title: 'tornado_refactor: rename-http1connection (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Rename the class "HTTP1Connection" to "HTTP1xConnection" in the file
+    named "http1connection.py". Ensure to update all the references to the renamed
+    class in the repository, specifically updating the import and usage in files like
+    "simple_httpclient.py", "http1connection_test.py", "httpserver_test.py", and comments
+    mentioning it in "web_test.py". Do not change any other class functionality or
+    the names of any other related classes or functions during this renaming process.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/rename-http1connection.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/rename-http1connection#lazy
+  title: 'tornado_refactor: rename-http1connection (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Rename the HTTP1Connection class to HTTP1xConnection and update all
+    references accordingly.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/rename-http1connection.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/rename-to-camel-case#base
+  title: 'tornado_refactor: rename-to-camel-case (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: 'Rename the method `tornado.testing.AsyncTestCase.get_new_ioloop()`
+    to camel case: getNewIoLoop() and update all references in the repo accordingly.'
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/rename-as-camel-case.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/rename-to-camel-case#descriptive
+  title: 'tornado_refactor: rename-to-camel-case (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Rename the method `get_new_ioloop()` in the `AsyncTestCase` class
+    to `getNewIoLoop()` in the `testing.py` file, and ensure all references in the
+    `gen_test.py` file, also under the Tornado framework, are updated to reflect this
+    change. Additionally, check and update any other occurrences across the entire
+    repository where this method might be called or referenced.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/rename-as-camel-case.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/rename-to-camel-case#lazy
+  title: 'tornado_refactor: rename-to-camel-case (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Rename and update references for a method in the repository.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/rename-as-camel-case.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/resolvers-as-separate#base
+  title: 'tornado_refactor: resolvers-as-separate (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Can you move the Resolver, and its child classes in tornado.netutils
+    into a newly created file called resolver.py. Also update all usages through the
+    repository.
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/resolvers-as-separate.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/resolvers-as-separate#descriptive
+  title: 'tornado_refactor: resolvers-as-separate (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Please transfer the Resolver class along with all its subclass dependencies
+    from the netutils module to a newly created file named resolver.py within the
+    tornado directory. After relocating these classes, ensure to adjust all import
+    statements across the repository that reference the Resolver or any of its subclasses
+    accordingly. This includes updating files like websocket.py, tcpclient.py, and
+    various test files like websocket_test.py and simple_httpclient_test.py, ensuring
+    they accurately reference the new location of these classes.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/resolvers-as-separate.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/resolvers-as-separate#lazy
+  title: 'tornado_refactor: resolvers-as-separate (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Move and update the Resolver classes in the project.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/resolvers-as-separate.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/tcpclient-connect-params#base
+  title: 'tornado_refactor: tcpclient-connect-params (base)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Can you wrap up the parameters for TCPClient.connect() into a separate
+    dataclass named TCPClientConfig in a new file tornado/tcpclientconfig.py and import
+    and pass that for all the calls throughout the repo?
+  params:
+    mode: base
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/tcpclient-connect-params.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/tcpclient-connect-params#descriptive
+  title: 'tornado_refactor: tcpclient-connect-params (descriptive)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Create a new dataclass named TCPClientConfig in the file named tcpclientconfig.py
+    within the tornado directory. Modify the files client.py in demos/tcpecho, simple_httpclient.py,
+    tcpclient.py, and tcpclient_test.py by importing TCPClientConfig from tornado.tcpclientconfig
+    and use this class to encapsulate the parameters in calls to TCPClient.connect()
+    in those files. Make sure that TCPClient.connect() in these files accepts an instance
+    of TCPClientConfig with necessary configuration parameters.
+  params:
+    mode: descriptive
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/tcpclient-connect-params.py
+    cwd_hint: tornado
+- task_key: tornado_refactor/tcpclient-connect-params#lazy
+  title: 'tornado_refactor: tcpclient-connect-params (lazy)'
+  language: python
+  workspace:
+    type: snapshot
+    source: repositories/tornado_refactor
+  instructions: Introduce a dataclass for TCP client configurations in the repo.
+  params:
+    mode: lazy
+    repo: tornado_refactor
+    test_file: tests/tornado_refactor/tcpclient-connect-params.py
+    cwd_hint: tornado

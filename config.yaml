@@ -1,0 +1,11 @@
+# Committed, non-secret defaults. Operator overrides live in the DB
+# (runtime_setting, editable from Settings). Secrets live only in .env.
+server:
+  host: 0.0.0.0
+  port: 8000
+
+defaults:
+  model: openrouter/free
+  task_timeout_seconds: 1800
+  eval_tool_max_attempts: 3
+  retention_runs_cap: 25
