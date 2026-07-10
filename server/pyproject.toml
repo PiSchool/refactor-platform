@@ -1,0 +1,42 @@
+[project]
+name = "refactor-platform-server"
+version = "1.0.0"
+description = "Refactor Platform backend: plugin-driven refactoring-agent benchmark runner"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.32",
+    "sqlalchemy[asyncio]>=2.0",
+    "aiosqlite>=0.20",
+    "alembic>=1.13",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.5",
+    "pyyaml>=6.0",
+    "jinja2>=3.1",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+postgres = ["asyncpg>=0.29"]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "httpx>=0.27",
+    # the swe benchmark's CodeBLEU metric, so its stage is covered by tests
+    "codebleu==0.7.0",
+    "tree-sitter==0.22.3",
+    "tree-sitter-java==0.21.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+markers = [
+    "data: requires downloaded benchmark data",
+    "live: requires real agent CLI + credentials",
+]
+
+[tool.uv]
+package = false

@@ -1,0 +1,28 @@
+type: benchmark
+key: refbench
+name: RefactorBench
+version: 1.0.0
+language: python
+setups: [s1, s1_lsp, s1_eval, s3]
+facets:
+  - {key: mode, label: Prompt mode}
+  - {key: repo, label: Project}
+prompt:
+  template: prompts/task.md.j2
+data:
+  bootstrap: data_bootstrap.py
+evaluation:
+  capture: [git_diff, events_metrics]
+  verify:
+    - {preset: workspace_changed}
+    - preset: python_tests
+      config:
+        runner: runpy
+        test_from: params.test_file
+        compat_shim: py39_ast
+        cwd_hint_from: params.cwd_hint
+        sys_path_repo_root: true
+        timeout: 300
+  passed: "workspace_changed and python_tests"
+display:
+  tabs: {output: Diff, response: Response}

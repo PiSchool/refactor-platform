@@ -1,0 +1,17 @@
+type: benchmark
+key: fixturebench
+name: Fixture Benchmark
+version: 1.0.0
+language: python
+setups: [s1, s1_eval]
+facets:
+  - {key: mode, label: Mode}
+prompt:
+  template: prompts/task.md.j2
+evaluation:
+  capture: [git_diff, events_metrics]
+  verify:
+    - {preset: workspace_changed}
+  passed: "workspace_changed"
+display:
+  tabs: {output: Diff, response: Response}

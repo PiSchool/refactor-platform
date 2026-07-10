@@ -1,0 +1,28 @@
+type: benchmark
+key: swe
+name: SWE-Refactor
+version: 1.0.0
+language: java
+entrypoint: plugin:Plugin
+setups: [s1, s1_lsp, s1_eval, s3]
+facets:
+  - {key: refactoringType, label: Refactoring type}
+  - {key: project, label: Project}
+data:
+  bootstrap: data_bootstrap.py
+evaluation:
+  capture: [git_diff, events_metrics, swe.codebleu]
+  verify:
+    - {preset: workspace_changed}
+    - {preset: swe.prepare_candidate}
+    - preset: refactoring_miner
+      config:
+        binary_from_data: data/tools/RefactoringMiner-3.0.10/bin/RefactoringMiner
+    - preset: java_build
+      config:
+        command_from: params.compileCommand
+        jdk_from: params.compileJDK
+        fallback_jdk: 17
+  passed: "workspace_changed and refactoring_miner and java_build"
+display:
+  tabs: {output: Diff, response: Response}

@@ -1,0 +1,45 @@
+# Refactor Platform — two-service stack.
+#   backend  : FastAPI + PTY-owned agent sessions + Java/LSP toolchain
+#   frontend : Next.js dashboard, proxies /api and /ws to the backend
+#
+# Secrets come from .env (copy .env.example). Persistent state lives in named
+# volumes: platform DB/outputs, plus each benchmark's bootstrapped data.
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    env_file: [.env]
+    environment:
+      RP_DATA_DIR: /data
+    volumes:
+      - platform-data:/data
+      - refbench-data:/app/plugins/benchmarks/refbench/data
+      - swe-data:/app/plugins/benchmarks/swe/data
+    # Loopback only: the dashboard proxies /api over the compose network, so the
+    # API never needs a public port. Override RP_API_BIND to expose it.
+    ports:
+      - "${RP_API_BIND:-127.0.0.1}:8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: docker/frontend.Dockerfile
+      args:
+        PLATFORM_API_ORIGIN: http://backend:8000
+    environment:
+      PLATFORM_API_ORIGIN: http://backend:8000
+    depends_on:
+      backend:
+        condition: service_healthy
+    # The public entry point. Deployments that front it on another port (the demo
+    # host serves :8787) set RP_WEB_PORT rather than editing this file.
+    ports:
+      - "${RP_WEB_PORT:-3000}:3000"
+    restart: unless-stopped
+
+volumes:
+  platform-data:
+  refbench-data:
+  swe-data:

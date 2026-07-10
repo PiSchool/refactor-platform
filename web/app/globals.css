@@ -1,0 +1,256 @@
+@import '@xterm/xterm/css/xterm.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── GitHub Dark (default) ── */
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-canvas-default: 13 17 23;
+  --color-canvas-overlay: 22 27 34;
+  --color-canvas-inset: 1 4 9;
+  --color-canvas-subtle: 22 27 34;
+  --color-fg-default: 230 237 243;
+  --color-fg-muted: 125 133 144;
+  --color-fg-subtle: 110 118 129;
+  --color-fg-on-emphasis: 255 255 255;
+  --color-border-default: 48 54 61;
+  --color-border-muted: 33 38 45;
+  --color-border-subtle: 33 38 45;
+  --color-neutral-emphasis-plus: 110 118 129;
+  --color-neutral-emphasis: 110 118 129;
+  --color-neutral-muted: 33 38 45;
+  --color-neutral-subtle: 22 27 34;
+  --color-accent-fg: 88 166 255;
+  --color-accent-emphasis: 31 111 235;
+  --color-accent-muted: 56 139 253;
+  --color-accent-subtle: 18 53 101;
+  --color-success-fg: 63 185 80;
+  --color-success-emphasis: 35 134 54;
+  --color-success-muted: 35 134 54;
+  --color-success-subtle: 12 45 22;
+  --color-attention-fg: 210 153 34;
+  --color-attention-emphasis: 154 103 3;
+  --color-attention-muted: 154 103 3;
+  --color-attention-subtle: 42 33 5;
+  --color-danger-fg: 248 81 73;
+  --color-danger-emphasis: 218 54 51;
+  --color-danger-muted: 218 54 51;
+  --color-danger-subtle: 52 17 17;
+  --color-done-fg: 163 113 247;
+  --color-done-emphasis: 130 80 223;
+  --color-btn-bg: 33 38 45;
+  --color-btn-border: 48 54 61;
+  --color-btn-hover-bg: 48 54 61;
+  --color-btn-primary-bg: 35 134 54;
+  --color-btn-primary-hover-bg: 46 160 67;
+  --color-btn-danger-bg: 218 54 51;
+  --color-header-bg: 22 27 34;
+  --color-sidenav-selected: 33 38 45;
+  --color-timeline-badge-bg: 33 38 45;
+}
+
+/* ── GitHub Light ── */
+[data-theme='light'] {
+  color-scheme: light;
+  --color-canvas-default: 255 255 255;
+  --color-canvas-overlay: 255 255 255;
+  --color-canvas-inset: 246 248 250;
+  --color-canvas-subtle: 246 248 250;
+  --color-fg-default: 31 35 40;
+  --color-fg-muted: 101 109 118;
+  --color-fg-subtle: 101 109 118;
+  --color-fg-on-emphasis: 255 255 255;
+  --color-border-default: 208 215 222;
+  --color-border-muted: 216 222 228;
+  --color-border-subtle: 234 238 242;
+  --color-neutral-emphasis-plus: 36 41 47;
+  --color-neutral-emphasis: 101 109 118;
+  --color-neutral-muted: 175 184 193;
+  --color-neutral-subtle: 234 238 242;
+  --color-accent-fg: 9 105 218;
+  --color-accent-emphasis: 9 105 218;
+  --color-accent-muted: 84 174 255;
+  --color-accent-subtle: 221 244 255;
+  --color-success-fg: 26 127 55;
+  --color-success-emphasis: 26 127 55;
+  --color-success-muted: 74 194 107;
+  --color-success-subtle: 218 251 225;
+  --color-attention-fg: 154 103 0;
+  --color-attention-emphasis: 154 103 0;
+  --color-attention-muted: 210 153 34;
+  --color-attention-subtle: 255 248 217;
+  --color-danger-fg: 207 34 46;
+  --color-danger-emphasis: 207 34 46;
+  --color-danger-muted: 255 129 130;
+  --color-danger-subtle: 255 235 233;
+  --color-done-fg: 130 80 223;
+  --color-done-emphasis: 130 80 223;
+  --color-btn-bg: 246 248 250;
+  --color-btn-border: 208 215 222;
+  --color-btn-hover-bg: 243 244 246;
+  --color-btn-primary-bg: 26 127 55;
+  --color-btn-primary-hover-bg: 42 145 72;
+  --color-btn-danger-bg: 207 34 46;
+  --color-header-bg: 36 41 47;
+  --color-sidenav-selected: 255 255 255;
+  --color-timeline-badge-bg: 234 238 242;
+}
+
+/* ── GitHub Dimmed ── */
+[data-theme='dimmed'] {
+  color-scheme: dark;
+  --color-canvas-default: 34 39 46;
+  --color-canvas-overlay: 44 50 58;
+  --color-canvas-inset: 26 30 36;
+  --color-canvas-subtle: 44 50 58;
+  --color-fg-default: 173 186 199;
+  --color-fg-muted: 118 131 144;
+  --color-fg-subtle: 118 131 144;
+  --color-fg-on-emphasis: 255 255 255;
+  --color-border-default: 68 76 86;
+  --color-border-muted: 55 62 71;
+  --color-border-subtle: 55 62 71;
+  --color-neutral-emphasis-plus: 118 131 144;
+  --color-neutral-emphasis: 118 131 144;
+  --color-neutral-muted: 55 62 71;
+  --color-neutral-subtle: 44 50 58;
+  --color-accent-fg: 82 139 255;
+  --color-accent-emphasis: 51 113 231;
+  --color-accent-muted: 65 132 228;
+  --color-accent-subtle: 24 49 87;
+  --color-success-fg: 70 189 96;
+  --color-success-emphasis: 38 143 61;
+  --color-success-muted: 38 143 61;
+  --color-success-subtle: 17 51 28;
+  --color-attention-fg: 198 144 38;
+  --color-attention-emphasis: 148 99 6;
+  --color-attention-muted: 148 99 6;
+  --color-attention-subtle: 44 36 10;
+  --color-danger-fg: 229 83 75;
+  --color-danger-emphasis: 204 52 50;
+  --color-danger-muted: 204 52 50;
+  --color-danger-subtle: 53 22 22;
+  --color-done-fg: 152 106 240;
+  --color-done-emphasis: 122 73 214;
+  --color-btn-bg: 55 62 71;
+  --color-btn-border: 68 76 86;
+  --color-btn-hover-bg: 68 76 86;
+  --color-btn-primary-bg: 38 143 61;
+  --color-btn-primary-hover-bg: 51 163 76;
+  --color-btn-danger-bg: 204 52 50;
+  --color-header-bg: 44 50 58;
+  --color-sidenav-selected: 55 62 71;
+  --color-timeline-badge-bg: 55 62 71;
+}
+
+html {
+  background: rgb(var(--color-canvas-default));
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: rgb(var(--color-canvas-default));
+  color: rgb(var(--color-fg-default));
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+code, pre, kbd, samp {
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+  font-size: 12px;
+}
+
+* { box-sizing: border-box; }
+
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb {
+  background: rgb(var(--color-border-default) / 0.6);
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-track { background: transparent; }
+
+::selection {
+  background: rgb(var(--color-accent-fg) / 0.3);
+}
+
+@layer base {
+  a { color: rgb(var(--color-accent-fg)); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+}
+
+/* ── Animations ── */
+
+@keyframes status-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(var(--color-attention-fg) / 0.4); }
+  50% { box-shadow: 0 0 6px 2px rgb(var(--color-attention-fg) / 0.2); }
+}
+.status-glow-running { animation: status-glow 2s ease-in-out infinite; border-radius: 9999px; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-neutral-muted)) 25%,
+    rgb(var(--color-neutral-emphasis) / 0.2) 50%,
+    rgb(var(--color-neutral-muted)) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.animate-fade-in { animation: fade-in 0.15s ease-out forwards; }
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in-up { animation: fade-in-up 0.2s ease-out forwards; }
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-6px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+.animate-slide-down { animation: slide-down 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+.animate-slide-in-right { animation: slide-in-right 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+@keyframes toast-out {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(12px); }
+}
+.animate-toast-out { animation: toast-out 0.2s ease-in forwards; }
+
+/* ── Focus ring utility ── */
+.focus-ring {
+  outline: none;
+}
+.focus-ring:focus-visible {
+  outline: 2px solid rgb(var(--color-accent-fg));
+  outline-offset: 2px;
+}
+
+/* ── Stagger children fade-in ── */
+.stagger-children > * { animation: fade-in-up 0.2s ease-out backwards; }
+.stagger-children > *:nth-child(1)  { animation-delay: 0.02s; }
+.stagger-children > *:nth-child(2)  { animation-delay: 0.04s; }
+.stagger-children > *:nth-child(3)  { animation-delay: 0.06s; }
+.stagger-children > *:nth-child(4)  { animation-delay: 0.08s; }
+.stagger-children > *:nth-child(5)  { animation-delay: 0.10s; }
+.stagger-children > *:nth-child(n+6) { animation-delay: 0.12s; }

@@ -1,0 +1,5 @@
+type: lsp
+key: pylsp
+name: Python LSP
+language: python
+entrypoint: plugin:Plugin
