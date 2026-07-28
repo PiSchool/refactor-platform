@@ -1,8 +1,6 @@
 """ORM → API JSON (camelCase). Kept in one place so shapes stay consistent."""
 from __future__ import annotations
-
 from datetime import timezone
-from pathlib import Path
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -16,12 +14,20 @@ from app.db.models import (
     Task,
     TaskResult,
 )
+from app.config import REPO_ROOT, get_settings
+from app.results.artifacts import ref_dicts, session_artifact_refs, task_artifact_refs
+from app.results.redaction import public_data
 
 _ACTIVE = {"queued", "running"}
 
 
 def _iso(dt):
     return dt.astimezone(timezone.utc).isoformat() if dt else None
+
+
+def _public(value):
+    settings = get_settings()
+    return public_data(value, (settings.data_dir, settings.outputs_dir, REPO_ROOT))
 
 
 async def run_summary(run: Run, s: AsyncSession) -> dict:
@@ -49,6 +55,9 @@ async def run_summary(run: Run, s: AsyncSession) -> dict:
         "agentTool": {"key": tool.key, "name": tool.name},
         "model": run.model,
         "taskTimeoutSeconds": run.task_timeout_seconds,
+        # Archived study runs carry provenance here; the UI badges them so an
+        # imported result is never mistaken for one this instance produced.
+        "config": _public(run.config or {}),
         "counts": counts,
         "passRate": (counts["passed"] / scored) if scored else 0.0,
         "queuedAt": _iso(run.queued_at),
@@ -70,25 +79,10 @@ async def run_task_detail(rt: RunTask, s: AsyncSession) -> dict:
         "timeoutSeconds": rt.timeout_seconds,
         "startedAt": _iso(rt.started_at),
         "finishedAt": _iso(rt.finished_at),
-        "params": task.params,
-        # Artifact paths are known from the task directory, so the prompt and
-        # diff are viewable while the task is still running — not only after a
-        # TaskResult row exists.
-        "artifacts": _task_artifacts(rt),
+        "params": _public(task.params),
+        "artifacts": ref_dicts(task_artifact_refs(rt.run_id, rt.id)),
         "result": _result(result) if result else None,
-        "session": _session(session) if session else None,
-    }
-
-
-def _task_artifacts(rt: RunTask) -> dict[str, str]:
-    from app.config import get_settings
-
-    art = get_settings().outputs_dir / "runs" / rt.run_id / "tasks" / rt.id
-    return {
-        "prompt": str(art / "prompt.md"),
-        "response": str(art / "response.md"),
-        "diff": str(art / "diff.patch"),
-        "workspaceMeta": str(art / "workspace_meta.json"),
+        "session": _session(session, rt) if session else None,
     }
 
 
@@ -102,30 +96,17 @@ def _result(r: TaskResult) -> dict:
         "tokensInput": r.tokens_input,
         "tokensOutput": r.tokens_output,
         "model": r.model,
-        "metrics": r.metrics,
-        "details": r.details,
-        "artifacts": {
-            "prompt": r.prompt_path,
-            "response": r.response_path,
-            "diff": r.diff_path,
-            "terminal": r.terminal_path,
-            "events": r.events_path,
-            "evalDir": r.eval_dir,
-            "workspaceMeta": _sibling(r.prompt_path, "workspace_meta.json"),
-        },
+        "metrics": _public(r.metrics),
+        "details": _public(r.details),
     }
 
 
-def _sibling(path: str | None, name: str) -> str | None:
-    """Artifacts share one per-task directory; prompt.md anchors it."""
-    return str(Path(path).parent / name) if path else None
-
-
-def _session(sess: AgentSession) -> dict:
+def _session(sess: AgentSession, rt: RunTask) -> dict:
     return {
         "id": sess.id,
         "role": "primary",
         "status": sess.status,
         "startedAt": _iso(sess.started_at),
         "finishedAt": _iso(sess.finished_at),
+        "artifacts": ref_dicts(session_artifact_refs(rt.run_id, rt.id, sess)),
     }

@@ -1,0 +1,181 @@
+#,project,taskId,type,codeSuccessful,compileAndTestResult,refactoringMinerResult,successVerification,durationSeconds,agentDurationSeconds,copilotLspActionCount,timedOut,reason
+1,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,False,False,222.3,55.7,4,False,the code did not perform Extract And Move Method operation.
+2,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,142.0,102.9,4,False,the Extract And Move Method operation is successful.
+3,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,False,False,327.6,252.4,4,False,the code did not perform Extract And Move Method operation.
+4,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,False,False,109.8,109.8,4,False,Extracted method must be public static.
+5,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,False,False,81.8,81.8,4,False,Extracted method must be public static.
+6,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,138.1,42.9,4,False,the Extract And Move Method operation is successful.
+7,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,179.0,76.3,4,False,the Extract And Move Method operation is successful.
+8,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,295.7,193.4,4,False,the Extract And Move Method operation is successful.
+9,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,128.1,87.4,4,False,the Extract And Move Method operation is successful.
+10,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,151.3,82.8,4,False,
+11,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,139.8,92.6,4,False,
+12,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,101.9,54.4,4,False,
+13,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,False,False,False,False,74.5,74.5,4,False,Invalid target file path: 
+14,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,214.6,163.8,4,False,
+15,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,156.8,88.0,4,False,the Extract And Move Method operation is successful.
+16,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,249.8,198.2,4,False,
+17,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,163.5,131.7,4,False,the Extract And Move Method operation is successful.
+18,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,170.9,115.5,4,False,
+19,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,157.2,109.1,4,False,
+20,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,168.4,95.9,4,False,the Extract And Move Method operation is successful.
+21,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,134.6,64.0,4,False,the Extract And Move Method operation is successful.
+22,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,158.2,83.6,4,False,the Extract And Move Method operation is successful.
+23,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,False,False,359.2,359.2,4,False,Refactored code does not call extracted method 'validateFormatterType'.
+24,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,217.6,159.1,4,False,
+25,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,187.6,133.4,4,False,
+26,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,186.2,105.1,4,False,the Extract And Move Method operation is successful.
+27,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,192.2,137.1,4,False,
+28,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,False,False,False,False,390.4,390.4,4,False,"Invalid target file path: #################
+src/test/java/com/puppycrawl/tools/checkstyle/internal/u"
+29,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,182.6,106.2,4,False,the Extract And Move Method operation is successful.
+30,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,223.2,172.5,4,False,
+31,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,249.4,197.3,4,False,
+32,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,True,False,200.7,165.8,4,False,the Extract And Move Method operation is successful.
+33,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,124.6,73.7,4,False,
+34,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,True,True,True,326.6,272.0,4,False,
+35,checkstyle,cd8ef61ea62f3155040501fd21e20b,Extract And Move Method,True,False,True,False,598.0,220.3,4,False,the Extract And Move Method operation is successful.
+36,checkstyle,7a9913aa64f911e41eae958b757e73,Move And Rename Method,True,True,True,True,373.9,86.8,4,False,
+37,checkstyle,664227cd5bf9c649847461d8055a7e,Extract And Move Method,False,False,False,False,199.2,199.2,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+38,checkstyle,ba76f3e4f33194b0a1d687e95a5839,Extract And Move Method,True,True,True,True,279.8,68.4,4,False,
+39,checkstyle,1a6443b724a3539b000bcaa2ed9f80,Extract And Move Method,True,False,True,False,226.1,57.8,4,False,the Extract And Move Method operation is successful.
+40,checkstyle,1a6443b724a3539b000bcaa2ed9f80,Extract And Move Method,False,False,False,False,138.2,138.2,4,False,Invalid target file path: src/test/java/com/puppycrawl/tools/checkstyle/internal/utils/CheckUtil.jav
+41,checkstyle,1a6443b724a3539b000bcaa2ed9f80,Extract And Move Method,True,False,True,False,188.8,139.4,4,False,the Extract And Move Method operation is successful.
+42,checkstyle,1a6443b724a3539b000bcaa2ed9f80,Extract And Move Method,True,True,False,False,136.6,100.4,4,False,the code did not perform Extract And Move Method operation.
+43,checkstyle,e2c6e148a92e01b3c6037b33440ee7,Move And Inline Method,True,False,False,False,138.8,110.7,4,False,the code did not perform Move And Inline Method operation.
+44,commons-io,7566f557c2fa172d7677fcde06514e,Extract And Move Method,True,False,True,False,350.6,114.9,4,False,the Extract And Move Method operation is successful.
+45,commons-io,a8ee7b9defba5ed7c83c1fa06b4020,Extract And Move Method,True,False,True,False,323.4,138.6,4,False,the Extract And Move Method operation is successful.
+46,commons-io,7245fbd82735eed3fc5510f8b468b7,Extract And Move Method,True,True,True,True,604.5,70.1,4,False,
+47,commons-io,c1692f43ef5a41328b54bbbcd06285,Extract And Move Method,True,True,True,True,267.8,87.8,4,False,
+48,commons-io,b3ce147431dbad1bbd2e91d527560d,Extract And Move Method,True,False,True,False,286.7,264.8,4,False,the Extract And Move Method operation is successful.
+49,commons-io,8a786abb5e2cc04568517f1f8c0535,Extract And Move Method,True,False,True,False,131.8,104.1,4,False,the Extract And Move Method operation is successful.
+50,commons-io,8a786abb5e2cc04568517f1f8c0535,Extract And Move Method,True,False,False,False,73.6,55.9,4,False,the code did not perform Extract And Move Method operation.
+51,commons-io,8a786abb5e2cc04568517f1f8c0535,Extract And Move Method,True,False,False,False,144.5,125.0,4,False,the code did not perform Extract And Move Method operation.
+52,commons-io,0d84f279d6dd6486b581acf2ea2ad2,Extract And Move Method,True,False,True,False,110.0,89.8,4,False,the Extract And Move Method operation is successful.
+53,commons-lang,479532b83db2d7b228e4128f2db022,Extract And Move Method,False,False,False,False,6.5,6.5,4,False,Invalid target file path: 
+54,commons-lang,cdddb82e12ef7b2cc770125e930bde,Extract And Move Method,False,False,False,False,6.7,6.7,4,False,Invalid target file path: 
+55,commons-lang,cdddb82e12ef7b2cc770125e930bde,Extract And Move Method,False,False,False,False,5.3,5.3,4,False,Invalid target file path: 
+56,commons-lang,e4c03c5e38b3e2550da7a1f9084d93,Extract And Move Method,False,False,False,False,4.6,4.6,4,False,Invalid target file path: 
+57,guava,a9c3d3ac68223c83a98022eb88bbcf,Move And Rename Method,True,False,True,False,656.0,174.9,4,False,the Move And Rename Method operation is successful.
+58,guava,a9c3d3ac68223c83a98022eb88bbcf,Move And Rename Method,True,False,False,False,376.8,280.4,4,False,the code did not perform Move And Rename Method operation.
+59,guava,a9c3d3ac68223c83a98022eb88bbcf,Move And Rename Method,True,False,False,False,595.7,178.9,4,False,the code did not perform Move And Rename Method operation.
+60,guava,b03067f2c78b2352cba8f5136c9aa0,Move And Rename Method,False,False,False,False,154.6,154.6,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+61,guava,b03067f2c78b2352cba8f5136c9aa0,Move And Rename Method,True,False,False,False,115.8,115.8,4,False,Moved method must be public static.
+62,guava,b007d6db4ab71c5fc94623cac6eb8a,Extract And Move Method,True,False,True,False,502.8,303.1,4,False,the Extract And Move Method operation is successful.
+63,guava,ee9ac70a9296645b3f883773eb9509,Extract And Move Method,True,False,True,False,829.9,710.2,4,False,the Extract And Move Method operation is successful.
+64,guava,ee9ac70a9296645b3f883773eb9509,Extract And Move Method,True,False,True,False,285.7,187.5,4,False,the Extract And Move Method operation is successful.
+65,hibernate-orm,96cba56591e3e8c6dabaf35d954bd5,Extract And Move Method,False,False,False,False,28.0,28.0,4,False,Invalid target file path: 
+66,hibernate-orm,2f7052c0ce5114e492c7dc4e4b8abd,Extract And Move Method,False,False,False,False,31.4,31.4,4,False,Invalid target file path: 
+67,hibernate-orm,5dcbdf64f11dfdcf25fd5a4a571f97,Extract And Move Method,False,False,False,False,24.1,24.1,4,False,Invalid target file path: 
+68,hibernate-orm,72e2da2da84fae761f14ceeb822bd3,Move And Inline Method,False,False,False,False,24.5,24.5,4,False,"Invalid target file path: ##########################
+refactored_class_code"
+69,hibernate-orm,ba05533a036e73ac119169392b0da4,Extract And Move Method,False,False,False,False,22.1,22.1,4,False,Invalid target file path: 
+70,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,False,False,False,False,19.5,19.5,4,False,Invalid target file path: 
+71,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,False,False,False,False,20.9,20.9,4,False,Invalid target file path: 
+72,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,False,False,False,False,21.7,21.7,4,False,Invalid target file path: 
+73,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,False,False,False,False,20.9,20.9,4,False,Invalid target file path: 
+74,hibernate-orm,c04caa18de3c5ff81c17ebb151430b,Extract And Move Method,False,False,False,False,23.5,23.5,4,False,Invalid target file path: 
+75,hibernate-search,b67c74bdf7a5a1a8102fb0b0179bdc,Move And Inline Method,True,False,False,False,1360.2,129.7,4,False,the code did not perform Move And Inline Method operation.
+76,hibernate-search,b67c74bdf7a5a1a8102fb0b0179bdc,Move And Inline Method,True,False,False,False,451.4,131.3,4,False,the code did not perform Move And Inline Method operation.
+77,hibernate-search,b67c74bdf7a5a1a8102fb0b0179bdc,Move And Inline Method,True,False,False,False,462.3,87.5,4,False,the code did not perform Move And Inline Method operation.
+78,hibernate-search,b67c74bdf7a5a1a8102fb0b0179bdc,Move And Inline Method,True,False,False,False,454.3,153.2,4,False,the code did not perform Move And Inline Method operation.
+79,hibernate-search,ea4e402fd1d991e8c01ae391804779,Move And Rename Method,True,False,True,False,1298.0,56.6,4,False,the Move And Rename Method operation is successful.
+80,hibernate-search,f50cbfc772b75e7d7a983359b9baca,Move And Rename Method,True,False,False,False,127.3,127.0,4,False,Target file path does not exist: /util/internal/test/src/main/java/org/hibernate/search/util/impl/te
+81,hibernate-search,0b4c69d582f4c29554d78da38daebb,Extract And Move Method,False,False,False,False,200.0,200.0,4,False,Invalid target file path: 
+82,hibernate-search,c1738e3fcb5ac2ded491a9ff1b9aa6,Move And Rename Method,True,False,False,False,109.9,109.9,4,False,Refactored code does not call moved method 'fromClusterMemberList'.
+83,hibernate-search,520908200e1e83c994b39a93131741,Extract And Move Method,True,False,True,False,610.3,230.4,4,False,the Extract And Move Method operation is successful.
+84,hibernate-search,b369ab192fd1c80ab666c63e65224b,Extract And Move Method,True,False,True,False,228.6,67.9,4,False,the Extract And Move Method operation is successful.
+85,hibernate-search,314cff098d6147b783fa091ce3ebcc,Move And Rename Method,True,True,False,False,2077.2,54.0,4,False,the code did not perform Move And Rename Method operation.
+86,hibernate-search,314cff098d6147b783fa091ce3ebcc,Move And Rename Method,True,False,False,False,57.7,57.7,4,False,Refactored code does not call moved method 'getPersistenceUnitName'.
+87,hibernate-search,6b65d5b3d028b6cf672822b29edb96,Move And Inline Method,True,False,False,False,361.0,154.5,4,False,the code did not perform Move And Inline Method operation.
+88,hibernate-search,da64c4e549b8dfd9c17e7753247d80,Extract And Move Method,True,True,True,True,3360.7,104.5,4,False,
+89,hibernate-search,05c12b8fd2eb002ad9246efd04d8fa,Extract And Move Method,True,False,True,False,287.1,111.5,4,False,the Extract And Move Method operation is successful.
+90,hibernate-search,0c6c0d87a14968fd7a417b4943835c,Move And Inline Method,True,False,False,False,118.5,63.7,4,False,the code did not perform Move And Inline Method operation.
+91,hibernate-search,14e6370a9ab5e7fca20e508f6413bd,Move And Rename Method,True,False,False,False,84.1,83.9,4,False,Target file path does not exist: /engine/src/main/java/org/hibernate/search/engine/environment/class
+92,hibernate-search,60720a3723b836213b0e663b71fcbd,Move And Rename Method,True,False,False,False,58.3,58.3,4,False,Moved method must be public static.
+93,hibernate-search,daaa9ff20cae0f7751636f16bcaf0c,Extract And Move Method,False,False,False,False,14.8,14.8,4,True,Invalid target file path: 
+94,hibernate-search,f6398f46e661b12bb5cd7d429c52bd,Extract And Move Method,False,False,False,False,12.5,12.5,4,True,Invalid target file path: 
+95,hibernate-search,8233e6e5e455472b841a7a2b0aee22,Extract And Move Method,True,True,True,True,815.7,73.6,4,False,
+96,hibernate-search,be929dfca72583e5cef800af2f9772,Extract And Move Method,True,False,False,False,269.2,220.6,4,False,the code did not perform Extract And Move Method operation.
+97,hibernate-search,daaa9ff20cae0f7751636f16bcaf0c,Extract And Move Method,True,True,True,True,345.6,51.4,4,False,
+98,hibernate-search,daaa9ff20cae0f7751636f16bcaf0c,Extract And Move Method,True,True,True,True,375.0,200.9,4,False,
+99,hibernate-search,4c0595551f48dcca939fc3f7d3ea5b,Move And Rename Method,True,False,True,False,326.5,100.5,4,False,the Move And Rename Method operation is successful.
+100,hibernate-search,6b55b85d003d11848939dbdf2640fc,Move And Rename Method,False,False,False,False,104.9,104.9,4,False,Invalid target file path: 
+101,hibernate-search,64d26592b1ac48943690f7690355d4,Move And Inline Method,False,False,False,False,128.8,128.7,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+102,hibernate-search,4809368dec30478582c165d2c01aa2,Extract And Move Method,True,False,True,False,702.9,219.0,4,False,the Extract And Move Method operation is successful.
+103,hibernate-search,f307576b2d1a89c3814067a2b6b62d,Extract And Move Method,True,False,False,False,854.7,191.7,4,False,the code did not perform Extract And Move Method operation.
+104,hibernate-search,3ba4b03373611f27e258496ad8376e,Extract And Move Method,True,False,False,False,158.9,158.4,4,False,Target file path does not exist: /workspace/benchmarks/swe-refactor/data/hibernate-search/ai_logs/si
+105,hibernate-search,3ba4b03373611f27e258496ad8376e,Extract And Move Method,True,False,False,False,136.7,92.5,4,False,the code did not perform Extract And Move Method operation.
+106,javaparser,b08e66263903837d53a688b5d12a75,Extract And Move Method,False,False,False,False,71.6,71.5,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+107,javaparser,2903fc918dd87be53192aa10650473,Move And Inline Method,True,True,False,False,367.9,113.9,4,False,the code did not perform Move And Inline Method operation.
+108,javaparser,034b17a06497b52eb066eaf1ece5f0,Extract And Move Method,False,False,True,False,214.6,65.6,4,False,the Extract And Move Method operation is successful.
+109,javaparser,ead1412d06bf2ba7eaec982231023a,Move And Inline Method,False,False,False,False,149.5,149.5,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+110,javaparser,547da782d2ea7f1abc35e5c1e58529,Extract And Move Method,True,True,True,True,57.7,39.4,4,False,
+111,javaparser,c378a677ebcd999d853b3e5867ac7c,Extract And Move Method,True,False,True,False,393.5,106.9,4,False,the Extract And Move Method operation is successful.
+112,javaparser,2b503c32229deae7d432f59dab7108,Extract And Move Method,True,False,True,False,396.1,45.4,4,False,the Extract And Move Method operation is successful.
+113,javaparser,78d0ea5d493f0ab2e83bb70d7023b6,Extract And Move Method,True,False,False,False,68.0,51.0,4,False,the code did not perform Extract And Move Method operation.
+114,javaparser,86f41353d40bfd3ef0669b86392662,Extract And Move Method,False,False,False,False,270.2,270.2,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+115,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1472.7,188.3,4,False,the Extract And Move Method operation is successful.
+116,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1167.9,190.9,4,False,the Extract And Move Method operation is successful.
+117,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,True,True,True,1004.2,134.6,4,False,
+118,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,False,False,False,False,114.4,114.4,4,False,Invalid target file path: 
+119,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,False,False,101.7,101.7,4,False,Extracted method must be public static.
+120,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,False,False,False,False,216.7,216.7,4,True,Extracted method must be public static.
+121,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1124.0,157.4,4,True,the Extract And Move Method operation is successful.
+122,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1072.8,100.6,4,False,the Extract And Move Method operation is successful.
+123,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1037.7,80.9,4,False,the Extract And Move Method operation is successful.
+124,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,False,False,False,False,144.8,144.8,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+125,junit5,2a777a84cfdc9ccb79aa906cde80e0,Move And Rename Method,False,False,False,False,156.4,156.4,4,True,Invalid target file path: 
+126,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,False,False,1130.3,104.9,4,False,the code did not perform Extract And Move Method operation.
+127,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1143.2,96.4,4,False,the Extract And Move Method operation is successful.
+128,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1175.0,146.9,4,False,the Extract And Move Method operation is successful.
+129,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,False,False,1197.9,230.3,4,False,the code did not perform Extract And Move Method operation.
+130,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,False,False,False,False,134.2,134.2,4,False,invalid_swe_output_artifact: missing required original SWE section headers or malformed final SWE ou
+131,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,False,False,1159.6,197.8,4,False,the code did not perform Extract And Move Method operation.
+132,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,1231.9,223.0,4,False,the Extract And Move Method operation is successful.
+133,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,False,False,1132.9,139.7,4,False,the code did not perform Extract And Move Method operation.
+134,junit5,9f6ad01b6d4753a0cb8f6c366371b2,Move And Rename Method,True,False,False,False,238.0,75.3,4,False,the code did not perform Move And Rename Method operation.
+135,mockito,50b21cf68b400a29369de58b9286d2,Extract And Move Method,True,True,True,True,406.9,35.0,4,False,
+136,pmd,994b8402d59773888977d768d39552,Extract And Move Method,True,False,True,False,2000.9,73.8,4,False,the Extract And Move Method operation is successful.
+137,pmd,e4f5d027b2d86f675208d8da53d0bb,Extract And Move Method,False,False,False,False,65.3,65.2,4,False,Invalid target file path: 
+138,pmd,868883819020b0780313358e00f613,Move And Rename Method,True,False,True,False,109.6,74.5,4,False,the Move And Rename Method operation is successful.
+139,pmd,20a3c39b4d88b0e5716b9e72880ad9,Extract And Move Method,True,True,True,True,1863.1,83.8,4,False,
+140,pmd,91d0ebf4620b9cda44ce6f02232fe8,Extract And Move Method,False,False,False,False,20.9,20.9,4,True,Invalid target file path: 
+141,pmd,97c08a37ab6e5f0dc0bc2c38d86520,Extract And Move Method,False,False,False,False,34.6,34.6,4,True,Invalid target file path: 
+142,pmd,da03fafabb2146ca3b2cd3f6148475,Extract And Move Method,False,False,False,False,15.1,15.1,4,True,Invalid target file path: 
+143,pmd,a733da4dcfa19b80f21480040aaf70,Move And Inline Method,True,False,False,False,99.7,63.2,4,False,the code did not perform Move And Inline Method operation.
+144,pmd,0276320abf2c66cae14d2ad24e2b2f,Move And Inline Method,False,False,False,False,16.4,16.4,4,True,"Invalid target file path: ##########################
+refactored_class_code"
+145,pmd,05870c98cc05805d6272d12f5080af,Extract And Move Method,True,True,True,True,588.9,116.5,4,False,
+146,pmd,05870c98cc05805d6272d12f5080af,Extract And Move Method,True,False,True,False,161.7,133.5,4,False,the Extract And Move Method operation is successful.
+147,pmd,5031c83c880d11f215b2b21919ff30,Extract And Move Method,False,False,False,False,59.2,59.2,4,False,Invalid target file path: 
+148,pmd,00d391261d90afb005aac22dd9e1be,Extract And Move Method,True,False,True,False,2137.7,241.7,4,False,the Extract And Move Method operation is successful.
+149,pmd,5dc2774c0a53810717358cc850b69c,Extract And Move Method,True,False,True,False,262.0,233.2,4,False,the Extract And Move Method operation is successful.
+150,pmd,cfbb14c91c24b1a50cf4b41cd855fd,Extract And Move Method,True,False,True,False,111.4,74.5,4,False,the Extract And Move Method operation is successful.
+151,pmd,cfbb14c91c24b1a50cf4b41cd855fd,Extract And Move Method,True,False,True,False,100.4,66.7,4,False,the Extract And Move Method operation is successful.
+152,pmd,cfbb14c91c24b1a50cf4b41cd855fd,Extract And Move Method,True,False,True,False,141.3,106.7,4,False,the Extract And Move Method operation is successful.
+153,pmd,214e80a5f1d68e3b42efeacab5b0fc,Extract And Move Method,True,False,True,False,154.4,121.6,4,False,the Extract And Move Method operation is successful.
+154,pmd,ff2f5ef93c1b3150583e9611b2a8fd,Move And Rename Method,True,False,True,False,139.3,99.1,4,False,the Move And Rename Method operation is successful.
+155,pmd,2123ab3d5d7dcfc867ada3af119c3d,Extract And Move Method,False,False,False,False,41.7,41.7,4,False,Invalid target file path: 
+156,pmd,a70e70ad15995e87060380ee241e36,Extract And Move Method,True,True,False,False,588.7,64.7,4,False,the code did not perform Extract And Move Method operation.
+157,pmd,26bcbd839a79055a0ff037da3c8c54,Move And Inline Method,False,False,False,False,151.1,151.1,4,False,Invalid target file path: 
+158,pmd,05870c98cc05805d6272d12f5080af,Extract And Move Method,True,False,True,False,123.0,88.8,4,False,the Extract And Move Method operation is successful.
+159,pmd,05870c98cc05805d6272d12f5080af,Extract And Move Method,True,False,True,False,397.2,96.6,4,False,the Extract And Move Method operation is successful.
+160,pmd,05870c98cc05805d6272d12f5080af,Extract And Move Method,True,False,True,False,1284.6,182.3,4,False,the Extract And Move Method operation is successful.
+161,pmd,05870c98cc05805d6272d12f5080af,Extract And Move Method,True,True,True,True,610.6,70.8,4,False,
+162,pmd,5c36ee1eba5a08732d6fc53b0a6901,Extract And Move Method,True,False,True,False,182.0,125.1,4,False,the Extract And Move Method operation is successful.
+163,pmd,bc25e58dfc8b3fe32c173e2cf213bf,Extract And Move Method,True,True,True,True,741.1,54.1,4,False,
+164,pmd,ff2f5ef93c1b3150583e9611b2a8fd,Move And Rename Method,True,False,False,False,251.4,213.6,4,False,the code did not perform Move And Rename Method operation.
+165,pmd,396567636fa1dbef2f7766f8c9ef57,Extract And Move Method,True,True,True,True,648.3,86.3,4,False,
+166,pmd,6253b696ea9b04ecf4a0c832473a17,Extract And Move Method,True,False,True,False,1035.5,130.7,4,False,the Extract And Move Method operation is successful.
+167,pmd,08b19dbcdde5d6258515cf2620a855,Extract And Move Method,True,True,True,True,891.8,62.2,4,False,
+168,pmd,1540ec6d9148fc14fc1673f4df1d33,Move And Rename Method,True,False,False,False,322.4,322.4,4,False,Refactored code does not call moved method 'data'.
+169,pmd,2995f156caf2b55369ef28108f0b60,Extract And Move Method,True,False,False,False,461.4,139.6,4,False,the code did not perform Extract And Move Method operation.
+170,pmd,0fec3640a30bd92e6a2d2a0f318883,Extract And Move Method,True,True,True,True,1422.2,44.3,4,False,
+171,pmd,5f2a5bb67813ac5acb38a8bac6d335,Extract And Move Method,True,True,True,True,495.0,42.0,4,False,
+172,shenyu,d8c7b57eed6c5ab5880cca8f49920e,Extract And Move Method,False,False,False,False,73.1,73.1,4,False,Invalid target file path: 
+173,shenyu,18b3ac1bfe19cbe26650e13d9cb1ad,Extract And Move Method,True,True,False,False,8192.8,67.6,4,False,the code did not perform Extract And Move Method operation.
+174,shenyu,9725874eaa20ec87a3d8beea168f3a,Extract And Move Method,True,True,True,True,3478.3,52.3,4,False,
+175,shenyu,2f4ff7f4b7100db14c549f47941fff,Extract And Move Method,True,False,True,False,451.5,75.2,4,False,the Extract And Move Method operation is successful.
+176,zxing,515688992bec0973288f3deb9b4538,Extract And Move Method,True,False,True,False,259.6,221.7,4,False,the Extract And Move Method operation is successful.
+177,zxing,515688992bec0973288f3deb9b4538,Extract And Move Method,True,False,False,False,527.3,496.5,4,False,the code did not perform Extract And Move Method operation.

@@ -1,0 +1,11 @@
+type: agent
+key: claude
+name: Claude Code
+binary: claude
+install: npm install -g @anthropic-ai/claude-code
+entrypoint: plugin:Plugin
+capabilities:
+  lsp: false
+  subagents: true
+  eval_tool: true
+  retrieval: true

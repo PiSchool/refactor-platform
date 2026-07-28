@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/PiSchool/refactor-platform/blob/main/SECURITY.md
+    about: Read the private reporting policy; never include vulnerabilities in a public issue.
+  - name: Documentation and support
+    url: https://github.com/PiSchool/refactor-platform/blob/main/SUPPORT.md
+    about: Read the support guide before opening an issue.

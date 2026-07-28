@@ -1,0 +1,27 @@
+# SWE-Refactor S1-Eval (deepseek/deepseek-v4-pro)
+"# 142 never-passed tasks, descriptive mode, eval loop enabled"
+# Run: benchmark_pipeline_20260616_052901 | Duration: 5h 16m
+# Status: STOPPED - OpenRouter credit exhausted (HTTP 403) after 8/142 tasks
+# Result: 8/8 passed (100% of completed) | 8/142 overall (5.6%)
+
+#,Project,RefactoringId,Passed,Duration(s),AgentDur(s),EvalDur(s),EvalLoops,InputTok,OutputTok,CacheRead,Requests,CodeBLEU,RMResult
+1,checkstyle,bfb3e5f5e416_98_106_399_409_98_106,True,1153,1051,102,3,1409457,12581,811776,39,0.363,Success
+2,checkstyle,bfb3e5f5e416_68_76_399_409_68_76,True,534,432,102,2,494837,6461,177152,16,0.363,Success
+3,checkstyle,bfb3e5f5e416_101_117_399_409_101_117,True,2959,2869,90,8,6602983,75335,4188672,97,0.915,Success
+4,checkstyle,bfb3e5f5e416_82_99_399_409_82_99,True,8943,8834,109,31,10327685,165096,8090880,157,0.919,Success
+5,checkstyle,bfb3e5f5e416_465_476_399_409_465_477,True,541,433,108,1,621109,7987,210304,21,0.398,Success
+6,checkstyle,bfb3e5f5e416_261_273_399_409_258_271,True,583,473,110,1,620570,16520,453888,19,0.803,Success
+7,checkstyle,bfb3e5f5e416_204_216_399_409_200_213,True,661,560,101,1,475804,17388,320000,16,0.794,Success
+8,checkstyle,bfb3e5f5e416_237_243_399_409_237_243,True,1132,1024,108,3,1136801,20611,680576,28,0.817,Success
+
+SUMMARY
+Passed (completed),8/8 (100%)
+Passed (total scope),8/142 (5.6%)
+Termination reason,OpenRouter HTTP 403 - credit exhausted
+Total input tokens,21689246
+Total output tokens,321979
+Total cache read tokens,14933248
+Total requests,393
+Total duration (s),17506
+Avg eval loops,6.25
+Avg CodeBLEU,0.672

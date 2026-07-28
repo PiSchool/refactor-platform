@@ -1,0 +1,101 @@
+#,task_id,repo,status,duration_s,input_tokens,output_tokens,cache_tokens,reasoning_tokens,requests,lines_added,lines_removed,files_modified,tests_passed,tests_total,timed_out,reason_short
+1,add-log-parameter-get-group-vars,ansible_refactor,success,37.58,106416,2018,0,656,6,4,3,3,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_add-log-
+2,add-log-parameter-is-systemd-managed,ansible_refactor,success,67.08,314203,4807,0,1101,16,4,3,3,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_add-log-
+3,combine-namespace-compat,ansible_refactor,failed,85.37,428663,7786,0,1726,17,32,54,7,6,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_combine-
+4,data-to-inventory-data,ansible_refactor,success,50.79,208320,2941,0,1110,11,2,2,2,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_data-to-
+5,move-quoting-splitter,ansible_refactor,failed,60.85,298885,4765,0,2693,15,13,10,2,1,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_move-quo
+6,new-inventory-patterns,ansible_refactor,success,97.27,637965,7239,0,2510,25,103,76,3,9,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_new-inve
+7,new-utils-class-connection,ansible_refactor,timed_out,81.12,343646,6477,0,3829,18,0,0,0,,7,1,No repository changes detected from Copilot response.
+8,new-utils-from-basic,ansible_refactor,failed,198.77,1135304,19063,0,9509,33,123,91,13,,12,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_new-util
+9,parse_key_value,ansible_refactor,success,81.46,413015,7112,0,1088,16,36,32,12,21,21,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_parse_ke
+10,rename-lenient-lowercase,ansible_refactor,success,44.41,180094,2321,0,612,9,6,2,2,4,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_rename-l
+11,sort-groups-to-group-sort,ansible_refactor,success,40.61,141995,1551,0,480,9,8,4,2,4,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/ansible_refactor_sort-gro
+12,add-log-parameter-get-digest-algorithm,celery_refactor,success,39.79,166425,1638,0,677,9,2,2,2,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_add-log-p
+13,add-log-parameter-node-format,celery_refactor,success,50.1,278362,2717,0,1131,14,5,5,3,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_add-log-p
+14,annotation-utils,celery_refactor,failed,58.06,218279,4001,0,2478,12,16,8,2,5,8,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_annotatio
+15,autoretry-to-retry,celery_refactor,failed,92.47,557917,7553,0,4006,24,12,8,7,6,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_autoretry
+16,combine-unpickle-task,celery_refactor,failed,54.06,283329,3628,0,1230,15,12,12,3,5,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_combine-u
+17,dump-message-to-serialization,celery_refactor,success,118.89,815860,5441,0,1573,32,10,9,2,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_dump-mess
+18,ensure_serialize,celery_refactor,success,94.75,631648,7459,0,2573,31,13,10,4,9,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_ensure_se
+19,evaluate-promises-to-serialization,celery_refactor,success,54.1,318984,3507,0,1157,13,10,8,2,4,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_evaluate-
+20,expand-router-string-to-utils,celery_refactor,failed,68.33,355871,4940,0,2337,15,11,10,2,3,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_expand-ro
+21,object-mro-lookup,celery_refactor,success,52.04,204045,3030,0,1480,12,2,1,1,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_object-mr
+22,rename-host-format,celery_refactor,failed,78.47,478811,5670,0,1563,24,10,6,3,6,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_rename-ho
+23,truncate-text,celery_refactor,failed,226.85,1754752,15338,0,7268,46,17,17,7,,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/celery_refactor_truncate-
+24,add-log-parameter-constant-time-compare,django_refactor,failed,98.91,593299,7126,0,1811,23,21,13,6,2,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_add-log-p
+25,add-log-parameter-get-resolver,django_refactor,failed,183.83,1551133,14457,0,4723,44,32,27,11,2,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_add-log-p
+26,add-log-parameter-resolve-error-handler,django_refactor,failed,68.3,519783,4432,0,1156,23,13,6,4,,2,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_add-log-p
+27,add-none-handling-duration-string,django_refactor,success,66.13,302670,3618,0,987,15,6,1,3,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_add-none-
+28,combine-utils-dates-dateformat,django_refactor,success,68.23,329211,5221,0,2519,14,80,11,3,4,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_combine-u
+29,combine-utils-hashable-itercompat,django_refactor,failed,216.52,1450631,23388,0,11504,61,63,58,15,3,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_combine-u
+30,new-converter-to-python-class,django_refactor,failed,50.26,165935,3087,0,748,8,55,41,1,1,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_new-conve
+31,new-path-traversal-exception,django_refactor,failed,147.5,1055977,17077,0,12225,31,19,13,6,7,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_new-path-
+32,new-reference-context-field-class,django_refactor,timed_out,54.46,231294,2621,0,1325,12,0,0,0,,4,1,No repository changes detected from Copilot response.
+33,new-reference-context-graph-class,django_refactor,failed,204.55,1413902,24200,0,3561,32,74,26,4,5,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_new-refer
+34,new-timezone-class,django_refactor,timed_out,184.11,538273,20979,0,18033,20,0,0,0,,4,1,No repository changes detected from Copilot response.
+35,new-utils-adapt-method-mode,django_refactor,success,82.44,543322,6138,0,1933,24,49,44,2,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_new-utils
+36,new-utils-check-response,django_refactor,success,60.11,352574,3419,0,1216,16,39,25,2,2,2,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_new-utils
+37,new-utils-path-from-module,django_refactor,success,82.24,447197,5696,0,2866,20,37,29,2,2,2,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_new-utils
+38,remove-core-cache-utils,django_refactor,failed,58.27,279194,4135,0,1098,12,22,17,5,4,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_remove-co
+39,remove-db-models-constants,django_refactor,success,444.07,1408474,50941,0,40489,49,39,29,20,19,19,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_remove-db
+40,rename-file-move-safe,django_refactor,success,131.93,776536,8124,0,2343,25,22,18,5,6,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_rename-fi
+41,split-parse-apps-and-model-labels,django_refactor,failed,52.09,192445,3534,0,1680,10,30,9,1,2,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/django_refactor_split-par
+42,add-log-parameter-generate-option-id-for-path,fastapi_refactor,success,62.36,335401,2939,0,1528,15,2,2,2,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/fastapi_refactor_add-log-
+43,exception-handlers-to-handlers,fastapi_refactor,failed,119.33,493946,10804,0,3576,22,5,5,5,11,12,0,/workspace/benchmarks/refactorbench/outputs/workspaces/fastapi_refactor_exceptio
+44,get-auth-scheme-param,fastapi_refactor,success,58.38,279752,3846,0,1655,15,6,2,2,6,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/fastapi_refactor_get-auth
+45,openapi-get-utils,fastapi_refactor,success,68.57,336124,4543,0,1630,18,7,7,7,9,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/fastapi_refactor_openapi-
+46,params-to-param,fastapi_refactor,failed,80.45,344145,5562,0,2462,16,0,0,0,10,22,0,/workspace/benchmarks/refactorbench/outputs/workspaces/fastapi_refactor_params-t
+47,value-is-a-sequence,fastapi_refactor,success,33.89,101898,1260,0,264,6,7,3,2,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/fastapi_refactor_value-is
+48,add-log-parameter-get-debug-flag,flask_refactor,success,49.93,180958,3185,0,1042,10,10,5,4,7,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/flask_refactor_add-log-pa
+49,add-log-parameter-get-flashed-messages,flask_refactor,success,70.22,467217,4620,0,1384,22,12,7,2,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/flask_refactor_add-log-pa
+50,debughelpers-to-helpers.py,flask_refactor,timed_out,15.36,467217,4620,0,1384,22,12,7,2,,5,1,No repository changes detected from Copilot response.
+51,rename-send-from-directory,flask_refactor,timed_out,63.13,167329,3969,0,3248,10,0,0,0,1,4,1,No repository changes detected from Copilot response.
+52,render-template-str,flask_refactor,success,74.38,300632,6259,0,1315,14,18,13,8,10,10,0,/workspace/benchmarks/refactorbench/outputs/workspaces/flask_refactor_render-tem
+53,stream-template-str,flask_refactor,failed,37.62,88354,1796,0,861,5,4,1,1,3,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/flask_refactor_stream-tem
+54,add-log-parameter-get-encoding-from-headers,requests_refactor,failed,47.8,191494,3168,0,703,11,4,3,2,2,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_add-log
+55,add-log-parameter-resolve-proxies,requests_refactor,success,62.04,266157,3608,0,946,15,4,3,2,2,2,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_add-log
+56,add-log-parameter-select-proxy,requests_refactor,timed_out,45.88,153295,1754,0,537,9,0,0,0,,2,1,No repository changes detected from Copilot response.
+57,combine-from-key-to-key,requests_refactor,success,84.28,368755,5637,0,1723,17,34,45,4,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_combine
+58,combine-internal-utils-utils,requests_refactor,failed,214.26,464363,28957,0,25079,22,45,11,1,1,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_combine
+59,move-hooks-sessions,requests_refactor,failed,472.27,1943192,32042,0,20098,58,30,8,3,4,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_move-ho
+60,new-cookie-utils-class,requests_refactor,failed,259.88,1539499,12293,0,2857,46,198,120,1,,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_new-coo
+61,rename-lookup-dict-dict-lookup,requests_refactor,success,51.92,229003,2981,0,705,11,11,7,3,7,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_rename-
+62,rename-super-len-complex-len,requests_refactor,failed,68.15,249597,6059,0,901,11,33,29,3,2,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_rename-
+63,split-warnings-exceptions,requests_refactor,success,86.35,494611,6231,0,2477,22,39,25,4,9,9,0,/workspace/benchmarks/refactorbench/outputs/workspaces/requests_refactor_split-w
+64,add-log-parameter-delete-directory,salt_refactor,success,47.97,170928,2727,0,993,9,6,5,2,4,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_add-log-par
+65,add-log-parameter-get-capability-definitions,salt_refactor,success,112.41,452729,9681,0,5730,23,10,5,2,3,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_add-log-par
+66,add-log-parameter-recursive-diff,salt_refactor,success,121.55,583778,11353,0,4885,20,11,6,2,6,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_add-log-par
+67,cant-create,salt_refactor,failed,48.69,178657,2690,0,1095,10,6,4,3,6,8,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_cant-create
+68,channel-to-transport,salt_refactor,failed,59.14,198533,3238,0,1070,10,0,0,0,3,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_channel-to-
+69,ex-pillar-fail,salt_refactor,success,48.33,187156,2760,0,1063,11,1,1,1,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_ex-pillar-f
+70,ex-state-fail,salt_refactor,failed,45.12,167632,2168,0,674,10,7,4,3,5,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_ex-state-fa
+71,exactly-n-boto-mod,salt_refactor,failed,123.61,872463,6836,0,3153,33,4,11,1,2,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_exactly-n-b
+72,get-unavail,salt_refactor,success,43.57,132295,1788,0,469,8,5,4,4,10,10,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_get-unavail
+73,iam-to-aws,salt_refactor,success,61.48,309406,3232,0,1134,13,35,0,1,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_iam-to-aws_
+74,mksls-to-specific,salt_refactor,success,59.12,317413,3921,0,1204,14,12,3,3,6,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_mksls-to-sp
+75,namecheap-xmlutil,salt_refactor,success,121.54,469001,10697,0,7398,17,84,71,2,6,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_namecheap-x
+76,paged-call-boto-mod,salt_refactor,failed,72.86,385169,4394,0,2026,21,2,16,1,1,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_paged-call-
+77,pem-fingerprint,salt_refactor,success,73.24,340028,4939,0,1311,14,2,2,2,10,10,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_pem-fingerp
+78,perm-denied,salt_refactor,failed,42.3,154555,1683,0,740,9,3,2,2,4,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/salt_refactor_perm-denied
+79,add-log-parameter-disconnect-all,scrapy_refactor,success,48.22,203577,2052,0,631,11,8,4,3,6,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_add-log-p
+80,add-log-parameter-job-dir,scrapy_refactor,failed,46.22,215812,2373,0,666,12,4,4,4,3,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_add-log-p
+81,add-log-parameter-xmliter,scrapy_refactor,failed,232.92,832646,29668,0,24194,30,21,17,2,2,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_add-log-p
+82,genspider-functions-to-utils-url,scrapy_refactor,failed,72.48,413225,3563,0,1356,21,17,17,2,,4,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_genspider
+83,new-downloadermiddlewares-utils,scrapy_refactor,success,54.16,218705,3166,0,808,12,29,20,2,5,5,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_new-downl
+84,new-spider-utils-in-spiders,scrapy_refactor,timed_out,842.16,809584,104692,0,100268,32,37,0,1,3,8,1,No repository changes detected from Copilot response.
+85,new-verify-reactor-class,scrapy_refactor,failed,126.36,684431,8114,0,2828,23,59,46,6,8,11,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_new-verif
+86,not-supported-exception-to-unsupported,scrapy_refactor,failed,62.53,246069,4243,0,1045,10,16,13,6,8,10,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_not-suppo
+87,parameterize-gunzip,scrapy_refactor,timed_out,56.17,256684,2964,0,1484,13,0,0,0,1,9,1,No repository changes detected from Copilot response.
+88,rename-description-commands,scrapy_refactor,success,66.69,282465,4636,0,1020,13,27,27,17,7,7,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_rename-de
+89,rename-engine-status,scrapy_refactor,success,70.55,309120,6210,0,1673,13,33,27,6,8,8,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_rename-en
+90,rename-processtest-testproc,scrapy_refactor,failed,60.42,272931,3290,0,962,11,13,9,5,,6,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_rename-pr
+91,sitemap-url-to-url,scrapy_refactor,failed,58.34,251783,3253,0,651,11,13,1,1,1,3,0,/workspace/benchmarks/refactorbench/outputs/workspaces/scrapy_refactor_sitemap-u
+92,global-objects,tornado_refactor,failed,225.07,803221,24266,0,19228,26,102,0,2,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_global-o
+93,log-utils,tornado_refactor,failed,151.85,1047784,14280,0,6313,33,176,137,4,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_log-util
+94,option-parser-with-pretty-print,tornado_refactor,failed,188.19,943409,15132,0,8858,30,125,110,2,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_option-p
+95,options-utils,tornado_refactor,failed,204.68,967234,19467,0,12962,31,272,79,2,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_options-
+96,remove-locale-data,tornado_refactor,failed,84.59,411546,7176,0,1677,19,69,67,2,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_remove-l
+97,rename-http1connection,tornado_refactor,timed_out,32.2,46357,354,0,179,3,0,0,0,,,1,No repository changes detected from Copilot response.
+98,rename-to-camel-case,tornado_refactor,failed,72.75,390905,5407,0,2362,18,9,7,2,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_rename-t
+99,resolvers-as-separate,tornado_refactor,timed_out,194.35,1136122,14093,0,6055,44,290,0,1,,,1,No repository changes detected from Copilot response.
+100,tcpclient-connect-params,tornado_refactor,failed,226.76,1983670,19374,0,7420,49,173,20,7,,,0,/workspace/benchmarks/refactorbench/outputs/workspaces/tornado_refactor_tcpclien

@@ -1,0 +1,17 @@
+#,Task,Status,Input,Output,Cache,Reasoning,Time,Reqs,+Lines,-Lines,Files,Apply,Test,Result,EvalLoops,lspActions,lspMarkers,completedAt
+1,annotation-utils,completed,247.6k,4.5k,143.7k,1.9k,1m45s,14,17,5,3,yes,yes,PASSED,1,4,diagnostic;find_references;go_to_definition;hover,2026-05-23T22:16:21Z
+2,add-log-parameter-get-resolver,completed,807.8k,8.8k,420.0k,2.1k,3m24s,27,25,19,8,yes,yes,PASSED,1,4,diagnostic;find_references;go_to_definition;hover,2026-05-23T22:23:54Z
+3,add-log-parameter-resolve-error-handler,completed,160.9k,3.5k,63.4k,902,1m21s,10,6,6,4,yes,yes,PASSED,1,4,diagnostic;find_references;go_to_definition;hover,2026-05-23T22:27:55Z
+4,paged-call-boto-mod,completed,292.8k,6.2k,128.4k,3.7k,2m11s,13,2,9,1,yes,yes,PASSED,0,4,diagnostic;find_references;go_to_definition;hover,2026-05-23T22:30:09Z
+
+Run ID,eval_loop_deepseek_20260523
+Status,completed
+Model,deepseek/deepseek-v4-pro
+Datasets,refbench
+Setups,s1_default + eval_loop(max=2)
+
+Total tasks,4
+Passed,4
+Failed,0
+Total duration,522s
+Success rate,4/4 (100%)

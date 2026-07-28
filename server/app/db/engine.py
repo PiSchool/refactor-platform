@@ -1,11 +1,14 @@
-"""Async engine + session factory. SQLite (WAL) by default, Postgres via DATABASE_URL."""
+"""Async database engine, sessions, and Alembic migration entry point."""
 from __future__ import annotations
 
-from sqlalchemy import event, text
+from pathlib import Path
+
+from alembic import command
+from alembic.config import Config
+from sqlalchemy import event
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from app.config import get_settings
-from app.db.models import Base
 
 _engine = None
 _sessionmaker: async_sessionmaker[AsyncSession] | None = None
@@ -38,17 +41,18 @@ def session_factory() -> async_sessionmaker[AsyncSession]:
 
 
 async def migrate() -> None:
-    """Apply schema. Fresh-schema v1: create_all + Alembic stamp so future
-    releases migrate incrementally."""
+    """Apply every committed Alembic revision to the configured database."""
     engine = get_engine()
     async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)
-        await conn.execute(
-            text("CREATE TABLE IF NOT EXISTS alembic_version (version_num VARCHAR(32) NOT NULL)")
-        )
-        res = await conn.execute(text("SELECT COUNT(*) FROM alembic_version"))
-        if res.scalar_one() == 0:
-            await conn.execute(text("INSERT INTO alembic_version (version_num) VALUES ('v1_initial')"))
+        await conn.run_sync(upgrade_connection_to_head)
+
+
+def upgrade_connection_to_head(connection) -> None:
+    """Upgrade an already-open SQLAlchemy connection to the schema head."""
+    server_dir = Path(__file__).resolve().parents[2]
+    alembic_config = Config(str(server_dir / "alembic.ini"))
+    alembic_config.attributes["connection"] = connection
+    command.upgrade(alembic_config, "head")
 
 
 async def dispose() -> None:

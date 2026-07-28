@@ -1,0 +1,8 @@
+#,Repo,TaskId,Passed,TestSucceeded,EvalLoopCount,Duration(s),TimedOut,Model,Setup,Mode
+1,ansible_refactor,new-utils-from-basic,False,False,3,250,False,openrouter/free,s1_eval,descriptive
+2,celery_refactor,annotation-utils,True,True,1,101,False,openrouter/free,s1_eval,descriptive
+
+Summary
+Total,2
+Passed,1 (50%)
+EvalLoops Used,4 total (avg 2.0/task)

@@ -1,0 +1,115 @@
+Run ID,benchmark_pipeline_20260514_223318
+Status,completed
+Model,openrouter/free
+Datasets,refbench
+Setups,s1_default
+
+#,Task,Status,Input,Output,Cache,Time,Evals,Cmpct,Reqs,'+Lines,'-Lines,Files,Model,Build/Test,Model mismatch,Result,Checks
+1,rs_1778798007746,completed,110.8k,1.7k,15.1k,51s,0,0,7,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+2,ed_1778798073671,completed,544.1k,7.8k,36.7k,4m29s,0,0,24,3,2,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+3,at_1778798351380,completed,97.1k,702,7.0k,27s,0,0,6,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+4,ta_1778798389364,completed,417.9k,6.9k,7.6k,2m59s,0,0,20,2,2,2,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+5,er_1778798589760,completed,601.8k,5.8k,61.4k,3m23s,0,0,20,5,5,5,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+6,ns_1778798800573,terminated,669.6k,9.0k,137.0k,4m45s,0,0,34,'-,'-,'-,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+7,on_1778799099262,completed,282.8k,3.7k,30.5k,1m42s,0,0,15,41,31,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+8,ic_1778799214874,completed,273.8k,3.0k,6.0k,2m49s,0,0,13,78,2,1,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+9,ue_1778799397600,terminated,1.4M,14.2k,86.0k,7m32s,0,0,36,3,3,3,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+10,se_1778799863876,completed,14.9k,4,'-,3s,0,0,1,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+11,rt_1778799881987,terminated,167.7k,2.6k,12.3k,1m25s,0,0,11,4,4,2,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+12,hm_1778799975689,completed,170.5k,1.6k,20.2k,2m14s,0,0,8,3,3,2,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+13,at_1778800121102,completed,91.6k,676,17.2k,24s,0,0,6,3,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+14,ls_1778800156002,completed,357.5k,9.2k,40.5k,3m16s,0,0,18,13,10,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+15,ry_1778800361562,terminated,518.9k,7.2k,23.3k,3m49s,0,0,23,4,4,4,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+16,sk_1778800597496,completed,394.5k,3.4k,2.0k,5m52s,0,0,18,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+17,on_1778800959440,completed,471.4k,14.4k,688,5m09s,0,0,21,12,7,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+18,ze_1778801278191,completed,61.6k,1.4k,43,34s,0,0,4,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+19,on_1778801322417,completed,207.4k,9.1k,24.3k,5m04s,0,0,8,1,5,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+20,ls_1778801635493,completed,292.9k,8.3k,7.6k,3m12s,0,0,16,14,6,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+21,up_1778801836346,terminated,30.4k,375,'-,12s,0,0,2,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+22,at_1778801858279,completed,159.4k,6.3k,16.1k,1m52s,0,0,9,5,5,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+23,xt_1778801979802,completed,689.2k,8.8k,110.0k,7m53s,0,0,31,9,9,4,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+24,re_1778803086762,completed,339.3k,2.8k,66.3k,2m30s,0,0,18,12,2,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+25,er_1778803262394,completed,630.8k,3.9k,72.9k,6m43s,0,0,29,5,5,5,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+26,er_1778803922401,terminated,792.9k,11.7k,110.6k,6m37s,0,0,38,7,3,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+27,ng_1778804520446,terminated,320.4k,4.1k,52.3k,3m16s,0,0,18,17,11,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+28,at_1778804727082,completed,435.3k,10.0k,35.2k,7m07s,0,0,21,86,87,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+29,at_1778805169914,completed,184.4k,4.3k,16.4k,3m19s,0,0,12,33,12,3,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+30,ss_1778805385345,terminated,255.7k,3.8k,608,2m19s,0,0,13,'-,'-,'-,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+31,on_1778805696314,completed,97.3k,9.8k,43,1m46s,0,0,6,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+32,ss_1778805818201,completed,256.1k,5.2k,13.3k,3m28s,0,0,12,54,7,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+33,ss_1778806838594,terminated,1.3M,9.1k,95.9k,10m04s,0,0,42,18,2,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+34,ss_1778807462076,completed,195.8k,6.9k,18.1k,4m01s,0,0,10,33,31,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+35,de_1778807714519,completed,526.5k,5.5k,39.7k,2m53s,0,0,25,43,36,2,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+36,se_1778807906263,completed,576.2k,15.5k,79.2k,7m01s,0,0,35,11,4,2,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+37,le_1778808347948,completed,186.8k,2.5k,24.7k,1m34s,0,0,10,43,1,3,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+38,ls_1778808457465,completed,575.5k,19.9k,59.7k,6m14s,0,0,28,15,10,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+39,ts_1778808850618,completed,202.4k,4.0k,21.9k,2m09s,0,0,12,3,'-,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+40,fe_1778808997030,terminated,167.1k,1.7k,528,1m08s,0,0,9,'-,'-,'-,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+41,ls_1778809079128,completed,177.0k,6.7k,19.5k,2m55s,0,0,11,25,16,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+42,'-path_1778809270,completed,294.8k,4.6k,491,2m15s,0,0,18,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+43,rs_1778809417476,completed,191.2k,9.9k,160,12m30s,0,0,12,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+44,am_1778810179788,completed,128.7k,1.1k,384,58s,0,0,7,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+45,ls_1778810249892,terminated,340.9k,7.8k,38.0k,3m03s,0,0,19,6,6,6,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+46,am_1778810441210,completed,870.5k,7.8k,102.6k,7m04s,0,0,33,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+47,ce_1778810882164,completed,194.9k,2.5k,32.2k,2m11s,0,0,13,3,3,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+48,ag_1778811026349,completed,272.5k,3.6k,41.3k,3m03s,0,0,15,3,'-,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+49,es_1778811219869,completed,344.2k,4.4k,7.6k,2m46s,0,0,20,3,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+50,py_1778811395266,completed,344.2k,4.4k,7.6k,2m46s,0,0,20,3,1,1,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+51,ry_1778811397562,terminated,64.1k,562,448,18s,0,0,4,'-,'-,'-,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+52,tr_1778811666822,terminated,452.4k,8.8k,28.7k,5m56s,0,0,21,6,6,5,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+53,tr_1778812029118,completed,474.2k,7.4k,72.2k,4m13s,0,0,26,4,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+54,ders_17788122901,completed,412.4k,5.6k,33.6k,3m50s,0,0,25,4,3,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+55,es_1778812532428,terminated,250.7k,3.3k,1.7k,2m32s,0,0,15,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+56,xy_1778812695064,terminated,372.8k,2.4k,47.0k,1m39s,0,0,19,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+57,ey_1778813050824,terminated,267.8k,2.5k,60.1k,2m37s,0,0,16,'-,'-,'-,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+58,ls_1778813215406,completed,215.8k,2.1k,17.5k,1m34s,0,0,12,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+59,ns_1778813868681,terminated,546.5k,12.3k,20.2k,10m20s,0,0,26,37,4,4,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+60,ss_1778814496738,terminated,93.1k,859,14.5k,1m11s,0,0,6,33,'-,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+61,up_1778814573585,completed,203.5k,1.9k,18.6k,1m42s,0,0,11,4,4,3,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+62,en_1778814685929,completed,159.3k,1.9k,16.9k,1m45s,0,0,9,2,2,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+63,ns_1778814801764,terminated,273.2k,5.0k,25.5k,3m02s,0,0,15,8,'-,1,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+64,ry_1778814990601,terminated,307.5k,3.2k,28.6k,1m25s,0,0,15,9,6,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+65,ns_1778815089795,completed,136.2k,8.6k,6.2k,2m24s,0,0,8,27,9,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+66,ff_1778815246706,completed,169.6k,702,7.1k,49s,0,0,9,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+67,te_1778815308272,completed,287.4k,2.2k,67.5k,1m44s,0,0,14,4,4,3,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+68,rt_1778815426542,terminated,444.0k,3.9k,67.4k,3m15s,0,0,22,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+69,il_1778815636699,completed,301.3k,4.3k,49.2k,2m59s,0,0,16,3,3,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+70,il_1778815831407,terminated,330.2k,2.4k,19.2k,3m54s,0,0,19,'-,'-,'-,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+71,od_1778816080247,completed,210.8k,4.9k,6.7k,3m10s,0,0,11,15,197,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+72,il_1778816284674,completed,158.7k,3.4k,528,1m22s,0,0,10,4,4,4,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+73,ws_1778816375002,completed,438.7k,18.2k,12.3k,5m44s,0,0,21,'-,'-,'-,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+74,ic_1778816740283,completed,472.4k,7.2k,48.4k,3m24s,0,0,25,3,3,3,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+75,il_1778816955291,completed,513.7k,14.9k,87.4k,5m17s,0,0,22,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+76,od_1778817290812,terminated,155.9k,3.0k,1.0k,2m07s,0,0,8,1,15,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+77,nt_1778817428031,terminated,72.7k,1.4k,14.5k,1m18s,0,0,5,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+78,ed_1778817514469,terminated,243.6k,3.2k,13.8k,1m58s,0,0,15,2,2,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+79,ll_1778817645322,terminated,437.1k,4.4k,68.7k,9m29s,0,0,18,10,3,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+80,ir_1778818223386,completed,30.5k,202,'-,14s,0,0,2,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+81,er_1778818248301,terminated,405.9k,5.6k,104.2k,4m03s,0,0,20,5,5,2,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes
+82,rl_1778818499518,completed,334.2k,6.0k,166,3m24s,0,0,16,17,17,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+83,ls_1778818714450,completed,423.6k,8.3k,63.6k,6m56s,0,0,22,53,83,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+84,rs_1778819145096,terminated,316.7k,4.3k,22.3k,3m32s,0,0,14,54,'-,1,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+85,ss_1778819363252,completed,384.1k,2.6k,51.1k,2m25s,0,0,19,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+86,ed_1778819522332,completed,130.2k,2.6k,160,1m44s,0,0,7,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+87,ip_1778819636166,terminated,108.3k,761,7.4k,38s,0,0,7,19,'-,1,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+88,ds_1778819680835,completed,282.3k,3.4k,20.0k,1m56s,0,0,15,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+89,us_1778819807183,completed,358.0k,5.6k,21.9k,3m48s,0,0,19,10,10,4,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+90,oc_1778820043732,completed,82.0k,4.3k,'-,36s,0,0,5,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+91,rl_1778820090369,completed,170.9k,2.6k,12.7k,1m49s,0,0,8,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+92,ts_1778820210670,terminated,239.1k,4.6k,576,3m25s,0,0,13,3,2,3,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+93,ls_1778820420470,completed,104.9k,793,24.4k,1m05s,0,0,5,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+94,nt_1778820495665,completed,637.0k,4.2k,15.4k,4m44s,0,0,25,47,2,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+95,ls_1778820791488,completed,61.5k,654,5.8k,23s,0,0,4,'-,'-,'-,yes,checked,no,FAILED,code=no build=no ast=- verified=no
+96,ta_1778820825788,terminated,498.0k,15.0k,6.7k,9m48s,0,0,25,1,1,1,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+97,on_1778821426519,terminated,378.7k,7.6k,70.2k,6m26s,0,0,21,11,11,5,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+98,se_1778821823795,terminated,494.1k,71.4k,15.3k,34m58s,0,0,22,4,4,2,yes,checked,no,FAILED,code=yes build=no ast=- verified=no
+99,te_1778823934994,terminated,391.6k,1.6k,98.8k,4m06s,0,0,21,'-,'-,'-,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+100,ms_1778824430033,terminated,78.5k,954,14.0k,1m56s,0,0,5,26,'-,1,yes,checked,no,TIMEOUT,code=no build=no ast=- verified=no
+TOT,,,32.6M,593.0k,3.0M,6.2h,0,0,,,,,,,,,
+
+Summary,
+Total runs,100
+Passed,7
+Failed,82
+Timed out,11
+Success rate,7%

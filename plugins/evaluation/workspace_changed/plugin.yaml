@@ -1,0 +1,4 @@
+type: evaluation
+key: workspace_changed
+name: Workspace changed
+entrypoint: plugin:Plugin

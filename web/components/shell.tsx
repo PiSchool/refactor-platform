@@ -6,7 +6,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Activity, Database, Moon, Play, Settings, Sun, Monitor, Zap } from 'lucide-react';
+import { Activity, Database, Moon, Play, Settings, Sun, Monitor, Lock } from 'lucide-react';
 import React, { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { useTheme, type Theme } from '@/lib/theme';
@@ -63,17 +63,14 @@ export function Shell({ children }: { children: ReactNode }) {
     <div className="flex min-h-screen bg-canvas text-fg">
       {/* Desktop sidebar */}
       <aside className="group/nav fixed inset-y-0 left-0 z-30 hidden w-12 flex-col border-r border-border bg-canvas-subtle transition-[width] duration-200 ease-out hover:w-48 lg:flex">
-        {/* Logo */}
-        <div className="flex h-12 items-center border-b border-border px-3">
-          <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent-emphasis">
-            <Zap className="h-4 w-4 text-white" />
-          </div>
-          <span className={cn(
-            'ml-2.5 truncate text-sm font-semibold text-fg',
-            'opacity-0 transition-[opacity,transform] duration-200 -translate-x-1 group-hover/nav:opacity-100 group-hover/nav:translate-x-0',
-          )}>
-            Refactor Platform
-          </span>
+        {/* Brand: the mark alone when the rail is collapsed, the wordmark when it opens.
+            Both are served from /public so the dashboard never calls out to a CDN. */}
+        <div className="flex h-12 items-center overflow-hidden border-b border-border px-2.5"
+             title="Refactor Platform — Pi School">
+          <img src="/brand/pischool-mark.jpg" alt="Pi School"
+               className="h-7 w-7 shrink-0 rounded-md object-cover transition-opacity duration-200 group-hover/nav:opacity-0" />
+          <img src="/brand/pischool-wordmark.png" alt="Pi School"
+               className="absolute left-2.5 h-7 w-auto opacity-0 transition-opacity duration-200 group-hover/nav:opacity-100" />
         </div>
 
         {/* Nav items */}
@@ -115,15 +112,32 @@ export function Shell({ children }: { children: ReactNode }) {
               {themeLabels[theme]}
             </span>
           </button>
+          <button
+            type="button"
+            onClick={() => { sessionStorage.removeItem('rp-unlocked'); location.reload(); }}
+            title="Lock screen"
+            className={cn(
+              'flex h-9 w-full items-center gap-3 rounded-md px-2 text-sm text-fg-muted',
+              'transition-colors duration-150 hover:bg-neutral-subtle hover:text-fg',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-fg focus-visible:ring-inset',
+            )}
+          >
+            <Lock className="h-4 w-4 shrink-0" />
+            <span className={cn(
+              'truncate',
+              'opacity-0 -translate-x-1 transition-[opacity,transform] duration-200 group-hover/nav:opacity-100 group-hover/nav:translate-x-0',
+            )}>
+              Lock
+            </span>
+          </button>
         </div>
       </aside>
 
       {/* Mobile top bar */}
       <header className="fixed inset-x-0 top-0 z-30 flex h-12 items-center justify-between border-b border-border bg-canvas-subtle px-3 lg:hidden">
         <div className="flex items-center gap-0.5">
-          <div className="mr-2 flex h-7 w-7 shrink-0 items-center justify-center rounded-md bg-accent-emphasis">
-            <Zap className="h-3.5 w-3.5 text-white" />
-          </div>
+          <img src="/brand/pischool-mark.jpg" alt="Pi School"
+               className="mr-2 h-7 w-7 shrink-0 rounded-md object-cover" />
           {nav.map(item => {
             const active = pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href));
             const Icon = item.icon;

@@ -1,7 +1,7 @@
 type: agent
 key: copilot
 name: GitHub Copilot CLI
-version: 1.0.68
+binary: copilot
+install: npm install -g @github/copilot
 entrypoint: plugin:Plugin
-capabilities: {lsp: true, subagents: true, eval_tool: true}
-models: [openrouter/free]
+capabilities: {lsp: true, subagents: true, eval_tool: true, retrieval: true}

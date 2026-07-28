@@ -1,25 +1,104 @@
 from __future__ import annotations
 
 import re
+import threading
+import time
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
+from helpers import FIXTURES
 from sqlalchemy import func, select
 
-FIXTURES = Path(__file__).parent / "fixtures" / "plugins"
+from app.catalog.loader import discover
 
 
 def test_discover_finds_plugins():
-    from app.catalog.loader import discover
-
     reg = discover(FIXTURES)
     assert "fixturebench" in reg.benchmarks
     assert "stub" in reg.agents
     bench = reg.benchmarks["fixturebench"]
-    assert len(bench.tasks) == 1
-    assert bench.tasks[0].task_key == "fixture-0001"
+    assert [task.task_key for task in bench.tasks] == ["fixture-0001", "fixture-0002"]
     assert bench.tasks[0].workspace.type == "snapshot"
     assert reg.agents["stub"].impl.capabilities["subagents"] is True
+
+
+def test_benchmark_bootstrap_is_single_flight_and_observable(tmp_path, monkeypatch):
+    """Startup and button-triggered provisioning must never write the same
+    benchmark archive concurrently.  While it runs, callers see a real
+    provisioning state rather than the previous stale error marker.
+    """
+    from app.catalog import bootstrap
+
+    entered = threading.Event()
+    release = threading.Event()
+    calls = 0
+
+    def provision(_data_dir):
+        nonlocal calls
+        calls += 1
+        entered.set()
+        assert release.wait(2)
+
+    loaded = SimpleNamespace(
+        manifest=SimpleNamespace(key="swe", data=SimpleNamespace(bootstrap="unused.py")),
+        data_dir=tmp_path / "swe-data",
+    )
+    loaded.data_dir.mkdir()
+    (loaded.data_dir / ".error").write_text("old corrupt archive\n", encoding="utf-8")
+    monkeypatch.setattr(bootstrap, "_bootstrap_fn", lambda _loaded: provision)
+
+    assert bootstrap.start_background_bootstrap_one(loaded) is True
+    assert entered.wait(1)
+    try:
+        assert bootstrap.data_state(loaded) == "provisioning"
+        assert bootstrap.start_background_bootstrap_one(loaded) is False
+    finally:
+        release.set()
+
+    deadline = time.monotonic() + 2
+    while bootstrap.data_state(loaded) == "provisioning" and time.monotonic() < deadline:
+        time.sleep(0.01)
+    assert bootstrap.data_state(loaded) == "ready"
+    assert bootstrap.bootstrap_error(loaded) == ""
+    assert calls == 1
+
+
+def test_benchmark_bootstrap_exposes_failure_detail(tmp_path, monkeypatch):
+    from app.catalog import bootstrap
+
+    loaded = SimpleNamespace(
+        manifest=SimpleNamespace(key="swe-error", data=SimpleNamespace(bootstrap="unused.py")),
+        data_dir=tmp_path / "swe-data",
+    )
+    monkeypatch.setattr(
+        bootstrap,
+        "_bootstrap_fn",
+        lambda _loaded: lambda _data_dir: (_ for _ in ()).throw(RuntimeError("bad ZIP CRC")),
+    )
+
+    with pytest.raises(RuntimeError, match="bad ZIP CRC"):
+        bootstrap.run_bootstrap(loaded)
+    assert bootstrap.data_state(loaded) == "error"
+    assert bootstrap.bootstrap_error(loaded) == "bad ZIP CRC"
+
+
+def test_data_revision_invalidates_a_stale_ready_marker(tmp_path):
+    from app.catalog import bootstrap
+
+    loaded = SimpleNamespace(
+        manifest=SimpleNamespace(
+            key="swe",
+            data=SimpleNamespace(bootstrap="unused.py", revision="task-revisions-v1"),
+        ),
+        data_dir=tmp_path / "swe-data",
+    )
+    loaded.data_dir.mkdir()
+    (loaded.data_dir / ".ready").write_text("ok\n", encoding="utf-8")
+    assert bootstrap.data_state(loaded) == "missing"
+
+    (loaded.data_dir / ".ready").write_text("task-revisions-v1\n", encoding="utf-8")
+    assert bootstrap.data_state(loaded) == "ready"
 
 
 def test_invalid_manifest_is_skipped(tmp_path):
@@ -48,7 +127,8 @@ async def test_task_upsert_idempotent(tmp_env):
             await s.commit()
     async with db_engine.session_factory()() as s:
         count = (await s.execute(select(func.count()).select_from(Task))).scalar_one()
-    assert count == 1
+    # A second sync of the same manifest updates rows rather than adding them.
+    assert count == len(reg.benchmarks["fixturebench"].tasks)
 
 
 def test_plugin_import_boundary():

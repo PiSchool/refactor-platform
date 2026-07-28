@@ -1,7 +1,8 @@
-"""Per-run ZIP export: summary.json + results.csv + per-task artifacts."""
+"""Per-run ZIP export: manifest.json + summary.json + results.csv + per-task artifacts."""
 from __future__ import annotations
 
 import csv
+import hashlib
 import io
 import json
 import tempfile
@@ -11,9 +12,27 @@ from pathlib import Path
 from sqlalchemy import select
 
 from app.api.serializers import run_summary, run_task_detail
-from app.config import get_settings
+from app.config import REPO_ROOT, get_settings
 from app.db import engine as db_engine
-from app.db.models import Run, RunTask
+from app.db.models import AgentSession, AgentTool, Benchmark, Run, RunTask
+from app.results.artifacts import (
+    ArtifactNotFound,
+    ArtifactTooLarge,
+    enforce_size,
+    resolve_session_artifact,
+    resolve_task_artifact,
+    revalidate,
+    session_artifact_refs,
+    task_artifact_refs,
+)
+from app.results.bundle import (
+    ArtifactManifestEntry,
+    PluginRef,
+    build_manifest,
+    export_session_id,
+    export_task_id,
+)
+from app.results.redaction import Redactor
 
 #: Analysis columns, in reading order. `details` (a JSON blob of every stage)
 #: stays last so a spreadsheet opens on the useful ones.
@@ -33,6 +52,11 @@ _CSV_COLS = [
     "totalTokens", "costUsd",
     # context behaviour
     "contextTokens", "compactionCount", "contextOverflowCount", "evalIterations",
+    # setup fidelity: was the setup's mechanism actually exercised?
+    "setupCompliance", "setupExercised", "lspActions", "subagentInvocations",
+    "evalToolInvocations", "evalAttempts",
+    "retrievalPreInjected", "retrievalInvocations", "retrievalStrategy",
+    "retrievalHits", "retrievalQueries", "retrievalIndexKey",
     # raw
     "details",
 ]
@@ -102,6 +126,18 @@ def _row(task: dict, extra: dict | None = None, models: dict | None = None) -> d
         "compactionCount": metrics.get("compactionCount", ""),
         "contextOverflowCount": metrics.get("contextOverflowCount", ""),
         "evalIterations": metrics.get("evalIterations", ""),
+        "evalAttempts": metrics.get("evalAttempts", ""),
+        "setupCompliance": metrics.get("setupCompliance", ""),
+        "setupExercised": metrics.get("setupExercised", ""),
+        "lspActions": metrics.get("lspActions", ""),
+        "subagentInvocations": metrics.get("subagentInvocations", ""),
+        "evalToolInvocations": metrics.get("evalToolInvocations", ""),
+        "retrievalPreInjected": metrics.get("retrievalPreInjected", ""),
+        "retrievalInvocations": metrics.get("retrievalInvocations", ""),
+        "retrievalStrategy": metrics.get("retrievalStrategy", ""),
+        "retrievalHits": metrics.get("retrievalHits", ""),
+        "retrievalQueries": metrics.get("retrievalQueries", ""),
+        "retrievalIndexKey": metrics.get("retrievalIndexKey", ""),
         "details": json.dumps(details),
     }
     return {**(extra or {}), **row}
@@ -161,31 +197,152 @@ async def build_zip(run_id: str) -> Path | None:
         if run is None:
             return None
         summary = await run_summary(run, s)
+        bench = (await s.execute(
+            select(Benchmark).where(Benchmark.id == run.benchmark_id))).scalar_one()
+        tool = (await s.execute(
+            select(AgentTool).where(AgentTool.id == run.agent_tool_id))).scalar_one()
         rts = (await s.execute(
             select(RunTask).where(RunTask.run_id == run_id).order_by(RunTask.ordinal))).scalars().all()
         tasks = [await run_task_detail(rt, s) for rt in rts]
+        sessions = (await s.execute(select(AgentSession).where(
+            AgentSession.run_task_id.in_([rt.id for rt in rts])
+        ))).scalars().all() if rts else []
 
-    run_dir = get_settings().outputs_dir / "runs" / run_id
+    settings = get_settings()
+    run_dir = settings.outputs_dir / "runs" / run_id
+    redactor = Redactor.from_environment(private_paths=(
+        run_dir,
+        settings.outputs_dir,
+        settings.data_dir,
+        REPO_ROOT,
+    ))
+
+    by_task: dict[str, list[AgentSession]] = {}
+    for agent_session in sessions:
+        by_task.setdefault(agent_session.run_task_id, []).append(agent_session)
+
+    # Archive folder names and summary ids are export-local: they never leak
+    # the source run's live database identifiers into a shared/archived ZIP.
+    task_ids = {rt.id: export_task_id(i) for i, rt in enumerate(rts)}
+    session_ids = {
+        agent_session.id: export_session_id(j)
+        for rt in rts
+        for j, agent_session in enumerate(by_task.get(rt.id, []))
+    }
+
     tmp = Path(tempfile.mkdtemp(prefix="rp-export-")) / f"run-{run_id}.zip"
     with zipfile.ZipFile(tmp, "w", zipfile.ZIP_DEFLATED) as z:
-        z.writestr("summary.json", json.dumps({"run": summary, "tasks": tasks}, indent=2))
+        portable = redactor.sanitize({"run": summary, "tasks": tasks}, drop_path_fields=True)
+        for i, rt in enumerate(rts):
+            portable_task = portable["tasks"][i]
+            portable_task["id"] = task_ids[rt.id]
+            session_block = portable_task.get("session")
+            if session_block is not None:
+                live_session_id = (tasks[i].get("session") or {}).get("id")
+                if live_session_id in session_ids:
+                    session_block["id"] = session_ids[live_session_id]
+        z.writestr("summary.json", json.dumps(portable, indent=2))
         z.writestr("results.csv", results_csv(tasks))
-        # per-task artifacts (whatever survived retention)
-        if run_dir.is_dir():
-            for path in run_dir.rglob("*"):
-                if path.is_file() and _exportable(path.relative_to(run_dir).parts):
-                    z.write(path, arcname=str(Path("artifacts") / path.relative_to(run_dir)))
+
+        manifest_entries: list[ArtifactManifestEntry] = []
+        for rt in rts:
+            task_folder = task_ids[rt.id]
+            for ref in task_artifact_refs(run_id, rt.id):
+                if not ref.available:
+                    continue
+                try:
+                    artifact = resolve_task_artifact(run_id, rt.id, ref.key)
+                    enforce_size(artifact, download=True)
+                    artifact = revalidate(artifact)
+                except (ArtifactNotFound, ArtifactTooLarge):
+                    continue
+                archive_path = Path("artifacts") / "tasks" / task_folder / artifact.relative_path
+                manifest_entries.append(
+                    _write_sanitized(z, archive_path, artifact, redactor)
+                )
+
+            for agent_session in by_task.get(rt.id, []):
+                session_folder = session_ids[agent_session.id]
+                for ref in session_artifact_refs(run_id, rt.id, agent_session):
+                    if not ref.available:
+                        continue
+                    try:
+                        artifact = resolve_session_artifact(
+                            run_id, rt.id, agent_session, ref.key,
+                        )
+                        enforce_size(artifact, download=True)
+                        artifact = revalidate(artifact)
+                    except (ArtifactNotFound, ArtifactTooLarge):
+                        continue
+                    filename = {
+                        "terminal": "terminal.log",
+                        "transcript": "transcript.txt",
+                        "events": "events.jsonl",
+                    }[ref.key]
+                    archive_path = (
+                        Path("artifacts") / "tasks" / task_folder / "sessions"
+                        / session_folder / filename
+                    )
+                    manifest_entries.append(
+                        _write_sanitized(z, archive_path, artifact, redactor)
+                    )
+
+        manifest = build_manifest(
+            source_run_id=run_id,
+            benchmark=PluginRef(key=bench.key, name=bench.name),
+            setup=PluginRef(
+                key=summary["setup"]["key"], name=summary["setup"]["name"],
+            ),
+            agent_tool=PluginRef(key=tool.key, name=tool.name),
+            status=summary["status"],
+            task_count=len(rts),
+            artifacts=manifest_entries,
+        )
+        z.writestr(
+            "manifest.json",
+            json.dumps(manifest.model_dump(mode="json", by_alias=True), indent=2),
+        )
     return tmp
 
 
-# The agent's private HOME holds its own CLI cache (tens of MB) and a session
-# store; neither is part of the run record. Keep the agent-native events log.
+def _write_sanitized(
+    z: zipfile.ZipFile, archive_path: Path, artifact, redactor: Redactor,
+) -> ArtifactManifestEntry:
+    """Write transformed evidence directly into the ZIP without a raw copy.
+
+    Hash and size are taken over the sanitized bytes actually stored, not the
+    original evidence on disk, so the manifest matches the archive exactly.
+    """
+    hasher = hashlib.sha256()
+    size = 0
+    with z.open(archive_path.as_posix(), "w") as target:
+        for chunk in redactor.iter_file(
+            artifact.path,
+            artifact.media_type,
+            get_settings().evidence.stream_chunk_bytes,
+        ):
+            target.write(chunk)
+            hasher.update(chunk)
+            size += len(chunk)
+    return ArtifactManifestEntry(
+        path=archive_path.as_posix(),
+        sizeBytes=size,
+        sha256=hasher.hexdigest(),
+        mediaType=artifact.media_type,
+    )
+
+
+# Retained only as a narrow compatibility predicate for callers/tests from the
+# v1 exporter. `build_zip` no longer walks the tree: its positive catalog above
+# is authoritative.
 _SKIP_DIRS = ("workspace", ".cache")
-_SKIP_NAMES = ("session-store.db",)
+_SKIP_NAMES = ("session-store.db", "mcp-config.json")
 
 
 def _exportable(parts: tuple[str, ...]) -> bool:
     if any(p in _SKIP_DIRS for p in parts):
         return False
     name = parts[-1]
+    if ".copilot" in parts:
+        return "session-state" in parts and name == "events.jsonl"
     return not any(name.startswith(s) for s in _SKIP_NAMES)

@@ -1,0 +1,7 @@
+# RefactorBench S2-RAG AST Descriptive
+# Model: deepseek/deepseek-v4-pro
+# Pipeline: CocoIndex tree-sitter chunking + nomic-embed-code + pgvector + cross-encoder reranking
+# Total: 100 | Passed: 89/100 (89.0%)
+
+Model,Setup,Mode,Total,Passed,Pass Rate
+deepseek/deepseek-v4-pro,S2-RAG (AST),descriptive,100,89,89.0%

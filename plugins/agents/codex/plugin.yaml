@@ -1,0 +1,11 @@
+type: agent
+key: codex
+name: OpenAI Codex CLI
+binary: codex
+install: npm install -g @openai/codex
+entrypoint: plugin:Plugin
+capabilities:
+  lsp: false
+  subagents: false
+  eval_tool: true
+  retrieval: true

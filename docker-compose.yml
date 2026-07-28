@@ -1,17 +1,91 @@
-# Refactor Platform — two-service stack.
+# Refactor Platform.
 #   backend  : FastAPI + PTY-owned agent sessions + Java/LSP toolchain
 #   frontend : Next.js dashboard, proxies /api and /ws to the backend
+#   retrieval-db: PostgreSQL + pgvector for structured state and S2 indexes
+#   ollama   : serves the S2 embedding and query-expansion models
 #
-# Secrets come from .env (copy .env.example). Persistent state lives in named
-# volumes: platform DB/outputs, plus each benchmark's bootstrapped data.
+# S2 and S3 search with the study's models. The first start pulls several
+# gigabytes of weights into the ollama-models volume; the platform runs
+# meanwhile, S1 is unaffected, and S2/S3 runs are refused until the pull
+# finishes. The models are named in config.yaml, not here.
+#
+# Known settings are allowlisted from the host environment (copy .env.example).
+# Persistent state lives in named volumes: platform DB/outputs, plus each
+# benchmark's bootstrapped data.
 services:
+  retrieval-db:
+    image: pgvector/pgvector:pg16@sha256:1d533553fefe4f12e5d80c7b80622ba0c382abb5758856f52983d8789179f0fb
+    environment:
+      POSTGRES_DB: refactor_retrieval
+      POSTGRES_USER: refactor
+      POSTGRES_PASSWORD: "${RETRIEVAL_DB_PASSWORD:?set a retrieval writer password}"
+      RETRIEVAL_DB_READER_PASSWORD: "${RETRIEVAL_DB_READER_PASSWORD:?set a distinct read-only password}"
+    volumes:
+      - retrieval-data:/var/lib/postgresql/data
+      - ./docker/postgres/init-retrieval-reader.sh:/docker-entrypoint-initdb.d/20-retrieval-reader.sh:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U refactor -d refactor_retrieval"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    restart: unless-stopped
+
   backend:
     build:
       context: .
       dockerfile: docker/backend.Dockerfile
-    env_file: [.env]
+      args:
+        # Recorded in the image and reported on /api/health, so a redeploy is
+        # verifiable. Optional: set RP_BUILD_REV in .env or in the environment.
+        RP_BUILD_REV: "${RP_BUILD_REV:-}"
     environment:
       RP_DATA_DIR: /data
+      # Reported with the running build. Read at runtime as well as at build time,
+      # so a deployment can declare its revision without rebuilding.
+      RP_BUILD_REV: "${RP_BUILD_REV:-}"
+      DATABASE_URL: "${DATABASE_URL:-postgresql+asyncpg://refactor:${RETRIEVAL_DB_PASSWORD:?set a platform database password}@retrieval-db:5432/refactor_retrieval}"
+      # Provider registry: config.yaml declares the endpoints, .env carries the
+      # keys, and only the selected provider's key reaches an agent.
+      RP_PROVIDER: "${RP_PROVIDER:-}"
+      OPENROUTER_API_KEY: "${OPENROUTER_API_KEY:-}"
+      OPENROUTER_BASE_URL: "${OPENROUTER_BASE_URL:-}"
+      OPENAI_API_KEY: "${OPENAI_API_KEY:-}"
+      OPENAI_BASE_URL: "${OPENAI_BASE_URL:-}"
+      LOCAL_LLM_API_KEY: "${LOCAL_LLM_API_KEY:-}"
+      LOCAL_LLM_BASE_URL: "${LOCAL_LLM_BASE_URL:-}"
+      COPILOT_GITHUB_TOKEN: "${COPILOT_GITHUB_TOKEN:-}"
+      RETRIEVAL_DATABASE_URL: "postgresql://refactor:${RETRIEVAL_DB_PASSWORD:?set a retrieval writer password}@retrieval-db:5432/refactor_retrieval"
+      RETRIEVAL_READER_DATABASE_URL: "postgresql://retrieval_reader:${RETRIEVAL_DB_READER_PASSWORD:?set a distinct read-only password}@retrieval-db:5432/refactor_retrieval"
+      # The models and the stage limits come from config.yaml. What varies per
+      # deployment is where the model server listens.
+      OLLAMA_HOST: "${OLLAMA_HOST:-http://ollama:11434}"
+      RP_EVIDENCE_VIEW_MAX_BYTES: "${RP_EVIDENCE_VIEW_MAX_BYTES:-}"
+      RP_EVIDENCE_DOWNLOAD_MAX_BYTES: "${RP_EVIDENCE_DOWNLOAD_MAX_BYTES:-}"
+      RP_EVIDENCE_JSON_MAX_BYTES: "${RP_EVIDENCE_JSON_MAX_BYTES:-}"
+      RP_EVIDENCE_STREAM_CHUNK_BYTES: "${RP_EVIDENCE_STREAM_CHUNK_BYTES:-}"
+      RP_IMPORT_MAX_UPLOAD_BYTES: "${RP_IMPORT_MAX_UPLOAD_BYTES:-}"
+      RP_IMPORT_MAX_TOTAL_UNCOMPRESSED_BYTES: "${RP_IMPORT_MAX_TOTAL_UNCOMPRESSED_BYTES:-}"
+      RP_IMPORT_MAX_MEMBERS: "${RP_IMPORT_MAX_MEMBERS:-}"
+      RP_IMPORT_MAX_MEMBER_BYTES: "${RP_IMPORT_MAX_MEMBER_BYTES:-}"
+      RP_IMPORT_MAX_PATH_DEPTH: "${RP_IMPORT_MAX_PATH_DEPTH:-}"
+      RP_IMPORT_MAX_COMPONENT_LENGTH: "${RP_IMPORT_MAX_COMPONENT_LENGTH:-}"
+      RP_IMPORT_MAX_PATH_LENGTH: "${RP_IMPORT_MAX_PATH_LENGTH:-}"
+      RP_IMPORT_MAX_COMPRESSION_RATIO: "${RP_IMPORT_MAX_COMPRESSION_RATIO:-}"
+      RP_IMPORT_MAX_JSON_BYTES: "${RP_IMPORT_MAX_JSON_BYTES:-}"
+      RP_IMPORT_CHUNK_BYTES: "${RP_IMPORT_CHUNK_BYTES:-}"
+      # In-process inference stays on the CPU: this image ships no GPU runtime.
+      # Embeddings and query rewriting run in the ollama service, which uses
+      # whatever hardware the host gives it.
+      CUDA_VISIBLE_DEVICES: ""
+    depends_on:
+      retrieval-db:
+        condition: service_healthy
+      # Started, not healthy: the model server reports healthy once its weights
+      # are pulled, and waiting for that would keep the dashboard down for the
+      # length of a multi-gigabyte download on a first start. Retrieval reports
+      # itself as provisioning until then, and S2 runs are refused.
+      ollama:
+        condition: service_started
     volumes:
       - platform-data:/data
       - refbench-data:/app/plugins/benchmarks/refbench/data
@@ -22,24 +96,59 @@ services:
       - "${RP_API_BIND:-127.0.0.1}:8000:8000"
     restart: unless-stopped
 
+  ollama:
+    # Serves the two models named in config.yaml. Pulled on first boot
+    # rather than baked into an image, so a deployment can pin different models
+    # without a rebuild; the pulls are cache hits afterwards.
+    image: ollama/ollama:0.32.4@sha256:10c13eb515db310990527d36ca14a136da4bcc0fbf2bf3b15e9c1f111e9d3cd4
+    environment:
+      OLLAMA_KEEP_ALIVE: "${OLLAMA_KEEP_ALIVE:-30m}"
+      OLLAMA_NUM_PARALLEL: "${OLLAMA_NUM_PARALLEL:-1}"
+      OLLAMA_MAX_LOADED_MODELS: "${OLLAMA_MAX_LOADED_MODELS:-2}"
+      RP_EMBEDDING_MODEL: "${RETRIEVAL_EMBEDDING_MODEL:-hf.co/nomic-ai/nomic-embed-code-GGUF:Q4_K_M}"
+      RP_EXPANSION_MODEL: "${RETRIEVAL_EXPANSION_MODEL:-qwen2.5-coder:7b-instruct}"
+    entrypoint: ["/bin/sh", "/entrypoint.sh"]
+    volumes:
+      - ollama-models:/root/.ollama
+      - ./docker/ollama/entrypoint.sh:/entrypoint.sh:ro
+    healthcheck:
+      # Healthy means the models are pulled, not merely that the server answers.
+      test: ["CMD-SHELL", "ollama list | grep -q nomic-embed-code && ollama list | grep -q qwen2.5-coder"]
+      interval: 20s
+      timeout: 10s
+      retries: 90
+      start_period: 300s
+    restart: unless-stopped
+
   frontend:
     build:
       context: .
       dockerfile: docker/frontend.Dockerfile
       args:
         PLATFORM_API_ORIGIN: http://backend:8000
+        RP_BUILD_REV: "${RP_BUILD_REV:-}"
     environment:
       PLATFORM_API_ORIGIN: http://backend:8000
+      RP_BUILD_REV: "${RP_BUILD_REV:-}"
     depends_on:
       backend:
         condition: service_healthy
-    # The public entry point. Deployments that front it on another port (the demo
-    # host serves :8787) set RP_WEB_PORT rather than editing this file.
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:3000').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+    # Loopback by default: the stack has no authentication of its own. Reach it
+    # from another machine over an SSH tunnel, or through a reverse proxy that
+    # provides TLS and authentication.
     ports:
-      - "${RP_WEB_PORT:-3000}:3000"
+      - "${RP_WEB_BIND:-127.0.0.1}:${RP_WEB_PORT:-3000}:3000"
     restart: unless-stopped
 
 volumes:
   platform-data:
+  retrieval-data:
   refbench-data:
   swe-data:
+  ollama-models:

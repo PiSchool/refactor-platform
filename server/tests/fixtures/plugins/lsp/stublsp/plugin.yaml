@@ -1,0 +1,5 @@
+type: lsp
+key: stublsp
+name: Stub Python LSP
+language: python
+entrypoint: plugin:Plugin

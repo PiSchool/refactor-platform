@@ -1,0 +1,29 @@
+#,project,taskId,type,codeSuccessful,compileAndTestResult,refactoringMinerResult,successVerification,durationSeconds,agentDurationSeconds,copilotLspActionCount,timedOut,reason
+1,checkstyle,bfb3e5f5e416211bc95799426edba4,Extract And Move Method,True,False,False,False,267.8,123.7,4,False,the code did not perform Extract And Move Method operation.
+2,commons-lang,479532b83db2d7b228e4128f2db022,Extract And Move Method,True,False,False,False,193.5,152.8,4,False,the code did not perform Extract And Move Method operation.
+3,commons-lang,cdddb82e12ef7b2cc770125e930bde,Extract And Move Method,True,False,False,False,170.0,170.0,4,False,Extracted method must be public static.
+4,commons-lang,cdddb82e12ef7b2cc770125e930bde,Extract And Move Method,True,True,True,True,518.7,73.3,4,False,
+5,commons-lang,e4c03c5e38b3e2550da7a1f9084d93,Extract And Move Method,False,False,False,False,17.2,17.2,4,True,Invalid target file path: 
+6,hibernate-orm,96cba56591e3e8c6dabaf35d954bd5,Extract And Move Method,True,False,True,False,1312.8,209.8,4,False,the Extract And Move Method operation is successful.
+7,hibernate-orm,2f7052c0ce5114e492c7dc4e4b8abd,Extract And Move Method,True,False,False,False,1216.1,137.6,4,False,the code did not perform Extract And Move Method operation.
+8,hibernate-orm,5dcbdf64f11dfdcf25fd5a4a571f97,Extract And Move Method,True,False,False,False,355.8,355.8,4,False,Extracted method must be public static.
+9,hibernate-orm,72e2da2da84fae761f14ceeb822bd3,Move And Inline Method,True,False,False,False,1092.8,827.1,4,False,the code did not perform Move And Inline Method operation.
+10,hibernate-orm,ba05533a036e73ac119169392b0da4,Extract And Move Method,True,False,False,False,144.8,144.8,4,False,Extracted method must be public static.
+11,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,True,True,True,True,647.7,197.3,4,False,
+12,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,True,True,True,True,416.1,160.4,4,False,
+13,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,True,False,False,False,142.8,142.8,4,False,Extracted method must be public static.
+14,hibernate-orm,26e73937756de5781043f120905b71,Extract And Move Method,True,True,True,True,368.8,115.2,4,False,
+15,hibernate-orm,c04caa18de3c5ff81c17ebb151430b,Extract And Move Method,True,True,True,True,346.2,85.8,4,False,
+16,hibernate-search,0b4c69d582f4c29554d78da38daebb,Extract And Move Method,True,True,True,True,2106.8,104.8,4,False,
+17,hibernate-search,daaa9ff20cae0f7751636f16bcaf0c,Extract And Move Method,True,False,False,False,71.7,71.7,4,False,Extracted method must be public static.
+18,hibernate-search,f6398f46e661b12bb5cd7d429c52bd,Extract And Move Method,True,True,False,False,1264.8,176.0,4,False,the code did not perform Extract And Move Method operation.
+19,hibernate-search,6b55b85d003d11848939dbdf2640fc,Move And Rename Method,True,False,False,False,139.0,139.0,4,False,Refactored code does not call moved method 'getTargetDir'.
+20,junit5,50b28568a20c85473460504f484ac8,Extract And Move Method,True,False,True,False,2013.4,817.5,4,False,the Extract And Move Method operation is successful.
+21,junit5,2a777a84cfdc9ccb79aa906cde80e0,Move And Rename Method,True,False,False,False,738.6,123.2,4,False,the code did not perform Move And Rename Method operation.
+22,pmd,e4f5d027b2d86f675208d8da53d0bb,Extract And Move Method,True,False,False,False,494.8,84.2,4,False,the code did not perform Extract And Move Method operation.
+23,pmd,91d0ebf4620b9cda44ce6f02232fe8,Extract And Move Method,True,False,False,False,122.4,122.4,4,False,Extracted method must be public static.
+24,pmd,97c08a37ab6e5f0dc0bc2c38d86520,Extract And Move Method,True,False,True,False,1107.4,178.2,4,False,the Extract And Move Method operation is successful.
+25,pmd,da03fafabb2146ca3b2cd3f6148475,Extract And Move Method,False,False,False,False,51.0,51.0,4,True,Invalid target file path: 
+26,pmd,5031c83c880d11f215b2b21919ff30,Extract And Move Method,False,False,False,False,15.9,15.9,4,True,Invalid target file path: 
+27,pmd,2123ab3d5d7dcfc867ada3af119c3d,Extract And Move Method,True,True,True,True,1104.1,57.4,4,False,
+28,pmd,26bcbd839a79055a0ff037da3c8c54,Move And Inline Method,True,True,False,False,527.3,190.9,4,False,the code did not perform Move And Inline Method operation.

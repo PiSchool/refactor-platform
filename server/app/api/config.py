@@ -1,9 +1,9 @@
 """Operator configuration of plugin-provided things.
 
-The plugin manifest stays the source of truth for *what can* run; these
-endpoints record the operator's edits (stage tuning, disabled stages/tasks) as
-overrides in the DB, which the task loop merges at run time. Nothing here
-rewrites a plugin's files.
+These endpoints record the operator's edits — a retuned stage, a stage switched
+off, a metric added to a pipeline, a task excluded — as overrides in the
+database, which the task loop merges at run time. Nothing here rewrites a
+plugin's files, so restoring a benchmark to what it ships is one delete.
 """
 from __future__ import annotations
 
@@ -21,8 +21,8 @@ from app.config import get_settings
 from app.db import engine as db_engine
 from app.db.models import Benchmark, RuntimeSetting, Task
 from app.db.runtime import runtime_value
+from app.evaluation import metrics, registry
 from app.evaluation.engine import effective_pipeline
-from app.evaluation.presets import CORE_PRESETS
 
 router = APIRouter(prefix="/api")
 
@@ -70,23 +70,36 @@ async def get_evaluation(key: str, request: Request):
     verify, passed = effective_pipeline(ev, override)
 
     by_preset = {s.get("preset"): s for s in (override or {}).get("verify", [])}
+    # Each stage is returned with what it measures and the options it accepts, so
+    # the operator is not reading metric ids and guessing.
+    catalogue = metrics.catalogue()
+    prepare = None
+    if ev.prepare:
+        spec = loaded.hooks.describe_preparation()
+        if spec is not None:
+            prepare = metrics.preparation(ev.prepare, spec)
     return {
         "benchmark": key,
-        "capture": ev.capture,
         "overridden": bool(override),
-        "corePresets": sorted(CORE_PRESETS),
-        "pluginStages": sorted(loaded.hooks.stages()) if loaded.hooks else [],
+        # the benchmark's own step, before anything measures
+        "prepare": prepare,
+        # recorded for every task, never gating
+        "capture": [metrics.describe(p, catalogue) for p in ev.capture_ids],
         "shipped": {
             "verify": [{"preset": s.preset, "config": s.config} for s in ev.verify],
             "passed": ev.passed,
         },
         "effective": {
             "verify": [
-                {"preset": p, "config": c, "enabled": by_preset.get(p, {}).get("enabled", True)}
+                {"preset": p, "config": c,
+                 "enabled": by_preset.get(p, {}).get("enabled", True),
+                 "metric": metrics.describe(p, catalogue)}
                 for p, c in verify
             ],
             "passed": passed,
         },
+        # every metric installed here, for adding one to this pipeline
+        "available": [catalogue[metric_id] for metric_id in sorted(catalogue)],
         # stages the plugin ships but the operator disabled
         "disabled": [s.preset for s in ev.verify
                      if by_preset.get(s.preset, {}).get("enabled", True) is False],
@@ -96,15 +109,23 @@ async def get_evaluation(key: str, request: Request):
 @router.put("/benchmarks/{key}/evaluation")
 async def put_evaluation(key: str, body: EvaluationEdit, request: Request):
     loaded = _loaded(request, key)
+    # A stage may be one the benchmark ships or any metric installed here: adding
+    # `codebleu` to a benchmark that does not mention it needs no plugin edit.
     shipped = {s.preset for s in loaded.manifest.evaluation.verify}
-    unknown = [s.preset for s in body.verify if s.preset not in shipped]
+    unknown = [s.preset for s in body.verify
+               if s.preset not in shipped and registry.get(s.preset) is None]
     if unknown:
-        raise HTTPException(422, f"stages not shipped by this benchmark: {unknown}")
+        raise HTTPException(
+            422, f"no metric installed for {unknown}; metrics live in plugins/evaluation/")
+    recording_only = [s.preset for s in body.verify if s.enabled
+                      and (m := registry.get(s.preset)) is not None and not m.spec.gates]
+    if recording_only:
+        raise HTTPException(
+            422, f"{recording_only} only record and cannot fail a task, so they cannot gate")
     if body.passed:
         # the expression may only reference stages that will actually run
         from app.evaluation import expressions
-        names = {s.preset.split(".")[-1] for s in body.verify if s.enabled} | \
-                {s.preset for s in body.verify if s.enabled}
+        names = {s.preset for s in body.verify if s.enabled}
         try:
             expressions.evaluate(body.passed, {n: True for n in names})
         except ValueError as exc:

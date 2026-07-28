@@ -1,0 +1,8 @@
+tasks:
+  - task_key: greet-uppercase
+    title: Return the greeting in upper case
+    workspace: {type: snapshot, source: repo}   # data/repo, copied per task
+    instructions: |
+      In greet.py, make greet() return the greeting in upper case.
+      Keep the function's name and signature.
+    params: {kind: rename-free}

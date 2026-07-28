@@ -37,7 +37,7 @@ export function UsageBar({ sessionId, model }: { sessionId: string; model: strin
 
   return (
     <div className="shrink-0 rounded-md border border-border bg-canvas-subtle px-3 py-2">
-      <div className="flex items-center gap-2 text-[11px]">
+      <div className="flex items-center gap-2 text-xs">
         <Gauge className="h-3.5 w-3.5 shrink-0 text-fg-muted" />
         <span className="text-fg-muted">Context</span>
         {final ? (
@@ -54,7 +54,7 @@ export function UsageBar({ sessionId, model }: { sessionId: string; model: strin
         {pct != null && <span className="ml-auto font-mono tabular-nums text-fg-subtle">{pct.toFixed(0)}%</span>}
         {usage.compactions > 0 && (
           <Tooltip content="The agent compacted its context to keep going">
-            <span className="flex items-center gap-1 rounded-full bg-attention-subtle px-1.5 text-[10px] text-attention-fg">
+            <span className="flex items-center gap-1 rounded-full bg-attention-subtle px-1.5 text-[11px] text-attention-fg">
               <Layers className="h-3 w-3" />{usage.compactions}
             </span>
           </Tooltip>
@@ -67,7 +67,7 @@ export function UsageBar({ sessionId, model }: { sessionId: string; model: strin
         </div>
       )}
 
-      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px]">
+      <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs">
         <span className="text-fg-muted">
           turns <span className="font-mono tabular-nums text-fg">{usage.turns}</span>
         </span>
@@ -100,7 +100,7 @@ export function UsageBar({ sessionId, model }: { sessionId: string; model: strin
       </div>
 
       {!final && (
-        <p className="mt-1 text-[10px] text-fg-subtle">
+        <p className="mt-1 text-[11px] text-fg-subtle">
           The agent reports prompt tokens and context occupancy only when the session ends; cost follows from them.
         </p>
       )}

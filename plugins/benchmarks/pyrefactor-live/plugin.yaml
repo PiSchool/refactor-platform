@@ -1,0 +1,42 @@
+type: benchmark
+key: pyrefactor-live
+name: Python Refactorings (live repositories)
+language: python
+setups: [s1, s1_lsp, s1_eval, s2_rag_naive, s2_rag_ast, s3]
+facets:
+  - {key: refactoring, label: Refactoring type}
+  - {key: project, label: Project}
+data:
+  bootstrap: data_bootstrap.py
+  revision: mirrors-v1
+prompt:
+  template: prompts/task.md
+  appliesTo: every task in this benchmark
+  variables:
+    - name: task.instructions
+      summary: The refactoring the task asks for, naming the function and the file.
+      required: true
+    - name: params.refactoring
+      summary: The operation to apply, by the name the detector reports.
+      required: true
+    - name: params.module
+      summary: The module whose public behaviour must not change.
+      required: true
+    - name: params.tests
+      summary: The test command the verdict runs against the saved workspace.
+      required: false
+evaluation:
+  capture: [git_diff, events_metrics]
+  verify:
+    - {preset: workspace_changed}
+    - preset: pyrefactor
+      config:
+        expected_from: params.refactoring
+    - preset: pytest_suite
+      config:
+        targets_from: params.tests
+        timeout: 900
+        maxfail: 1
+  passed: "workspace_changed and pyrefactor and pytest_suite"
+display:
+  tabs: {output: Diff}

@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { fetchArtifactText } from '@/lib/api';
+import { ResumableTerminalStream } from '@/lib/terminal-stream';
+import type { ArtifactRef } from '@/lib/types';
 
 /** Read a platform colour token (stored as an "r g b" triple). */
 function cssRgb(name: string, fallback: string): string {
@@ -20,13 +23,14 @@ function xtermTheme() {
   };
 }
 
-/** Read-only xterm terminal. Live sessions stream over WS from byte 0 (full
- *  scrollback), then live deltas. Ended sessions load the finalized log. */
-export function Terminal({ sessionId, live }: { sessionId: string; live: boolean }) {
+/** Read-only xterm terminal with durable byte-offset replay and reconnect. */
+export function Terminal({ sessionId, live, artifact }: {
+  sessionId: string; live: boolean; artifact?: ArtifactRef;
+}) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let term: any, fit: any, ws: WebSocket | null = null, disposed = false;
+    let term: any, fit: any, stream: ResumableTerminalStream | null = null, disposed = false;
     let observer: MutationObserver | null = null;
 
     (async () => {
@@ -47,15 +51,39 @@ export function Terminal({ sessionId, live }: { sessionId: string; live: boolean
 
       if (live) {
         const proto = location.protocol === 'https:' ? 'wss' : 'ws';
-        ws = new WebSocket(`${proto}://${location.host}/ws/sessions/${sessionId}/terminal`);
-        ws.binaryType = 'arraybuffer';
-        ws.onmessage = (e) => {
-          if (typeof e.data === 'string') return; // status frames
-          term.write(new Uint8Array(e.data));
-        };
+        stream = new ResumableTerminalStream({
+          url: (offset) => (
+            `${proto}://${location.host}/ws/sessions/${encodeURIComponent(sessionId)}/terminal?offset=${offset}`
+          ),
+          write: (data) => term.write(data),
+          reset: () => term.reset(),
+          recover: async (offset) => {
+            if (!artifact) {
+              return { data: new Uint8Array(), totalBytes: offset, reset: false };
+            }
+            const response = await fetch(artifact.viewUrl, { credentials: 'same-origin' });
+            if (!response.ok) throw new Error(`terminal recovery failed (${response.status})`);
+            const complete = new Uint8Array(await response.arrayBuffer());
+            const reset = complete.byteLength < offset;
+            return {
+              data: reset ? complete : complete.slice(offset),
+              totalBytes: complete.byteLength,
+              reset,
+            };
+          },
+          onError: (error) => {
+            if (!disposed) term.write(`\r\n(terminal stream unavailable: ${error})`);
+          },
+        });
+        stream.start();
+      } else if (artifact) {
+        try {
+          term.write(await fetchArtifactText(artifact));
+        } catch (error) {
+          term.write(`(terminal unavailable: ${error})`);
+        }
       } else {
-        const res = await fetch(`/api/sessions/${sessionId}/terminal-log`);
-        term.write(await res.text());
+        term.write('(terminal unavailable)');
       }
       (term as any)._cleanup = () => window.removeEventListener('resize', onResize);
     })();
@@ -63,10 +91,10 @@ export function Terminal({ sessionId, live }: { sessionId: string; live: boolean
     return () => {
       disposed = true;
       observer?.disconnect();
-      if (ws) ws.close();
+      stream?.stop();
       if (term) { term._cleanup?.(); term.dispose(); }
     };
-  }, [sessionId, live]);
+  }, [sessionId, live, artifact?.viewUrl]);
 
   return <div ref={ref} className="h-full min-h-0 w-full overflow-hidden rounded-md border border-border bg-canvas-inset p-1" />;
 }

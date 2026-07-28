@@ -6,6 +6,10 @@ import { formatDurationSeconds } from '@/lib/utils';
 
 interface Stage { ok?: boolean; message?: string }
 
+function isCompletedStage(value: unknown): value is Stage {
+  return typeof value === 'object' && value !== null && typeof (value as Stage).ok === 'boolean';
+}
+
 /** The verify pipeline the benchmark will run. Fetched so the checks are on
  *  screen from the start, pending, instead of "evaluation runs later". */
 function usePlannedChecks(benchmarkKey: string) {
@@ -26,12 +30,15 @@ function usePlannedChecks(benchmarkKey: string) {
 
 export function ChecksPanel({ benchmarkKey, task }: { benchmarkKey: string; task: any }) {
   const planned = usePlannedChecks(benchmarkKey);
-  const details: Record<string, Stage> = task?.result?.details ?? {};
-  const done = Object.keys(details).length > 0;
+  const details: Record<string, unknown> = task?.result?.details ?? {};
+  const evaluated = Object.entries(details).filter(
+    (entry): entry is [string, Stage] => isCompletedStage(entry[1]),
+  );
 
-  // Show real results once they exist; otherwise the plan, all pending.
-  const rows = done
-    ? Object.entries(details)
+  // Result details also contain benchmark metadata and provenance. Only actual
+  // verification stages have an `ok` verdict and belong in the checks list.
+  const rows = task?.result
+    ? evaluated
     : planned.map((name) => [name, {} as Stage] as [string, Stage]);
 
   if (rows.length === 0) return null;
@@ -48,8 +55,8 @@ export function ChecksPanel({ benchmarkKey, task }: { benchmarkKey: string; task
   return (
     <div className="rounded-md border border-border">
       <div className="flex items-center justify-between border-b border-border bg-canvas-subtle px-2 py-1.5">
-        <span className="text-[11px] font-medium text-fg">Checks</span>
-        <span className="text-[10px] text-fg-subtle">
+        <span className="text-xs font-medium text-fg">Checks</span>
+        <span className="text-[11px] text-fg-subtle">
           {scored > 0 ? `${passing}/${rows.length} passing` : `${rows.length} pending`}
         </span>
       </div>
@@ -59,7 +66,7 @@ export function ChecksPanel({ benchmarkKey, task }: { benchmarkKey: string; task
       </ul>
 
       {/* where the wall-clock went */}
-      <div className="flex items-center justify-between border-t border-border px-2 py-1.5 text-[10px] text-fg-subtle">
+      <div className="flex items-center justify-between border-t border-border px-2 py-1.5 text-[11px] text-fg-subtle">
         <span>
           Agent{' '}
           <span className="tabular-nums text-fg-muted">
@@ -80,8 +87,8 @@ export function ChecksPanel({ benchmarkKey, task }: { benchmarkKey: string; task
 
       {task?.result?.reason && (
         <div className="border-t border-border px-2 py-1.5">
-          <span className="text-[10px] uppercase tracking-wide text-fg-subtle">Reason</span>
-          <p className="font-mono text-[11px] text-danger-fg">{task.result.reason}</p>
+          <span className="text-[11px] uppercase tracking-wide text-fg-subtle">Reason</span>
+          <p className="font-mono text-xs text-danger-fg">{task.result.reason}</p>
         </div>
       )}
     </div>
@@ -95,8 +102,8 @@ function Check({ name, stage }: { name: string; stage: Stage }) {
     <li className="flex items-start gap-1.5 px-2 py-1.5">
       <StatusIcon status={pending ? 'pending' : stage.ok ? 'passed' : 'failed'} className="mt-0.5 h-3.5 w-3.5" />
       <div className="min-w-0 flex-1">
-        <p className={`font-mono text-[11px] ${pending ? 'text-fg-muted' : 'text-fg'}`}>{name}</p>
-        <p className="break-words text-[10px] text-fg-subtle">
+        <p className={`font-mono text-xs ${pending ? 'text-fg-muted' : 'text-fg'}`}>{name}</p>
+        <p className="break-words text-[11px] text-fg-subtle">
           {stage.message || (pending ? 'Waiting for the agent to finish.' : '')}
         </p>
       </div>

@@ -20,7 +20,11 @@ from sqlalchemy import (
     Text,
     UniqueConstraint,
 )
+from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+
+
+JSON_DOCUMENT = JSON().with_variant(JSONB(), "postgresql")
 
 
 def new_id() -> str:
@@ -41,8 +45,7 @@ class Benchmark(Base):
     key: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
     language: Mapped[str] = mapped_column(String(32), nullable=False)
-    version: Mapped[str] = mapped_column(String(32), nullable=False, default="1.0.0")
-    manifest: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    manifest: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False, default=dict)
     data_state: Mapped[str] = mapped_column(String(16), nullable=False, default="missing")
     data_detail: Mapped[str] = mapped_column(Text, nullable=False, default="")
     enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
@@ -56,8 +59,7 @@ class AgentTool(Base):
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
     key: Mapped[str] = mapped_column(String(64), unique=True, nullable=False)
     name: Mapped[str] = mapped_column(String(200), nullable=False)
-    version: Mapped[str] = mapped_column(String(32), nullable=False, default="1.0.0")
-    manifest: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    manifest: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False, default=dict)
     enabled: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True)
 
 
@@ -69,9 +71,9 @@ class Task(Base):
     task_key: Mapped[str] = mapped_column(String(300), nullable=False)
     title: Mapped[str] = mapped_column(String(500), nullable=False)
     language: Mapped[str] = mapped_column(String(32), nullable=False)
-    workspace: Mapped[dict] = mapped_column(JSON, nullable=False)
+    workspace: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False)
     instructions: Mapped[str] = mapped_column(Text, nullable=False, default="")
-    params: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    params: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False, default=dict)
 
     benchmark: Mapped[Benchmark] = relationship(back_populates="tasks")
 
@@ -84,7 +86,7 @@ class Run(Base):
     setup_key: Mapped[str] = mapped_column(String(32), nullable=False)
     model: Mapped[str] = mapped_column(String(200), nullable=False)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="queued")
-    config: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    config: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False, default=dict)
     task_timeout_seconds: Mapped[int] = mapped_column(Integer, nullable=False, default=1800)
     queued_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, default=utcnow)
     started_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
@@ -124,8 +126,8 @@ class TaskResult(Base):
     tokens_input: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     tokens_output: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     model: Mapped[str] = mapped_column(String(200), nullable=False, default="")
-    metrics: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
-    details: Mapped[dict] = mapped_column(JSON, nullable=False, default=dict)
+    metrics: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False, default=dict)
+    details: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False, default=dict)
     prompt_path: Mapped[str | None] = mapped_column(Text)
     response_path: Mapped[str | None] = mapped_column(Text)
     diff_path: Mapped[str | None] = mapped_column(Text)
@@ -154,4 +156,4 @@ class AgentSession(Base):
 class RuntimeSetting(Base):
     __tablename__ = "runtime_setting"
     key: Mapped[str] = mapped_column(String(64), primary_key=True)
-    value: Mapped[dict] = mapped_column(JSON, nullable=False)
+    value: Mapped[dict] = mapped_column(JSON_DOCUMENT, nullable=False)

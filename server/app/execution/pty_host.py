@@ -40,15 +40,20 @@ async def run_pty(
     on_pid: Callable[[int], None] | None = None,
     should_kill: Callable[[], bool] | None = None,
     run_as: dict | None = None,
+    append: bool = False,
 ) -> PtyResult:
     terminal_log.parent.mkdir(parents=True, exist_ok=True)
     loop = asyncio.get_running_loop()
     return await loop.run_in_executor(
-        None, _run_blocking, cmd, terminal_log, on_bytes, timeout, on_pid, should_kill, run_as
+        None, _run_blocking, cmd, terminal_log, on_bytes, timeout, on_pid,
+        should_kill, run_as, append,
     )
 
 
-def _run_blocking(cmd, terminal_log, on_bytes, timeout, on_pid, should_kill, run_as=None) -> PtyResult:
+def _run_blocking(
+    cmd, terminal_log, on_bytes, timeout, on_pid, should_kill,
+    run_as=None, append=False,
+) -> PtyResult:
     master, slave = pty.openpty()
     _set_winsize(master)
     env = dict(os.environ)
@@ -70,7 +75,7 @@ def _run_blocking(cmd, terminal_log, on_bytes, timeout, on_pid, should_kill, run
     import time
     interrupted = False
     end = time.monotonic() + timeout if timeout and timeout > 0 else None
-    with terminal_log.open("wb") as log:
+    with terminal_log.open("ab" if append else "wb") as log:
         while True:
             if proc.poll() is not None:
                 _drain(master, log, on_bytes)

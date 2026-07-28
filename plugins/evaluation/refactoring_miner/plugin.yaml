@@ -1,0 +1,4 @@
+type: evaluation
+key: refactoring_miner
+name: RefactoringMiner detection
+entrypoint: plugin:Plugin

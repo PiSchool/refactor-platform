@@ -1,0 +1,26 @@
+Run ID,ceiling_analysis_20260523
+Status,completed
+Model,deepseek/deepseek-v4-pro (tasks 1-10) + qwen/qwen3.6-flash (task 1 ast-fix only)
+Datasets,refbench
+Setups,s1_default + eval_loop(max=2) + ast_compat_shim
+Note,Ceiling analysis: all 10 tasks that never passed across any S1/S2 run
+
+#,Task,Repo,Status,Input,Output,Cache,Reasoning,Time,Reqs,+Lines,-Lines,Files,Apply,Test,Result,EvalLoops,lspActions,completedAt
+1,openapi-get-utils,fastapi_refactor,completed,294.3k,6.7k,0,2.4k,1m01s,17,7,7,7,yes,yes,PASSED,0,4,2026-05-23T17:43:44Z
+2,annotation-utils,celery_refactor,completed,247.6k,4.5k,143.7k,1.9k,1m45s,14,17,5,3,yes,yes,PASSED,1,4,2026-05-23T22:16:21Z
+3,add-log-parameter-get-resolver,django_refactor,completed,807.8k,8.8k,420.0k,2.1k,3m24s,27,25,19,8,yes,yes,PASSED,1,4,2026-05-23T22:23:54Z
+4,add-log-parameter-resolve-error-handler,django_refactor,completed,160.9k,3.5k,63.4k,902,1m21s,10,6,6,4,yes,yes,PASSED,1,4,2026-05-23T22:27:55Z
+5,paged-call-boto-mod,salt_refactor,completed,292.8k,6.2k,128.4k,3.7k,2m11s,13,2,9,1,yes,yes,PASSED,0,4,2026-05-23T22:30:09Z
+6,new-utils-from-basic,ansible_refactor,completed,1.4M,15.8k,926.1k,4.9k,6m25s,40,108,91,13,yes,yes,PASSED,0,4,2026-05-23T23:30:12Z
+7,new-path-traversal-exception,django_refactor,completed,730.3k,29.6k,398.2k,24.9k,10m02s,22,9,3,2,yes,yes,PASSED,1,4,2026-05-23T23:42:09Z
+8,parameterize-gunzip,scrapy_refactor,completed,511.9k,7.1k,260.6k,1.3k,3m05s,22,24,16,5,yes,yes,PASSED,1,4,2026-05-24T02:15:04Z
+9,debughelpers-to-helpers.py,flask_refactor,completed,241.1k,4.3k,95.0k,2.2k,2s,11,5,4,3,no,no,FAILED,2,4,2026-05-23T23:42:13Z
+10,exactly-n-boto-mod,salt_refactor,timed_out,-,-,-,-,>20m,-,-,-,-,yes,no,FAILED,2,4,-
+
+Summary
+Total tasks,10
+Passed,8
+Failed,2
+Success rate,8/10 (80%)
+New ceiling,94/100 (previous best 86/100 + 8 recovered)
+Remaining failures,debughelpers-to-helpers.py (flask: apply heuristics fail); exactly-n-boto-mod (salt: model times out)

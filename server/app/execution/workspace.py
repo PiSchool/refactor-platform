@@ -11,15 +11,11 @@ import subprocess
 import tempfile
 from pathlib import Path
 
-from app.catalog.sdk import TaskDef
+from app.catalog.sdk import GIT_SAFE_ENV, TaskDef
 
 _GIT_ENV = {"GIT_AUTHOR_NAME": "platform", "GIT_AUTHOR_EMAIL": "platform@local",
             "GIT_COMMITTER_NAME": "platform", "GIT_COMMITTER_EMAIL": "platform@local",
-            # The agent owns the workspace (unprivileged user); the platform
-            # inspects it as root. Without this git aborts on "dubious ownership".
-            "GIT_CONFIG_COUNT": "1",
-            "GIT_CONFIG_KEY_0": "safe.directory",
-            "GIT_CONFIG_VALUE_0": "*"}
+            **GIT_SAFE_ENV}
 
 
 def mirror_path(mirrors_root: Path, source: str) -> Path:
@@ -34,7 +30,7 @@ def _run(args: list[str], cwd: Path | None = None,
                           capture_output=True, text=True, check=True)
 
 
-def _prepare_sync(task: TaskDef, dest: Path, data_root: Path, mirrors_root: Path) -> str:
+def prepare_sync(task: TaskDef, dest: Path, data_root: Path, mirrors_root: Path) -> str:
     dest.mkdir(parents=True, exist_ok=True)
     ws = task.workspace
     if ws.type == "snapshot":
@@ -62,8 +58,7 @@ def _prepare_sync(task: TaskDef, dest: Path, data_root: Path, mirrors_root: Path
 
 
 async def prepare(task: TaskDef, dest: Path, data_root: Path, mirrors_root: Path) -> str:
-    return await asyncio.get_running_loop().run_in_executor(
-        None, _prepare_sync, task, dest, data_root, mirrors_root)
+    return await asyncio.to_thread(prepare_sync, task, dest, data_root, mirrors_root)
 
 
 def capture_diff(dest: Path) -> str:

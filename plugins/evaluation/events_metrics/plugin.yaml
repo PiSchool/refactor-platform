@@ -1,0 +1,4 @@
+type: evaluation
+key: events_metrics
+name: Agent session metrics
+entrypoint: plugin:Plugin

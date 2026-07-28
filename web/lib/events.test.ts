@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { liveUsage, type AgentEvent } from './events';
+import { liveUsage, summarize, type AgentEvent } from './events';
 
 const ev = (type: string, data: Record<string, unknown> = {}): AgentEvent => ({ type, data });
 
@@ -35,5 +35,22 @@ describe('liveUsage', () => {
     ]);
     expect(u.final).toEqual({ inputTokens: 614426, cacheReadTokens: 377216, reasoningTokens: 2200, contextTokens: 45921 });
     expect(u.outputTokens).toBe(6200);
+  });
+});
+
+describe('the session label', () => {
+  it('names the tool and the version it reported', () => {
+    expect(summarize({ type: 'session.start', timestamp: '', data: { producer: 'junie', version: '26.7.20', selectedModel: 'openrouter/free' } } as any))
+      .toBe('junie v26.7.20 · model openrouter/free');
+  });
+
+  it("still reads Copilot's own name for the same field", () => {
+    expect(summarize({ type: 'session.start', timestamp: '', data: { producer: 'copilot-agent', copilotVersion: '1.0.75', selectedModel: 'openrouter/free' } } as any))
+      .toBe('copilot-agent v1.0.75 · model openrouter/free');
+  });
+
+  it('omits the version when the tool did not report one', () => {
+    expect(summarize({ type: 'session.start', timestamp: '', data: { producer: 'opencode', selectedModel: 'openrouter/free' } } as any))
+      .toBe('opencode · model openrouter/free');
   });
 });

@@ -11,7 +11,7 @@ import { DiffFileBlock } from '@/components/diff-view';
 type Change = { status: string; path: string };
 type Entry = { name: string; path: string; dir: boolean; sizeBytes: number };
 type Repo = {
-  source?: string; ref?: string; baseline?: string; workspacePath?: string;
+  source?: string; ref?: string; baseline?: string;
   live?: boolean; changedFiles?: Change[]; error?: string;
 };
 
@@ -84,12 +84,12 @@ export function RepositoryView({ runId, taskId, live }: { runId: string; taskId:
         <div className="flex items-center gap-2 text-xs">
           <GitBranch className="h-3.5 w-3.5 shrink-0 text-fg-muted" />
           <span className="truncate font-mono text-fg">{repo.source ?? '—'}</span>
-          {live && <span className="shrink-0 rounded-full bg-success-subtle px-1.5 text-[10px] text-success-fg">live</span>}
+          {live && <span className="shrink-0 rounded-full bg-success-subtle px-1.5 text-[11px] text-success-fg">live</span>}
           <button onClick={load} title="Refresh" className="ml-auto shrink-0 text-fg-muted hover:text-fg">
             <RefreshCw className={`h-3.5 w-3.5 ${refreshing ? 'animate-spin' : ''}`} />
           </button>
         </div>
-        <div className="mt-1 flex items-center gap-2 text-[11px] text-fg-muted">
+        <div className="mt-1 flex items-center gap-2 text-xs text-fg-muted">
           <GitCommitHorizontal className="h-3.5 w-3.5 shrink-0" />
           <span className="font-mono">{(repo.baseline ?? repo.ref ?? '—').slice(0, 12)}</span>
           <span className="text-fg-subtle">baseline</span>
@@ -130,14 +130,14 @@ export function RepositoryView({ runId, taskId, live }: { runId: string; taskId:
             ) : (
               <>
                 <div className="sticky top-0 flex items-center gap-2 border-b border-border bg-canvas-subtle px-3 py-1.5">
-                  <span className="truncate font-mono text-[11px] text-fg">{selected}</span>
+                  <span className="truncate font-mono text-xs text-fg">{selected}</span>
                   {changedByPath[selected] && (
-                    <span className={`ml-auto shrink-0 font-mono text-[10px] ${badge(changedByPath[selected]).cls}`}>
+                    <span className={`ml-auto shrink-0 font-mono text-[11px] ${badge(changedByPath[selected]).cls}`}>
                       {badge(changedByPath[selected]).label}
                     </span>
                   )}
                 </div>
-                <table className="w-full border-collapse font-mono text-[11px] leading-5">
+                <table className="w-full border-collapse font-mono text-xs leading-5">
                   <tbody>
                     {fileText.split('\n').map((l, i) => (
                       <tr key={i}>
@@ -182,7 +182,7 @@ function Tree({ runId, taskId, path, depth, changed, selected, onSelect }: {
     return () => { stale = true; };
   }, [runId, taskId, path]);
 
-  if (!entries) return <p className="px-2 py-1 text-[11px] text-fg-subtle">…</p>;
+  if (!entries) return <p className="px-2 py-1 text-xs text-fg-subtle">…</p>;
   if (entries.length === 0 && depth === 0) {
     return <p className="p-3 text-xs text-fg-subtle">Workspace not available (it was cleaned up after the run).</p>;
   }
@@ -197,7 +197,7 @@ function Tree({ runId, taskId, path, depth, changed, selected, onSelect }: {
             <button
               onClick={() => (e.dir ? setOpen((o) => ({ ...o, [e.path]: !isOpen })) : onSelect(e.path))}
               style={{ paddingLeft: 6 + depth * 12 }}
-              className={`flex w-full items-center gap-1 py-0.5 pr-2 text-left text-[11px] hover:bg-neutral-subtle ${
+              className={`flex w-full items-center gap-1 py-0.5 pr-2 text-left text-xs hover:bg-neutral-subtle ${
                 selected === e.path ? 'bg-neutral-subtle' : ''}`}>
               {e.dir ? (
                 <>
@@ -211,7 +211,7 @@ function Tree({ runId, taskId, path, depth, changed, selected, onSelect }: {
                 </>
               )}
               <span className={`truncate font-mono ${mark ? 'text-fg' : 'text-fg-muted'}`}>{e.name}</span>
-              {mark && <span className={`ml-auto shrink-0 font-mono text-[10px] ${badge(mark).cls}`}>{badge(mark).label}</span>}
+              {mark && <span className={`ml-auto shrink-0 font-mono text-[11px] ${badge(mark).cls}`}>{badge(mark).label}</span>}
             </button>
             {e.dir && isOpen && (
               <Tree runId={runId} taskId={taskId} path={e.path} depth={depth + 1}

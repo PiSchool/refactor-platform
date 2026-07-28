@@ -1,0 +1,11 @@
+type: agent
+key: example-agent            # the directory name
+name: Example Agent
+binary: bash                  # the executable this adapter drives
+install: "already present on any Linux host"
+entrypoint: plugin:Plugin
+capabilities:                 # what the platform may offer this tool
+  lsp: false
+  subagents: false
+  eval_tool: false
+  retrieval: false

@@ -1,0 +1,64 @@
+name: Bug report
+description: Report reproducible platform behavior that differs from the documented contract
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Do not include credentials, private source, full prompts, or unredacted artifacts. Security issues belong in private vulnerability reporting.
+  - type: input
+    id: commit
+    attributes:
+      label: Commit
+      description: Output of `git rev-parse --short HEAD`.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, Docker version, and Docker Compose version.
+    validations:
+      required: true
+  - type: input
+    id: run
+    attributes:
+      label: Run configuration
+      description: Benchmark, setup, agent tool, model identifier, and task key if relevant.
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Use the smallest reproducible case, preferably one task.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Redacted logs
+      description: Include only the relevant excerpt after removing secrets and private content.
+      render: shell
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Safety checks
+      options:
+        - label: I reproduced this on the latest maintained `refactor-demo` commit.
+          required: true
+        - label: I removed credentials and private data from this report.
+          required: true
+        - label: This is not a security vulnerability.
+          required: true

@@ -1,0 +1,7 @@
+# RefactorBench S2-RAG AST Descriptive
+# Model: minimax/minimax-m3
+# Pipeline: CocoIndex tree-sitter chunking + nomic-embed-code + pgvector + cross-encoder reranking
+# Total: 100 | Passed: 81/100 (81.0%)
+
+Model,Setup,Mode,Total,Passed,Pass Rate
+minimax/minimax-m3,S2-RAG (AST),descriptive,100,81,81.0%

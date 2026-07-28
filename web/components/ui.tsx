@@ -332,7 +332,7 @@ export function Tooltip({ content, children, side = 'top' }: { content: string; 
             exit={{ opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.1 }}
             className={cn(
-              'pointer-events-none absolute z-50 whitespace-nowrap rounded bg-fg px-2 py-1 text-[11px] font-medium text-canvas shadow-lg',
+              'pointer-events-none absolute z-50 whitespace-nowrap rounded bg-fg px-2 py-1 text-xs font-medium text-canvas shadow-lg',
               positionCls,
             )}
           >
@@ -356,7 +356,7 @@ export function Badge({ children, variant = 'default', className }: { children: 
     done:      'bg-done-emphasis/10 text-done-fg border-done-emphasis/20',
   };
   return (
-    <span className={cn('inline-flex items-center rounded-full border px-1.5 py-0.5 text-[10px] font-medium', v[variant], className)}>
+    <span className={cn('inline-flex items-center rounded-full border px-1.5 py-0.5 text-[11px] font-medium', v[variant], className)}>
       {children}
     </span>
   );

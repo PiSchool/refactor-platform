@@ -1,0 +1,4 @@
+type: evaluation
+key: file_artifact
+name: Agent response file
+entrypoint: plugin:Plugin

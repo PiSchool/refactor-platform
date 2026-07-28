@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Boxes, FileCode2, GitBranch, ListChecks, Plug, Server, Sliders } from 'lucide-react';
+import { Boxes, Gauge, GitBranch, ListTodo, MessageSquareText, Plug, Server, Sliders } from 'lucide-react';
 import { useSettings } from '@/lib/api';
-import { SkeletonCard } from '@/components/ui';
+import { Select, SkeletonCard } from '@/components/ui';
 import { RunDefaults } from '@/components/settings/run-defaults';
 import { BenchmarksSection } from '@/components/settings/benchmarks';
 import { EvaluationSection } from '@/components/settings/evaluation';
@@ -13,13 +13,15 @@ import { PromptsSection } from '@/components/settings/prompts';
 import { ServicesSection } from '@/components/settings/services';
 import { PluginsSection } from '@/components/settings/plugins';
 
+/** One icon per section: two sections sharing one made the nav unreadable at a
+ *  glance, which is the only thing a 12-pixel glyph is for. */
 const SECTIONS = [
   { id: 'general', label: 'General', icon: Sliders },
   { id: 'benchmarks', label: 'Benchmarks', icon: Boxes },
-  { id: 'evaluation', label: 'Evaluation & metrics', icon: ListChecks },
+  { id: 'evaluation', label: 'Evaluation & metrics', icon: Gauge },
   { id: 'repos', label: 'Repositories', icon: GitBranch },
-  { id: 'tasks', label: 'Tasks', icon: FileCode2 },
-  { id: 'prompts', label: 'Prompts', icon: FileCode2 },
+  { id: 'tasks', label: 'Tasks', icon: ListTodo },
+  { id: 'prompts', label: 'Prompts', icon: MessageSquareText },
   { id: 'services', label: 'Services', icon: Server },
   { id: 'plugins', label: 'Plugins', icon: Plug },
 ] as const;
@@ -36,7 +38,7 @@ export default function SettingsPage() {
   }, [data, bench]);
 
   if (isLoading || !data) return <SkeletonCard rows={8} />;
-  const benchKeys = data.plugins.benchmarks.map((b) => b.key);
+  const benchmarks = data.plugins.benchmarks;
 
   return (
     <div className="flex h-[calc(100vh-3rem)] min-h-0 flex-col gap-3">
@@ -60,14 +62,16 @@ export default function SettingsPage() {
         </nav>
 
         <div className="min-h-0 overflow-auto pr-1">
-          {/* benchmark scope selector for the sections that need one */}
+          {/* Which benchmark these settings belong to. Named, with its task
+              count, because a bare key says nothing about what is selected. */}
           {['evaluation', 'repos', 'tasks', 'prompts'].includes(section) && (
             <div className="mb-3 flex items-center gap-2">
-              <span className="text-xs text-fg-muted">Benchmark</span>
-              <select value={bench} onChange={(e) => setBench(e.target.value)}
-                className="h-8 rounded-md border border-border bg-canvas-inset px-2 text-xs text-fg">
-                {benchKeys.map((k) => <option key={k} value={k}>{k}</option>)}
-              </select>
+              <label className="text-xs text-fg-muted" htmlFor="benchmark-scope">Benchmark</label>
+              <Select id="benchmark-scope" value={bench} onChange={(e) => setBench(e.target.value)}>
+                {benchmarks.map((b) => (
+                  <option key={b.key} value={b.key}>{b.name} · {b.taskCount.toLocaleString()} tasks</option>
+                ))}
+              </Select>
             </div>
           )}
 
@@ -77,7 +81,7 @@ export default function SettingsPage() {
           {section === 'repos' && bench && <ReposSection benchmark={bench} />}
           {section === 'tasks' && bench && <TasksSection benchmark={bench} />}
           {section === 'prompts' && bench && <PromptsSection benchmark={bench} />}
-          {section === 'services' && <ServicesSection secrets={data.secrets} lsp={data.plugins.lsp} />}
+          {section === 'services' && <ServicesSection secrets={data.secrets} providers={data.providers ?? []} />}
           {section === 'plugins' && <PluginsSection plugins={data.plugins} errors={data.errors} />}
         </div>
       </div>

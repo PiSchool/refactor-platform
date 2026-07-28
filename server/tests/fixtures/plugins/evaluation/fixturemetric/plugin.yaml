@@ -1,0 +1,4 @@
+type: evaluation
+key: fixturemetric
+name: Fixture metric
+entrypoint: plugin:Plugin
