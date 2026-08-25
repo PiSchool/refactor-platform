@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Score a repeated-run campaign: is the effect stable, or was one run lucky?
 
-`scripts/uncertainty.py` quantifies sampling uncertainty over the 100 benchmark
-tasks while holding the run fixed. That is the wrong tool for the question the
-reviewers actually asked — whether a stochastic agent produces the same answer
-twice — so this scores the other axis: variation *between* repeated runs of the
-same configuration.
+`scripts/uncertainty.py` quantifies sampling uncertainty over the benchmark
+tasks while holding the run fixed. That is the wrong tool for a different
+question — whether a stochastic agent produces the same answer twice — so this
+scores the other axis: variation *between* repeated runs of the same
+configuration.
 
 Four things, because each answers a different objection:
 
@@ -17,7 +17,7 @@ Four things, because each answers a different objection:
 * **Per-task flip rate** — how many tasks change verdict between runs. A large
   effect built on tasks that flip every run is not a stable effect.
 
-Consumes the JSON that `campaign.py` writes.
+Consumes the JSON that `scripts/repeat_campaign.py` writes.
 
     python scripts/repeat_stats.py --campaign repeat_campaign.json
 """

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Uncertainty and paired significance for every comparison the study reports.
 
-Reviewers asked for the two things a single pass rate cannot supply: an interval
+A single pass rate cannot supply two things a comparison needs: an interval
 around each number, and a test that says whether a gap between two numbers is
 larger than noise.
 
@@ -20,7 +20,7 @@ Both come out of the per-task verdicts already in `docs/exports/`, with no rerun
 
 These describe sampling uncertainty over the 100-task benchmark, holding the run
 fixed. They do not describe run-to-run variation of a stochastic agent; that
-needs repeated runs, reported separately by `scripts/repeat_runs.py`.
+needs repeated runs, reported separately by `scripts/repeat_stats.py`.
 
     python scripts/uncertainty.py --archive docs/exports --out docs/exports
     python scripts/uncertainty.py --archive docs/exports --latex

@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Launch the same configuration N times, and record every per-task verdict.
 
-The reviewers asked whether a result is stable across runs or a single-run
-artifact. Answering that needs the same configurations executed repeatedly over
-the same tasks, with the per-task outcomes kept rather than just the rates —
+Whether a result is stable across runs, or an artifact of one run, can only be
+answered by executing the same configuration repeatedly over the same tasks and
+keeping the per-task outcomes rather than just the rates —
 `scripts/repeat_stats.py` scores what this produces.
 
 Runs are launched one at a time and waited on, because the platform executes its
