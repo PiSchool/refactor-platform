@@ -38,9 +38,17 @@ def status(probe_database: bool = False) -> dict:
             value.setdefault("error" if state == "error" else "detail", detail)
     if probe_database and config.database_url:
         try:
-            value.update(PostgresHybridStore(
+            database = PostgresHybridStore(
                 config.database_url, config.embedding_dimension
-            ).health())
+            ).health()
+            # The store reports whether *the database* is ready, and merging it
+            # wholesale used to overwrite a model server that was still fetching
+            # its weights. The overall status then read `ready` while every S2 run
+            # was being refused, which is the one situation this field exists to
+            # warn about. Retrieval needs every layer, so the weakest one decides.
+            if value["status"] in ("provisioning", "error"):
+                database.pop("status", None)
+            value.update(database)
         except Exception as exc:
             value["status"] = "error"
             value["error"] = str(exc)[:300]

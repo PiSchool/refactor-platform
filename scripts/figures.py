@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import argparse
 import csv
+import json
 import pathlib
 import sys
 from dataclasses import dataclass
@@ -209,6 +210,65 @@ def swe_by_model() -> list[tuple[str, int, int, bool]]:
 # rendering
 # --------------------------------------------------------------------------- #
 
+def chunking_frontier() -> list[tuple[str, float, float, float]]:
+    """Chunking strategies as (label, purity, integrity, median unit lines).
+
+    Produced by `scripts/chunking_ablation.py`, which measures both properties
+    over the benchmark repositories without running a model.
+    """
+    source = EXPORTS / "chunking_ablation.json"
+    if not source.is_file():
+        raise SystemExit(f"{source} missing — run scripts/chunking_ablation.py --out docs/exports")
+    pooled = json.loads(source.read_text(encoding="utf-8"))["pooled"]
+    rows = [(name, values["purity"], values["integrity"], values["median_chunk_lines"])
+            for name, values in pooled.items()]
+    # Windows in ascending size, AST last so it draws on top.
+    windows = sorted((r for r in rows if r[0] != "ast"), key=lambda r: r[3])
+    return windows + [r for r in rows if r[0] == "ast"]
+
+
+def draw_chunking_frontier(theme: Theme, data: list[tuple[str, float, float, float]]) -> pathlib.Path:
+    windows = [row for row in data if row[0] != "ast"]
+    ast = next(row for row in data if row[0] == "ast")
+
+    fig, ax = _figure(theme, 7.6, 5.2)
+    ax.plot([r[1] for r in windows], [r[2] for r in windows], "-o", color=theme.naive,
+            linewidth=1.6, markersize=6, label="fixed line windows", zorder=2)
+    # The large windows crowd into the top-left corner, so labels step outward
+    # with size instead of sitting at a fixed offset and overlapping.
+    for index, (label, purity, integ, _lines_) in enumerate(windows):
+        reversed_rank = len(windows) - 1 - index
+        ax.annotate(f"{label.replace('naive@', '')} lines" if index == 0 else
+                    label.replace("naive@", ""),
+                    (purity, integ), color=theme.muted, fontsize=9,
+                    xytext=(10 + 7 * reversed_rank, -3), textcoords="offset points",
+                    ha="left", va="center",
+                    arrowprops=dict(arrowstyle="-", color=theme.grid, linewidth=0.7,
+                                    shrinkA=0, shrinkB=3) if reversed_rank else None)
+    ax.scatter([ast[1]], [ast[2]], s=150, marker="*", color=theme.ast,
+               label="AST chunks", zorder=3)
+    ax.annotate("AST", (ast[1], ast[2]), color=theme.fg, fontsize=10, fontweight="bold",
+                xytext=(-30, 6), textcoords="offset points")
+
+    # The corner AST occupies and no window reaches.
+    ax.axhline(ast[2], color=theme.ast, linewidth=0.9, linestyle=":", alpha=0.6)
+    ax.axvline(ast[1], color=theme.ast, linewidth=0.9, linestyle=":", alpha=0.6)
+
+    ax.set_xlabel("purity — how much of the retrieved unit is the definition (%)",
+                  color=theme.muted, fontsize=10)
+    ax.set_ylabel("integrity — definitions\nheld whole (%)", color=theme.muted, fontsize=10)
+    ax.set_xlim(0, 100)
+    ax.set_ylim(55, 102)
+    ax.grid(color=theme.grid, linewidth=0.8, alpha=0.7)
+    legend = ax.legend(frameon=False, fontsize=10, loc="lower left", ncols=2,
+                       bbox_to_anchor=(0, 1.015))
+    for text in legend.get_texts():
+        text.set_color(theme.fg)
+    ax.set_title("RefactorBench corpus · a window trades one property for the other; "
+                 "AST holds both", color=theme.muted, fontsize=10, loc="left", pad=30)
+    return _save(fig, theme, "chunking-frontier")
+
+
 def _figure(theme: Theme, width: float, height: float):
     fig, ax = plt.subplots(figsize=(width, height))
     fig.patch.set_facecolor(theme.bg)
@@ -371,6 +431,7 @@ def main() -> int:
     models = refactorbench_by_model()
     stages, total, by_type = swe_verification_funnel()
     swe_models = swe_by_model()
+    frontier = chunking_frontier()
     matched = compute_matched_subsets(EXPORTS)
 
     written = []
@@ -380,6 +441,7 @@ def main() -> int:
         written.append(draw_funnel(theme, stages, total))
         written.append(draw_swe_models(theme, swe_models))
         written.append(draw_matched_subset(theme, matched["swe"], matched["sweSharedTasks"]))
+        written.append(draw_chunking_frontier(theme, frontier))
 
     print("RefactorBench, 100 tasks, qwen3.6-flash")
     for setup, values in prompt_modes.items():

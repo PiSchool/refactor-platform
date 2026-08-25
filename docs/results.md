@@ -120,6 +120,41 @@ that straddles a definition boundary supplies part of a function without the
 rest. Both remain runnable setups (`s2_rag_ast`, `s2_rag_naive`), so the
 comparison can be repeated.
 
+### Why, measured on the index rather than argued from the pass rate
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="figures/chunking-frontier-dark.png">
+  <img alt="Integrity against purity for each chunking strategy: fixed line windows trace a steep trade-off from 20-line windows at 30 percent purity and 63 percent integrity to 240-line windows at 10 percent purity and 98 percent integrity, while AST chunks sit alone at 93 percent purity and 92 percent integrity" src="figures/chunking-frontier-light.png">
+</picture>
+
+"A window straddles a definition boundary" is a claim about the index, so it can
+be checked without running an agent. `scripts/chunking_ablation.py` chunks all
+nine repositories under each strategy and measures two properties of every
+function and class definition, enumerated from the file's own parse tree so that
+neither chunker is scored against its own notion of a unit:
+
+* **integrity** — does some unit hold the whole definition?
+* **purity** — of the tightest unit that does, how much *is* the definition? This
+  is what retrieval spends: pulling one function drags in everything sharing its
+  window.
+
+| Strategy | Median unit | Integrity | Purity |
+|---|---|---|---|
+| AST | 11 lines | 91.9 % | 93.3 % |
+| 20-line windows | 20 | 62.6 % | 30.3 % |
+| 80-line windows | 80 | 90.8 % | 16.3 % |
+| 240-line windows | 180 | 98.0 % | 10.0 % |
+
+Size alone does not explain the gap. At a matched median unit size AST leads
+integrity by `+29` points, and no window setting reaches AST's corner: a window
+can exceed AST on integrity only by growing until it swallows everything, which
+costs seven times the purity and a thirteen times larger payload.
+
+At the 80-line default the two are almost tied on integrity — `90.8` against
+`91.9` — and differ `5.7x` on purity. So windows do not fail to *contain* the
+code; they fail to deliver it without noise, which is the same reason window
+retrieval scores below no retrieval at all.
+
 ### The retrieval effect holds across models
 
 <picture>

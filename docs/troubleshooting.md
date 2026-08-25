@@ -13,6 +13,38 @@ The health response should report the database as `ok` and the worker as
 pgvector `ready`. When quoting it in an issue, leave out credentials, full
 prompts, private repository content, retrieved chunks and unredacted event logs.
 
+## Services fail to start under WSL with Docker Desktop
+
+`retrieval-db` and `ollama` each bind-mount one script from the checkout. Where
+Docker Desktop runs on the Windows side and WSL integration is *not* enabled for
+the distro holding the repository, the daemon cannot see that filesystem: the
+mounts resolve to nothing, `ollama` starts without its entrypoint, and the
+read-only retrieval user is never created. Nothing reports a missing file, so the
+symptom is services that never become healthy.
+
+Check whether the daemon can see the checkout at all:
+
+```bash
+docker run --rm -v "$PWD/docker/ollama:/probe:ro" alpine ls -A /probe
+```
+
+An empty listing confirms it. Either fix works:
+
+- **Enable WSL integration** for this distro in Docker Desktop → Settings →
+  Resources → WSL integration, and restart the stack. This is the tidier fix.
+- **Or stage the two scripts on a Windows path and override those mounts.**
+  Windows-style paths (`C:/Users/you/...`) mount even when the WSL path does not;
+  `/mnt/c/...` does *not*. Copy `docker/ollama/entrypoint.sh` and
+  `docker/postgres/init-retrieval-reader.sh` somewhere under `C:/`, then write a
+  machine-specific override that replaces only those two volume entries and pass
+  it with `-f`:
+
+  ```bash
+  docker compose -f docker-compose.yml -f compose.wsl-override.yml up -d
+  ```
+
+Linux and macOS hosts are unaffected.
+
 ## The dashboard does not load
 
 ```bash

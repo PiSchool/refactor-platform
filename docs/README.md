@@ -11,6 +11,7 @@
 | [Retrieval (S2)](retrieval.md) | Chunking, indexing, hybrid search, reranking, provenance |
 | [Results](results.md) | What was measured, on how many tasks, with which provenance |
 | [Replication](replication.md) | Reproducing the acceptance matrix |
+| [Release and versions](release.md) | Pinned versions of every component a result depends on |
 | [Setup conformance](setup-conformance-results.md) | The run ids that show each setup behaved as named |
 | [Requirements traceability](requirements-traceability.md) | Where each locked decision lives in the code, and what is not delivered |
 | [Adding a benchmark](adding-a-benchmark.md) | The benchmark plugin contract, end to end |

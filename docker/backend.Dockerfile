@@ -49,8 +49,21 @@ RUN set -eu; \
 # Agent CLIs. Every shipped adapter's executable is installed here; an adapter
 # declares the executable it drives, so one an operator adds later is reported
 # as unavailable with its install command rather than failing inside a run.
+#
+# Pinned, because an unpinned `npm install -g` makes the image a moving target:
+# two builds a week apart drive different agents, and a result cannot then be
+# attributed to a configuration. Override an ARG to move one deliberately; a run
+# records the version it actually invoked either way. These are the versions
+# `docs/release.md` names for this release.
+ARG COPILOT_CLI_VERSION=1.0.80
+ARG CODEX_CLI_VERSION=0.149.1
+ARG CLAUDE_CODE_VERSION=2.1.241
+ARG OPENCODE_VERSION=1.18.22
 RUN npm install -g --no-fund --no-audit \
-      @github/copilot @openai/codex @anthropic-ai/claude-code opencode-ai \
+      "@github/copilot@${COPILOT_CLI_VERSION}" \
+      "@openai/codex@${CODEX_CLI_VERSION}" \
+      "@anthropic-ai/claude-code@${CLAUDE_CODE_VERSION}" \
+      "opencode-ai@${OPENCODE_VERSION}" \
  && npm cache clean --force
 
 # Junie CLI. Its installer puts a launcher in $HOME/.local/bin and the runtime it
@@ -85,9 +98,14 @@ RUN uv pip install python-lsp-server
 # grammar: codebleu 0.7 builds the Java parser against these exact versions.
 RUN uv pip install codebleu==0.7.0 tree-sitter==0.22.3 tree-sitter-java==0.21.0
 ENV PATH=/app/server/.venv/bin:$PATH
-# Java LSP: Eclipse JDT.LS snapshot ships a `bin/jdtls` launcher.
+# Java LSP: Eclipse JDT.LS snapshot ships a `bin/jdtls` launcher. Pinned to a
+# dated snapshot rather than `-latest`, which changes under the build and would
+# silently alter the diagnostics the +LSP setups act on. Eclipse prunes old
+# snapshots, so bump this when the URL 404s -- and record the new one in
+# docs/release.md.
+ARG JDTLS_SNAPSHOT=jdt-language-server-1.61.0-202608141332.tar.gz
 RUN mkdir -p /opt/jdtls \
- && curl -fsSL https://download.eclipse.org/jdtls/snapshots/jdt-language-server-latest.tar.gz \
+ && curl -fsSL "https://download.eclipse.org/jdtls/snapshots/${JDTLS_SNAPSHOT}" \
       | tar xz -C /opt/jdtls \
  && ln -s /opt/jdtls/bin/jdtls /usr/local/bin/jdtls
 

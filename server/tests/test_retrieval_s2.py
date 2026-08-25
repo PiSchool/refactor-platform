@@ -520,3 +520,42 @@ def test_the_studys_embedding_model_is_not_refused_by_the_store():
         PostgresHybridStore(url, VECTOR_STORAGE_LIMIT + 1)
     with pytest.raises(RetrievalUnavailable):
         PostgresHybridStore(url, 0)
+
+
+def test_a_model_server_still_pulling_is_not_reported_ready():
+    """Retrieval needs every layer, so the weakest one decides the status.
+
+    The database probe was merged wholesale over the model-server state, so a
+    deployment whose embedding model was still downloading reported
+    `status=ready` while refusing every S2 run with `retrieval_unavailable` —
+    the one situation this field exists to warn about. The database's own facts
+    must still come through.
+    """
+    from unittest import mock
+
+    from app.retrieval import health
+
+    config = mock.Mock(
+        database_url="postgresql://example", embedding_dimension=3584,
+        embedder_factory=None, ollama_host="http://ollama:11434",
+        embedding_model="m", reranker_model="r", expansion_model="e",
+    )
+    database = {"status": "ready", "pgvectorVersion": "0.8.5", "indexes": 0}
+
+    with mock.patch.object(health.RetrievalConfig, "from_environment", return_value=config), \
+         mock.patch.object(health, "_ollama_state", return_value=("provisioning", "still pulling")), \
+         mock.patch.object(health, "PostgresHybridStore") as store:
+        store.return_value.health.return_value = dict(database)
+        value = health.status(probe_database=True)
+
+    assert value["status"] == "provisioning"
+    assert value["detail"] == "still pulling"
+    assert value["pgvectorVersion"] == "0.8.5", "database facts must still be reported"
+
+    with mock.patch.object(health.RetrievalConfig, "from_environment", return_value=config), \
+         mock.patch.object(health, "_ollama_state", return_value=("ready", "ok")), \
+         mock.patch.object(health, "PostgresHybridStore") as store:
+        store.return_value.health.return_value = dict(database, indexes=3)
+        ready = health.status(probe_database=True)
+
+    assert ready["status"] == "ready" and ready["indexes"] == 3
