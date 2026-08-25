@@ -3,12 +3,48 @@ from __future__ import annotations
 
 import ast
 import hashlib
+import sys
+from functools import lru_cache
+from importlib.metadata import PackageNotFoundError, version
 from pathlib import Path
 from typing import Iterable
 
 from app.retrieval.models import ChunkingReport, CodeChunk
 
-CHUNKER_VERSION = "cpu-s2-v3"
+#: Identity of the chunking *algorithm*. Bump by hand when the cutting rules
+#: change; `chunker_version()` extends it with the parsers, which decide the
+#: cuts just as much as this file does.
+CHUNKER_ALGORITHM = "cpu-s2-v3"
+
+
+@lru_cache(maxsize=1)
+def chunker_version() -> str:
+    """The algorithm, plus the versions of the parsers that implement it.
+
+    This string is part of the index identity, so whatever it does not capture
+    is free to change under a cached index. Python definitions are cut with the
+    standard library's `ast`, whose output tracks the interpreter, and Java with
+    tree-sitter; upgrading either can move a boundary and therefore change what
+    a chunk contains. Pinning them in the image is not enough on its own — the
+    identity has to notice when a pin moves, or an index built by one parser is
+    silently reused by another.
+
+    A parser that is not installed is recorded as absent rather than skipped: a
+    deployment without tree-sitter chunks Java by falling back to windows, which
+    is a different index and must not share an identity with a parsed one.
+    """
+    parts = [CHUNKER_ALGORITHM, f"py{sys.version_info.major}.{sys.version_info.minor}"]
+    for module, label in (("tree_sitter", "ts"), ("tree_sitter_java", "tsj")):
+        try:
+            parts.append(f"{label}{version(module.replace('_', '-'))}")
+        except PackageNotFoundError:
+            parts.append(f"{label}-absent")
+    return "+".join(parts)
+
+
+#: Kept for callers that import the constant; resolves through the function so
+#: the parser versions are always included.
+CHUNKER_VERSION = chunker_version()
 _LANGUAGE_EXTENSIONS = {"python": {".py"}, "java": {".java"}}
 _EXCLUDED_PARTS = {
     ".git", ".hg", ".idea", ".mypy_cache", ".pytest_cache", ".tox", ".venv",

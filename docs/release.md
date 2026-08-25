@@ -39,7 +39,7 @@ tarball are pinned by digest or checksum, not by tag.
 | Dashboard dependencies | `web/package-lock.json` (`npm ci`) |
 | CodeBLEU | `codebleu==0.7.0`, `tree-sitter==0.22.3`, `tree-sitter-java==0.21.0` |
 | Eclipse JDT.LS | `1.61.0-202608141332` |
-| Chunker | `cpu-s2-v3` (`CHUNKER_VERSION`, part of the index identity) |
+| Chunker | `cpu-s2-v3`, extended at runtime with the interpreter and parser versions (e.g. `cpu-s2-v3+py3.12+ts0.22.3+tsj0.21.0`) and carried in the index identity |
 
 ### Agent CLIs
 
@@ -76,17 +76,34 @@ Fetched once, ahead of runs, and pinned by source rather than by date.
 | SWE-Refactor | Zenodo record `17655592` |
 | RefactoringMiner | `3.0.10`, shipped inside the SWE-Refactor archive |
 
-## Model identifiers
+## When the experiments ran
 
-Model strings are routed through OpenRouter and resolve to whatever that
-provider currently serves under the name; providers re-point a name at a new
-checkpoint without renaming it. The platform records the string it was given and
-the provider's reported usage per task, which is what a rerun can be compared
-against — it cannot pin a hosted checkpoint, and neither can any harness that
-calls a hosted API.
+A hosted model identifier is not a version. Providers re-point a name at a new
+checkpoint without renaming it, so `qwen3.6-flash` in May and the same string in
+December need not be the same weights. The date is the only thing that pins which
+checkpoint answered, and it belongs beside every number.
 
-The study reported in the paper used `qwen3.6-flash`, `minimax-m3`,
-`kimi-k2.6`, `deepseek-v4-pro` and `gpt-5-mini`, all through OpenRouter.
+| Model (as requested from OpenRouter) | Runs dated | Period |
+|---|---|---|
+| `qwen/qwen3.6-flash` | 2 | 2026-05-09 – 2026-05-11 |
+| `openrouter/free` | 4 | 2026-05-14 – 2026-06-05 |
+| `deepseek/deepseek-v4-pro` | 3 | 2026-05-23 – 2026-06-16 |
+| `minimax/minimax-m3` | 2 | 2026-06-11 – 2026-06-12 |
+| `moonshotai/kimi-k2.6` | 1 | 2026-06-12 |
+
+`gpt-5-mini` also appears in the SWE-Refactor appendix; its runs were exported
+without a timestamp and fall inside the same window.
+
+The campaign as a whole ran between **2026-05-09 and 2026-06-16**. Twelve of the
+twenty-nine archived runs carry a recoverable timestamp, in their pipeline
+identifier or their per-task rows; the rest were exported without one, and are
+bounded only by that overall window. Runs made with this release record their
+start and finish times per task, so the gap does not recur.
+
+The platform records the model string it was given and the provider's reported
+usage for every task, which is what a rerun can be compared against. It cannot
+pin a hosted checkpoint — no harness calling a hosted API can — so the date is
+what carries that information, and it is why the table above exists.
 
 ## What this release cannot reconstruct
 

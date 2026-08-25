@@ -559,3 +559,30 @@ def test_a_model_server_still_pulling_is_not_reported_ready():
         ready = health.status(probe_database=True)
 
     assert ready["status"] == "ready" and ready["indexes"] == 3
+
+
+def test_the_index_identity_notices_a_parser_upgrade():
+    """Chunk boundaries are decided by the parsers, not only by this repository.
+
+    `chunker_version` is part of the index identity, which is what allows a
+    cached index to be reused. When it named the algorithm alone, upgrading
+    tree-sitter changed how Java was cut while the identity still claimed the
+    two indexes were equivalent — the pinned versions in the image were the only
+    thing standing between a result and a silently different one.
+    """
+    from app.retrieval.chunking import CHUNKER_ALGORITHM, chunker_version
+    from app.retrieval.models import IndexIdentity
+
+    value = chunker_version()
+    assert value.startswith(CHUNKER_ALGORITHM)
+    assert "py" in value, "the interpreter decides how Python is parsed"
+    # Either the version, or an explicit record that the parser is absent — a
+    # deployment without tree-sitter falls back to windows for Java, which is a
+    # different index and must not share an identity with a parsed one.
+    assert "ts" in value and "tsj" in value
+
+    def identity(chunker: str) -> str:
+        return IndexIdentity("b", "s", "r", "java", "ast", "m", 8, chunker).key
+
+    assert identity(value) != identity(CHUNKER_ALGORITHM), \
+        "a parser change must produce a different index identity"
