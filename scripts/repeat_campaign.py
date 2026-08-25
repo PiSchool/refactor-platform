@@ -123,6 +123,8 @@ def main() -> int:
     ap.add_argument("--repeats", type=int, default=5)
     ap.add_argument("--tasks", type=int, default=None, help="limit, for a trial run")
     ap.add_argument("--repo", default=None, help="restrict to one repository")
+    ap.add_argument("--task-keys", nargs="+", default=None,
+                    help="exact task keys; overrides --repo/--tasks. Use to target the\n                         tasks a previous study found hard, where repeats are informative")
     ap.add_argument("--timeout", type=int, default=3600, help="per-task seconds")
     # One long run loses everything when the stack restarts under it, and a
     # single errored task aborts the rest. Batching bounds both: a lost batch
@@ -134,7 +136,7 @@ def main() -> int:
     args = ap.parse_args()
 
     bench_id, tool_id = catalog_ids(args.base, args.benchmark, args.agent)
-    keys = task_keys(args.base, bench_id, args.mode, args.tasks, args.repo)
+    keys = args.task_keys or task_keys(args.base, bench_id, args.mode, args.tasks, args.repo)
     if not keys:
         raise SystemExit(f"no {args.mode} tasks matched")
     planned = args.repeats * len(args.setups) * len(keys)
@@ -149,8 +151,12 @@ def main() -> int:
     done = {(r["setup"], r["repeat"], r.get("batch", 0)) for r in record["runs"]}
 
     batches = [keys[i:i + args.batch] for i in range(0, len(keys), args.batch)]
-    for repeat in range(1, args.repeats + 1):
-        for setup in args.setups:
+    # Setup-major on purpose: pass@k needs every repeat of a setup, so finishing
+    # one setup's k runs before starting the next means an interrupted campaign
+    # still reports a complete pass@k for the setups it reached, instead of k=1
+    # for all of them.
+    for setup in args.setups:
+        for repeat in range(1, args.repeats + 1):
             for index, batch in enumerate(batches):
                 if (setup, repeat, index) in done:
                     print(f"[{setup} #{repeat} batch {index + 1}/{len(batches)}] recorded, skipping")
