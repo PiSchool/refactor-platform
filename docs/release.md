@@ -11,7 +11,7 @@ to something specific.
 | | |
 |---|---|
 | Platform version | `1.0.0` |
-| Git tag | `v1.0.0` (also tagged `emnlp2026-camera-ready`) |
+| Git tag | `v1.0.0` |
 | Citation | [`CITATION.cff`](../CITATION.cff) |
 
 The platform reports its own identity at runtime on `/api/health` and in
