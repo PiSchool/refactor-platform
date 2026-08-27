@@ -1,0 +1,1516 @@
+{
+  "runs": [
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 1,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 720.5,
+      "runId": "c44bc1a6f1d74ee9a380583644e4adf2",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        438.0,
+        257.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 1,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 787.1,
+      "runId": "c6f89fa9c5814b87abf0866af9af5543",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        534.0,
+        234.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 1,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2313.2,
+      "runId": "28a3c5b7c83546ad8c7b20129615bc2e",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        1714.0,
+        579.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 2,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1048.5,
+      "runId": "369eb3a05fff4148b37c590be6ec0c3b",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        657.0,
+        369.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 2,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1081.0,
+      "runId": "165dd050787644adb60fdf48d548daf5",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        592.0,
+        486.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 2,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2260.9,
+      "runId": "49d22c49c404454eb4e639b8364d0441",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": true,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        826.0,
+        1423.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 3,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 688.2,
+      "runId": "7ca9f3c21d334f64b5548fc558f71023",
+      "status": "completed",
+      "passed": 2,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 100.0,
+      "counts": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": true,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        269.0,
+        398.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 3,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 458.6,
+      "runId": "955d5a7f112547a4aa198b52a5a173f3",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        215.0,
+        222.0
+      ]
+    },
+    {
+      "setup": "s2_rag_ast",
+      "repeat": 3,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1343.8,
+      "runId": "a825409ee4494e298303f627b9bee877",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        613.0,
+        721.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 1,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 885.4,
+      "runId": "5e0e21f440624e15a091a7342953617e",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": false
+      },
+      "secondsPerTask": [
+        470.0,
+        397.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 1,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 852.5,
+      "runId": "ddb753702cbf4702947afffd6d7a5463",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        542.0,
+        299.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 1,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 611.1,
+      "runId": "b54a3725189f44fbbcfe73889b3a5de7",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        390.0,
+        205.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 2,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 358.8,
+      "runId": "28e1333889884c238a45b0ffede963fd",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        99.0,
+        249.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 2,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 425.9,
+      "runId": "6d322c7af2bf4ed6a4b1409eb5583cf4",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        221.0,
+        192.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 2,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1146.4,
+      "runId": "a911db1d27f84ff3b3f3269895a30f36",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        706.0,
+        436.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 3,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 524.1,
+      "runId": "7167fd04e26a4133bd73e30d47f5dbc6",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        350.0,
+        172.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 3,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1380.3,
+      "runId": "18ab4e05fb6e454288b1d9acc5dfd8b3",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        209.0,
+        1145.0
+      ]
+    },
+    {
+      "setup": "s2_rag_naive",
+      "repeat": 3,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 852.6,
+      "runId": "72946eb87c274884b2473fcb4129c4b3",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        399.0,
+        442.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 1,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 786.2,
+      "runId": "c2f3e2b298e746d8ad1b3e85a3ac95d2",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        418.0,
+        340.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 1,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1181.4,
+      "runId": "f88ed630639c47d787e38234d12969c0",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        903.0,
+        267.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 1,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 884.6,
+      "runId": "f395a8f143634735a510d29a2af77691",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        321.0,
+        547.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 2,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 688.0,
+      "runId": "03e251179b244bfea148d6e1515b322d",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        387.0,
+        272.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 2,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 561.5,
+      "runId": "24f8c85340784c2f869db5a0416c309b",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        247.0,
+        307.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 2,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 851.7,
+      "runId": "87e90593ea2e4f3f8617a0423d617862",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        357.0,
+        464.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 3,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 982.6,
+      "runId": "b72a1ef4e6724df192fb75212c33cbfd",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        690.0,
+        268.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 3,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 556.8,
+      "runId": "1e5b309bb8b641b1979755e974ceea15",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        164.0,
+        364.0
+      ]
+    },
+    {
+      "setup": "s1",
+      "repeat": 3,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1080.9,
+      "runId": "f2e09d3c11d54e5bb34729427dc09228",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        691.0,
+        375.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 1,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 655.2,
+      "runId": "503905f8551b4bd0851ceb93689bf40b",
+      "status": "completed",
+      "passed": 2,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 100.0,
+      "counts": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": true,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        566.0,
+        67.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 1,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1506.9,
+      "runId": "36c3fb57ce4f41cd817a16b0c3ddc5ab",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        780.0,
+        720.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 1,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2948.4,
+      "runId": "0b2e2de132064881b6b3131726218c8e",
+      "status": "completed",
+      "passed": 2,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 100.0,
+      "counts": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": true,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": true
+      },
+      "secondsPerTask": [
+        1177.0,
+        1760.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 2,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 753.4,
+      "runId": "d498ebeb8b72492697170dee730cbae1",
+      "status": "completed",
+      "passed": 2,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 100.0,
+      "counts": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": true,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        526.0,
+        225.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 2,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2260.2,
+      "runId": "fadce667ee2c4c0892f57448b6d5b76d",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        1963.0,
+        280.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 2,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 3275.8,
+      "runId": "c89241f49eb34bd2b81ebe56d4c6e472",
+      "status": "completed",
+      "passed": 2,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 100.0,
+      "counts": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": true,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": true
+      },
+      "secondsPerTask": [
+        1401.0,
+        1864.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 3,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 851.7,
+      "runId": "fe9afa9c6d614d8b9c47276617f3c3a5",
+      "status": "completed",
+      "passed": 2,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 100.0,
+      "counts": {
+        "total": 2,
+        "passed": 2,
+        "failed": 0,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": true,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        714.0,
+        106.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 3,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1310.2,
+      "runId": "7cb7486cddeb4dd399fef309e0ff1f31",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        850.0,
+        447.0
+      ]
+    },
+    {
+      "setup": "s1_eval",
+      "repeat": 3,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1441.3,
+      "runId": "a6c51dfd736a48cea617aecceae734fc",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": true
+      },
+      "secondsPerTask": [
+        476.0,
+        937.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 1,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2260.2,
+      "runId": "8291d7a9a46e43529dee30ece013a879",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        1857.0,
+        384.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 1,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1899.8,
+      "runId": "bd9841c9bccb4b9b998d79060c597120",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        1274.0,
+        609.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 1,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2161.8,
+      "runId": "a095586f36bf496db69d344d0e291877",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        1200.0,
+        939.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 2,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1343.1,
+      "runId": "1321b641f2a8423fb9c18d986bf53436",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        895.0,
+        444.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 2,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1341.4,
+      "runId": "5fabde0c774e4f099d202f33b16e3f0f",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        772.0,
+        545.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 2,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 2915.6,
+      "runId": "1134317b7ccd464d8fc8ea0c68903148",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 1,
+        "timedOut": 1,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        1970.0,
+        938.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 3,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1408.8,
+      "runId": "0aee766cd89a4313a51413029cc97678",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        983.0,
+        410.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 3,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 589.5,
+      "runId": "2247017bb88a4446bbbdccc145af4648",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        200.0,
+        371.0
+      ]
+    },
+    {
+      "setup": "s3",
+      "repeat": 3,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1663.9,
+      "runId": "8d43ceb4065146428aba2a538b46f952",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        1174.0,
+        459.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 1,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 1352.8,
+      "runId": "13d25729ba3b435daa8c008f7c92000a",
+      "status": "completed",
+      "passed": 1,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 50.0,
+      "counts": {
+        "total": 2,
+        "passed": 1,
+        "failed": 1,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": true
+      },
+      "secondsPerTask": [
+        1047.0,
+        293.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 1,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "3e0a1e2e00c84ffbad6b8195a0d9965a",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        3.0,
+        2.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 1,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "bd252f53062d4c6b8ad0077118316d19",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        3.0,
+        3.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 2,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "c6873af656df442eaeb0724a5787ec18",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": false
+      },
+      "secondsPerTask": [
+        2.0,
+        3.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 2,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "a32811c7e6c1411d99d6c028b76db7be",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        3.0,
+        2.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 2,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "e238dd8d2bda45d29216bd5aecb4b3b0",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        2.0,
+        3.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 3,
+      "batch": 0,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "d87811ada5124d708e74f720b321ec77",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/combine-from-key-to-key#descriptive": false,
+        "flask_refactor/add-log-parameter-get-flashed-messages#descriptive": false
+      },
+      "secondsPerTask": [
+        3.0,
+        2.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 3,
+      "batch": 1,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "f5ca406bc4804ef59b517a6d5f75bc8f",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "tornado_refactor/global-objects#descriptive": false,
+        "tornado_refactor/log-utils#descriptive": false
+      },
+      "secondsPerTask": [
+        3.0,
+        2.0
+      ]
+    },
+    {
+      "setup": "s1_lsp",
+      "repeat": 3,
+      "batch": 2,
+      "model": "stealth/ox-alpha",
+      "wallSeconds": 33.4,
+      "runId": "8f2158f5b9a7481b837329468bde6553",
+      "status": "completed",
+      "passed": 0,
+      "total": 2,
+      "dispatched": 2,
+      "rate": 0.0,
+      "counts": {
+        "total": 2,
+        "passed": 0,
+        "failed": 2,
+        "timedOut": 0,
+        "pending": 0
+      },
+      "perTask": {
+        "requests_refactor/move-hooks-sessions#descriptive": false,
+        "flask_refactor/debughelpers-to-helpers.py#descriptive": false
+      },
+      "secondsPerTask": [
+        2.0,
+        3.0
+      ]
+    }
+  ]
+}
