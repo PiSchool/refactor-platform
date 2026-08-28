@@ -99,6 +99,15 @@
         55.7
       ]
     },
+    "S3 native descriptive (full 100)": {
+      "passed": 66,
+      "total": 100,
+      "rate": 66.0,
+      "ci95": [
+        56.3,
+        74.5
+      ]
+    },
     "S3 sub-agents descriptive (all dispatched)": {
       "passed": 20,
       "total": 100,
@@ -234,7 +243,7 @@
       "discordant_a_only": 30,
       "discordant_b_only": 1,
       "p_value": 2.9802322387695312e-08,
-      "p_holm": 5.066394805908203e-07,
+      "p_holm": 5.662441253662109e-07,
       "significance_holm": "***"
     },
     {
@@ -253,7 +262,7 @@
       "discordant_a_only": 32,
       "discordant_b_only": 2,
       "p_value": 6.938353180885315e-08,
-      "p_holm": 1.1101365089416504e-06,
+      "p_holm": 1.2489035725593567e-06,
       "significance_holm": "***"
     },
     {
@@ -272,7 +281,7 @@
       "discordant_a_only": 27,
       "discordant_b_only": 2,
       "p_value": 1.6242265701293945e-06,
-      "p_holm": 2.2739171981811523e-05,
+      "p_holm": 2.5987625122070312e-05,
       "significance_holm": "***"
     },
     {
@@ -291,7 +300,7 @@
       "discordant_a_only": 13,
       "discordant_b_only": 0,
       "p_value": 0.000244140625,
-      "p_holm": 0.0029296875,
+      "p_holm": 0.003173828125,
       "significance_holm": "**"
     },
     {
@@ -310,7 +319,7 @@
       "discordant_a_only": 15,
       "discordant_b_only": 5,
       "p_value": 0.04138946533203125,
-      "p_holm": 0.20694732666015625,
+      "p_holm": 0.2483367919921875,
       "significance_holm": "n.s."
     },
     {
@@ -329,7 +338,7 @@
       "discordant_a_only": 14,
       "discordant_b_only": 6,
       "p_value": 0.11531829833984375,
-      "p_holm": 0.461273193359375,
+      "p_holm": 0.5765914916992188,
       "significance_holm": "n.s."
     },
     {
@@ -348,8 +357,8 @@
       "discordant_a_only": 8,
       "discordant_b_only": 24,
       "p_value": 0.0070003666914999485,
-      "p_holm": 0.04900256684049964,
-      "significance_holm": "*"
+      "p_holm": 0.05600293353199959,
+      "significance_holm": "n.s."
     },
     {
       "comparison": "LSP on vs off (lazy)",
@@ -371,7 +380,45 @@
       "significance_holm": "n.s."
     },
     {
-      "comparison": "S2-AST vs S3 sub-agents (matched 26)",
+      "comparison": "S2-AST vs S3 native (full 100)",
+      "a": "S2-AST descriptive",
+      "b": "S3 native descriptive (full 100)",
+      "rate_a_on_shared": 86.0,
+      "rate_b_on_shared": 66.0,
+      "delta_pp": 20.0,
+      "delta_ci95": [
+        12.0,
+        28.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 20,
+      "discordant_b_only": 0,
+      "p_value": 1.9073486328125e-06,
+      "p_holm": 2.86102294921875e-05,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "S1 vs S3 native (full 100)",
+      "a": "S1 descriptive +LSP",
+      "b": "S3 native descriptive (full 100)",
+      "rate_a_on_shared": 73.0,
+      "rate_b_on_shared": 66.0,
+      "delta_pp": 7.0,
+      "delta_ci95": [
+        0.0,
+        15.0
+      ],
+      "significance": "n.s.",
+      "n_paired": 100,
+      "discordant_a_only": 11,
+      "discordant_b_only": 4,
+      "p_value": 0.11846923828125,
+      "p_holm": 0.5765914916992188,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S2-AST vs S3 sub-agents (matched 26, superseded)",
       "a": "S2-AST descriptive",
       "b": "S3 sub-agents descriptive (executed)",
       "rate_a_on_shared": 80.8,
@@ -390,7 +437,7 @@
       "significance_holm": "n.s."
     },
     {
-      "comparison": "S1 vs S3 sub-agents (matched 26)",
+      "comparison": "S1 vs S3 sub-agents (matched 26, superseded)",
       "a": "S1 descriptive +LSP",
       "b": "S3 sub-agents descriptive (executed)",
       "rate_a_on_shared": 73.1,
@@ -424,7 +471,7 @@
       "discordant_a_only": 31,
       "discordant_b_only": 3,
       "p_value": 7.660128176212311e-07,
-      "p_holm": 1.1490192264318466e-05,
+      "p_holm": 1.3022217899560928e-05,
       "significance_holm": "***"
     },
     {
@@ -443,7 +490,7 @@
       "discordant_a_only": 22,
       "discordant_b_only": 4,
       "p_value": 0.0005335211753845215,
-      "p_holm": 0.0048828125,
+      "p_holm": 0.00537109375,
       "significance_holm": "**"
     },
     {
@@ -462,7 +509,7 @@
       "discordant_a_only": 12,
       "discordant_b_only": 0,
       "p_value": 0.00048828125,
-      "p_holm": 0.0048828125,
+      "p_holm": 0.00537109375,
       "significance_holm": "**"
     },
     {
@@ -481,7 +528,7 @@
       "discordant_a_only": 6,
       "discordant_b_only": 0,
       "p_value": 0.03125,
-      "p_holm": 0.1875,
+      "p_holm": 0.21875,
       "significance_holm": "n.s."
     },
     {
@@ -500,7 +547,7 @@
       "discordant_a_only": 17,
       "discordant_b_only": 0,
       "p_value": 1.52587890625e-05,
-      "p_holm": 0.0001983642578125,
+      "p_holm": 0.000213623046875,
       "significance_holm": "***"
     },
     {
@@ -519,7 +566,7 @@
       "discordant_a_only": 13,
       "discordant_b_only": 0,
       "p_value": 0.000244140625,
-      "p_holm": 0.0029296875,
+      "p_holm": 0.003173828125,
       "significance_holm": "**"
     },
     {
@@ -538,14 +585,14 @@
       "discordant_a_only": 15,
       "discordant_b_only": 1,
       "p_value": 0.000518798828125,
-      "p_holm": 0.0048828125,
+      "p_holm": 0.00537109375,
       "significance_holm": "**"
     }
   ],
   "method": {
     "interval": "Wilson score, 95%",
     "test": "McNemar exact, two-sided",
-    "multiplicity": "Holm-Bonferroni over the 17 comparisons",
+    "multiplicity": "Holm-Bonferroni over the 19 comparisons",
     "delta_interval": "paired bootstrap over tasks, 10000 draws, seed 20260824"
   }
 }

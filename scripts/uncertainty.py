@@ -159,6 +159,24 @@ def _from_result_column(path: pathlib.Path, order: list[str]) -> dict[str, bool]
     return {task: (r["Result"].strip() == "PASSED") for task, r in zip(order, rows)}
 
 
+def _s3_native(path: pathlib.Path) -> dict[str, bool]:
+    """Task id -> passed for the rerun, keyed to match the archive exports.
+
+    The campaign records a task as `<repo>/<task>#<prompt mode>`; the archive
+    exports carry the bare task id. Both name the same benchmark task, so the
+    qualifiers are stripped to pair them. The run arrives in batches that each
+    cover part of the benchmark.
+
+    Per-task setup conformance is not in this file -- the platform reports it per
+    run -- so the conformant-only rate is quoted from the run records in
+    docs/results.md rather than recomputed here."""
+    full: dict[str, bool] = {}
+    for run in json.loads(path.read_text(encoding="utf-8"))["runs"]:
+        for key, passed in run["perTask"].items():
+            full[key.split("#", 1)[0].rsplit("/", 1)[-1]] = bool(passed)
+    return full
+
+
 def load(archive: pathlib.Path) -> dict[str, dict[str, bool]]:
     """Every configuration the paper reports, as task id -> passed."""
     runs = {r["title"]: r for r in I.parse_appendix(archive / "appendix_per_task.md")}
@@ -193,6 +211,17 @@ def load(archive: pathlib.Path) -> dict[str, dict[str, bool]]:
     cfg["S3 sub-agents descriptive (all dispatched)"] = s3
     cfg["S3 CAO base"] = _from_archive(runs, "qwen3.6-flash S3 CAO base RefactorBench")
 
+    # The archived sub-agent run above stopped after 26 of 100 tasks, so it can
+    # only ever be compared on a matched subset. This is the full-length rerun,
+    # on the same benchmark and model, with native sub-agents rather than the
+    # superseded orchestrator. It also records whether the agent actually
+    # delegated, so the regime can be scored over the tasks that exercised it as
+    # well as over all of them -- the gap between those two is a result.
+    native = archive / "s3_native_descriptive.json"
+    if native.exists():
+        cfg["S3 native descriptive (full 100)"] = _s3_native(native)
+
+
     # --- cross-model (Table 2) ----------------------------------------------
     for model, s1_title, s2_title in (
         ("deepseek-v4-pro", "Run 4: deepseek-v4-pro S1 desc RefactorBench",
@@ -226,8 +255,10 @@ COMPARISONS = [
     ("S2-AST vs S1 (lazy)", "S2-AST lazy", "S1 lazy +LSP"),
     ("S2-naive vs S1 (descriptive)", "S2-naive descriptive", "S1 descriptive +LSP"),
     ("LSP on vs off (lazy)", "S1 lazy +LSP", "S1 lazy -LSP"),
-    ("S2-AST vs S3 sub-agents (matched 26)", "S2-AST descriptive", "S3 sub-agents descriptive (executed)"),
-    ("S1 vs S3 sub-agents (matched 26)", "S1 descriptive +LSP", "S3 sub-agents descriptive (executed)"),
+    ("S2-AST vs S3 native (full 100)", "S2-AST descriptive", "S3 native descriptive (full 100)"),
+    ("S1 vs S3 native (full 100)", "S1 descriptive +LSP", "S3 native descriptive (full 100)"),
+    ("S2-AST vs S3 sub-agents (matched 26, superseded)", "S2-AST descriptive", "S3 sub-agents descriptive (executed)"),
+    ("S1 vs S3 sub-agents (matched 26, superseded)", "S1 descriptive +LSP", "S3 sub-agents descriptive (executed)"),
     ("S2-AST vs S3 CAO (base, full 100)", "S2-AST base", "S3 CAO base"),
     ("S1 vs S3 CAO (base, full 100)", "S1 base +LSP", "S3 CAO base"),
     ("deepseek-v4-pro S2 vs S1", "deepseek-v4-pro S2-AST", "deepseek-v4-pro S1"),
@@ -254,6 +285,10 @@ def analyse(cfg: dict[str, dict[str, bool]]) -> dict:
         m = mcnemar_exact(cfg[a], cfg[b])
         lo, hi = bootstrap_diff(cfg[a], cfg[b])
         shared = sorted(set(cfg[a]) & set(cfg[b]))
+        if not shared:
+            raise SystemExit(
+                f"{label}: '{a}' and '{b}' share no task ids, so there is nothing "
+                "to pair -- their exports name tasks differently")
         ra = 100 * sum(cfg[a][t] for t in shared) / len(shared)
         rb = 100 * sum(cfg[b][t] for t in shared) / len(shared)
         tests.append({"comparison": label, "a": a, "b": b,
