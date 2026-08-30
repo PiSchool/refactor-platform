@@ -10,6 +10,8 @@ project still builds and passes its own test suite.
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB.svg)](server/pyproject.toml)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-000000.svg)](web/package.json)
 
+Accepted to **[EMNLP 2026 — System Demonstrations](https://pischool.github.io/refactor-platform/)**.
+
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/ui-run-detail-dark.png">
   <img alt="Run detail: agent steps on the left, live terminal and diff in the centre, evaluation checks and token accounting on the right" src="docs/figures/ui-run-detail-light.png">
@@ -175,6 +177,16 @@ ssh -L 3000:127.0.0.1:3000 user@host
 Publishing it to a network requires a reverse proxy that provides TLS and
 authentication. To share results instead, export a run: the archive carries the
 evidence without the deployment.
+
+## Contributors
+
+- [Aziz Ben Amor](https://www.linkedin.com/in/aziz-benamor/) — Pi School (equal contribution)
+- [Drish Mali](https://www.linkedin.com/in/drish-mali/) — Pi School (equal contribution)
+- [Mann Acharya](https://mannacharya.com) — Pi School (equal contribution)
+- [Vijayasri Iyer](https://www.linkedin.com/in/vijayasriiyer/) — Pi School (corresponding author)
+- [Sébastien Bratières](https://www.linkedin.com/in/sebastien-bratieres/) — Pi School, Translated
+
+[![Pi School](web/public/brand/pischool-wordmark.png)](https://picampus-school.com/)
 
 ## License
 

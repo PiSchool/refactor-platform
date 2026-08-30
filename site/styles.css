@@ -1,0 +1,302 @@
+:root {
+  --bg: #ffffff;
+  --fg: #1a1a1a;
+  --muted: #5b5b5b;
+  --accent: #2f5fd6;
+  --border: #e2e2e2;
+  --code-bg: #f5f5f7;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+h1 {
+  font-size: 2.6rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem;
+}
+
+.subtitle {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 620px;
+  margin: 0 auto 1.5rem;
+}
+
+.authors {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0 1.25rem;
+  padding: 0;
+  margin: 0 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.authors sup {
+  font-size: 0.7em;
+}
+
+.authors a {
+  text-decoration: none;
+}
+
+.authors a:hover {
+  text-decoration: underline;
+}
+
+.affiliation {
+  color: var(--muted);
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+
+.venue {
+  color: var(--muted);
+  font-size: 1rem;
+  margin: 0 0 0.75rem;
+}
+
+.footnote {
+  color: var(--muted);
+  margin: 0 0 1.5rem;
+  font-size: 0.8rem;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1.2rem;
+  border-radius: 999px;
+  border: none;
+  background: #363636;
+  color: #ffffff;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  transition: background 0.15s ease;
+}
+
+.button:hover {
+  background: #000000;
+}
+
+.button svg {
+  width: 1em;
+  height: 1em;
+}
+
+.teaser {
+  margin: 2.5rem 0;
+  text-align: center;
+}
+
+figure {
+  margin: 0;
+}
+
+figure img {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+figcaption {
+  margin-top: 0.4rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+}
+
+.teaser-caption {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--muted);
+  text-align: center;
+}
+
+.figure-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+
+.figure-col h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.figure-col p {
+  font-size: 0.88rem;
+  color: var(--fg);
+  margin: 0 0 1rem;
+}
+
+.figure-col img {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 640px) {
+  .panel-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .figure-columns {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+h2 {
+  font-size: 1.3rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  margin: 2.5rem 0 1rem;
+}
+
+.abstract p {
+  color: var(--fg);
+  text-align: justify;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 2rem;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 0;
+}
+
+.stat {
+  flex: 1 1 160px;
+  padding: 0 1.5rem;
+}
+
+.stat + .stat {
+  border-left: 1px solid var(--border);
+}
+
+.stat-value {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.stat-label {
+  display: block;
+  margin-top: 0.3rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+  margin: 0 0 0.5rem;
+}
+
+caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+th {
+  font-weight: 600;
+  border-bottom: 2px solid var(--border);
+}
+
+td:not(:first-child), th:not(:first-child) {
+  text-align: right;
+}
+
+.note {
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+
+.bibtex pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+}
+
+footer {
+  margin-top: 3rem;
+  border-top: 1px solid var(--border);
+  padding-top: 1.5rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.pischool-link {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.pischool-logo {
+  height: 32px;
+  width: auto;
+}
+
+a {
+  color: var(--accent);
+}
