@@ -1,0 +1,4 @@
+type: evaluation
+key: example_metric           # the directory name
+name: Line count
+entrypoint: plugin:Plugin

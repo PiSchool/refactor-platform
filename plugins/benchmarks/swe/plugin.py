@@ -24,7 +24,16 @@ import tempfile
 from functools import lru_cache
 from pathlib import Path
 
-from app.catalog.sdk import BenchmarkPlugin, EvalContext, SessionCtx, StageResult, TaskDef
+from app.catalog.sdk import (
+    BenchmarkPlugin,
+    EvalContext,
+    MetricSpec,
+    PromptSpec,
+    PromptVariable,
+    SessionCtx,
+    StageResult,
+    TaskDef,
+)
 
 PLUGIN_DIR = Path(__file__).resolve().parent
 DATASET = "pure_refactoring_data.json"
@@ -37,13 +46,27 @@ TASK_DESCRIPTION = (
 
 # refactoring type → prompt template
 _TEMPLATES = {
-    "Extract Method": "extract_method_baseline_prompt.txt",
-    "Inline Method": "inline_method_baseline_prompt.txt",
-    "Move Method": "move_method_prompt_baseline.txt",
-    "Move And Rename Method": "move_and_rename_method_baseline_prompt.txt",
-    "Extract And Move Method": "extract_and_move_method_baseline_prompt.txt",
-    "Move And Inline Method": "move_and_inline_baseline_prompt.txt",
+    "Extract Method": "extract_method.md",
+    "Inline Method": "inline_method.md",
+    "Move Method": "move_method.md",
+    "Move And Rename Method": "move_and_rename_method.md",
+    "Extract And Move Method": "extract_and_move_method.md",
+    "Move And Inline Method": "move_and_inline_method.md",
 }
+
+#: What `build_prompt` substitutes into whichever template the task selects.
+#: Without the code or the operation the task is undefined, so an edit that drops
+#: either is refused rather than sent to an agent.
+_PROMPT_VARIABLES = (
+    PromptVariable("code_to_refactor", "the method to be refactored, as it stands"),
+    PromptVariable("refactoring_operation", "the refactoring the task asks for"),
+    PromptVariable("task_description", "the benchmark's standing instruction", required=False),
+    PromptVariable("class_content", "the whole file the method lives in", required=False),
+    PromptVariable("file_path_before_refactoring", "that file's path in the repository",
+                   required=False),
+    PromptVariable("project_structure", "the surrounding package tree, for move-like operations",
+                   required=False),
+)
 
 # before-state fields the prompt may legitimately show (no solution fields)
 _ALLOW = ("type", "filePathBefore", "sourceCodeBeforeRefactoring",
@@ -134,30 +157,63 @@ class Plugin(BenchmarkPlugin):
         }
         return _template(ctx, template).format_map(_SafeDict(values))
 
-    def stages(self):
-        return {"swe.prepare_candidate": _prepare_candidate, "swe.codebleu": _codebleu}
+    def prepare(self, ctx: EvalContext) -> StageResult:
+        return _prepare_candidate(ctx)
+
+    def describe_preparation(self) -> MetricSpec:
+        return MetricSpec(
+            title="Prepare the detector's inputs",
+            summary=("Pairs the agent's edited file with the dataset's before-state, which is "
+                     "what RefactoringMiner is then run on, and publishes the dataset's own "
+                     "refactoring for the similarity score. Fails when the agent changed no "
+                     "Java file."),
+            requires="the SWE-Refactor dataset in the benchmark's data directory",
+            gates=False,
+            outputs=("rm_args", "reference_text", "candidate_path"),
+        )
+
+    def describe_prompts(self):
+        return {
+            name: PromptSpec(
+                applies_to=f"tasks whose refactoring type is {rtype}",
+                syntax="format",
+                variables=_PROMPT_VARIABLES,
+            )
+            for rtype, name in _TEMPLATES.items()
+        }
 
 
 def _read(path: Path) -> str:
     return path.read_text(encoding="utf-8", errors="replace")
 
 
-def _prepare_candidate(ctx: EvalContext, config: dict) -> StageResult:
-    """Read the agent's edited file(s) from the workspace and stage the
-    before/after pair RefactoringMiner needs (published via ctx.shared)."""
+def _prepare_candidate(ctx: EvalContext) -> StageResult:
+    """Stage what this benchmark's metrics compare, and publish it.
+
+    RefactoringMiner needs the dataset's whole-file before-state paired with the
+    file as the agent left it; the similarity score needs the dataset's own
+    refactoring and the same candidate. Both are read from the workspace, which
+    is authoritative: the agent's edits are the ground truth.
+    """
     params = ctx.task.params
     rtype = params.get("refactoringType", "")
     target = params.get("filePathBefore", "")
     dest_rel = params.get("filePathAfter", "") or ""
     if not target:
-        return StageResult(name="swe.prepare_candidate", ok=False, reason="apply_failed",
+        return StageResult(ok=False, reason="apply_failed",
                            message="Task has no target file path.")
 
     row = _row(ctx.task, ctx.data_root)
     before_whole = row.get("sourceCodeBeforeForWhole") or row.get("sourceCodeBeforeRefactoring") or ""
     if not before_whole:
-        return StageResult(name="swe.prepare_candidate", ok=False, reason="apply_failed",
+        return StageResult(ok=False, reason="apply_failed",
                            message="Dataset row not found; run the data bootstrap.")
+
+    # The reference is the dataset's own refactoring of the same file. Compared
+    # whole-file: the study scored the snippet an agent reported, this platform
+    # derives the candidate from the workspace, and whole-file is the only
+    # comparison both sides can supply honestly.
+    ctx.shared["reference_text"] = str(row.get("sourceCodeAfterForWhole") or "")
 
     tmp = Path(tempfile.mkdtemp(prefix="swe-rm-"))
     before_f = tmp / "before.java"
@@ -166,72 +222,24 @@ def _prepare_candidate(ctx: EvalContext, config: dict) -> StageResult:
     if dest_rel and dest_rel != target:  # move-like refactoring
         dest_path = ctx.workspace / dest_rel
         if not dest_path.is_file():
-            return StageResult(name="swe.prepare_candidate", ok=False, reason="apply_failed",
+            return StageResult(ok=False, reason="apply_failed",
                                message=f"Destination file not found in workspace: {dest_rel}")
         after_dest = tmp / "dest_after.java"
         after_dest.write_text(_read(dest_path), encoding="utf-8")
         ctx.shared["rm_args"] = ["-spr", target, str(before_f), dest_rel, str(after_dest), rtype]
-        return StageResult(name="swe.prepare_candidate", ok=True,
-                           message=f"Prepared move-refactoring inputs from workspace ({dest_rel}).")
+        ctx.shared["candidate_path"] = str(dest_path)
+        return StageResult(ok=True,
+                           message=f"Prepared move-refactoring inputs from workspace ({dest_rel}).",
+                           outputs={"candidatePath": dest_rel, "refactoringType": rtype})
 
     tgt_path = ctx.workspace / target
     if not tgt_path.is_file():
-        return StageResult(name="swe.prepare_candidate", ok=False, reason="apply_failed",
+        return StageResult(ok=False, reason="apply_failed",
                            message=f"Target file not found in workspace: {target}")
     after_f = tmp / "after.java"
     after_f.write_text(_read(tgt_path), encoding="utf-8")
     ctx.shared["rm_args"] = ["-scr", target, str(before_f), str(after_f), rtype]
-    return StageResult(name="swe.prepare_candidate", ok=True,
-                       message="Prepared single-file refactoring inputs from workspace.")
-
-
-def _candidate_path(ctx: EvalContext) -> Path | None:
-    """The file the agent was asked to refactor, as it stands after the run."""
-    params = ctx.task.params
-    rel = params.get("filePathAfter") or params.get("filePathBefore") or ""
-    path = ctx.workspace / rel if rel else None
-    return path if path and path.is_file() else None
-
-
-def _codebleu(ctx: EvalContext, config: dict) -> StageResult:
-    """Similarity of the agent's file to the dataset's reference refactoring.
-
-    A capture stage: it measures, it does not gate. CodeBLEU blends n-gram,
-    weighted n-gram, AST and data-flow match, so an agent that reaches the same
-    behaviour by a different route still scores well — which is why a low score
-    is a signal to read the diff, not a verdict on its own.
-
-    Compared whole-file against `sourceCodeAfterForWhole`. The original study
-    scored the extracted snippet from the agent's answer; this platform derives
-    the candidate from the workspace instead (there is no answer envelope), and
-    whole-file is the only comparison both sides can supply honestly.
-    """
-    name = "swe.codebleu"
-    try:
-        from codebleu import calc_codebleu
-    except ImportError:
-        return StageResult(name=name, ok=True, message="CodeBLEU unavailable (library not installed).")
-
-    row = _row(ctx.task, ctx.data_root)
-    reference = str(row.get("sourceCodeAfterForWhole") or "").strip()
-    path = _candidate_path(ctx)
-    if not reference or path is None:
-        return StageResult(name=name, ok=True, message="CodeBLEU skipped (no reference or candidate).")
-
-    try:
-        m = calc_codebleu([reference], [_read(path)], lang="java")
-    except Exception as exc:                       # a scorer must never fail a run
-        return StageResult(name=name, ok=True, message=f"CodeBLEU failed: {exc}")
-
-    score = float(m["codebleu"])
-    return StageResult(
-        name=name, ok=True,
-        message=f"CodeBLEU {score:.3f} against the reference refactoring.",
-        outputs={
-            "codebleu": round(score, 4),
-            "codebleuNgram": round(float(m["ngram_match_score"]), 4),
-            "codebleuWeightedNgram": round(float(m["weighted_ngram_match_score"]), 4),
-            "codebleuSyntax": round(float(m["syntax_match_score"]), 4),
-            "codebleuDataflow": round(float(m["dataflow_match_score"]), 4),
-        },
-    )
+    ctx.shared["candidate_path"] = str(tgt_path)
+    return StageResult(ok=True,
+                       message="Prepared single-file refactoring inputs from workspace.",
+                       outputs={"candidatePath": target, "refactoringType": rtype})

@@ -5,7 +5,93 @@ server:
   port: 8000
 
 defaults:
+  provider: openrouter
   model: openrouter/free
   task_timeout_seconds: 1800
+  java_baseline_timeout_seconds: 900
   eval_tool_max_attempts: 3
   retention_runs_cap: 25
+
+# Model providers. Adding one is an entry here, not a code change: declare a
+# base URL and the environment variable that carries its key. The platform
+# fetches the model catalogue from the endpoint and hands the agent a
+# provider-neutral RP_PROVIDER_BASE_URL / RP_PROVIDER_API_KEY pair. Select the
+# active provider with `defaults.provider`, or RP_PROVIDER at runtime.
+#
+# `protocols` lists the request formats the endpoint answers. Agent CLIs differ:
+# Copilot, Aider, opencode and Junie speak chat completions, Codex speaks the
+# OpenAI Responses API, Claude Code speaks the Anthropic Messages API. A pairing
+# the endpoint cannot serve is refused before the run starts, naming the protocol
+# instead of failing inside the agent. `anthropic_base_url` is needed only where
+# the Messages API does not sit under `base_url`.
+providers:
+  - key: openrouter
+    name: OpenRouter
+    base_url: https://openrouter.ai/api/v1
+    api_key_env: OPENROUTER_API_KEY
+    base_url_env: OPENROUTER_BASE_URL
+    credits: true            # publishes GET /key, so the dashboard shows the balance
+    protocols: [chat_completions, responses, anthropic_messages]
+    anthropic_base_url: https://openrouter.ai/api
+  - key: openai
+    name: OpenAI
+    base_url: https://api.openai.com/v1
+    api_key_env: OPENAI_API_KEY
+    base_url_env: OPENAI_BASE_URL
+    protocols: [chat_completions, responses]
+  - key: deepseek
+    name: DeepSeek
+    base_url: https://api.deepseek.com/v1
+    api_key_env: DEEPSEEK_API_KEY
+    base_url_env: DEEPSEEK_BASE_URL
+  - key: groq
+    name: Groq
+    base_url: https://api.groq.com/openai/v1
+    api_key_env: GROQ_API_KEY
+    base_url_env: GROQ_BASE_URL
+  - key: together
+    name: Together AI
+    base_url: https://api.together.xyz/v1
+    api_key_env: TOGETHER_API_KEY
+    base_url_env: TOGETHER_BASE_URL
+  # Any other OpenAI-compatible endpoint is declared the same way: Fireworks,
+  # Azure OpenAI, Anthropic's compatibility layer, or a gateway of your own.
+  - key: local
+    name: Local endpoint     # vLLM, Ollama, LM Studio, llama.cpp, an internal gateway
+    base_url: http://127.0.0.1:11434/v1
+    base_url_env: LOCAL_LLM_BASE_URL
+    api_key_env: LOCAL_LLM_API_KEY
+
+# S2/S3 retrieval: the models the published study searched with. See
+# docs/retrieval.md for the pipeline they sit in.
+retrieval:
+  # The models S2 and S3 search with. The embedding and query-rewriting models
+  # are served by the `ollama` service, which pulls exactly these two names; the
+  # cross-encoder reranker runs inside the API process. A model name appears
+  # nowhere else in the repository, and changing one here changes the index
+  # identity, so affected repositories are re-indexed on the next run.
+  embedding_model: hf.co/nomic-ai/nomic-embed-code-GGUF:Q4_K_M
+  embedding_dimension: 3584
+  expansion_model: qwen2.5-coder:7b-instruct
+  reranker_model: Xenova/ms-marco-MiniLM-L-6-v2
+  reranker_threads: 4
+  # How much the pipeline looks at, stage by stage.
+  vector_candidates: 50
+  lexical_candidates: 50
+  prefilter_candidates: 512
+  fused_candidates: 40
+  context_hits: 12
+  context_char_limit: 24000
+  window_lines: 80
+  overlap_lines: 20
+  embed_num_ctx: 2048
+  embed_num_batch: 2048
+  embed_max_chars: 500
+
+# Reviewer-visible evidence is sanitized while streaming. The lower view cap
+# prevents an accidental browser allocation; explicit downloads remain bounded.
+evidence:
+  view_max_bytes: 16777216
+  download_max_bytes: 536870912
+  json_max_bytes: 16777216
+  stream_chunk_bytes: 65536

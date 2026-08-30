@@ -14,23 +14,43 @@ export interface AgentEvent {
   data?: Record<string, any>;
 }
 
-/** Replays the whole file, then tails it while the session runs. */
+/** Replays the whole file, then tails it while the session runs.
+ *
+ *  On a dropped connection we reconnect and replay from the start rather than
+ *  giving up: a feed that dies on the first hiccup shows an empty Events tab for
+ *  the rest of a run. The server always replays the whole file, so resetting
+ *  state on reconnect is what keeps events from being duplicated. */
 export function useSessionEvents(sessionId: string): AgentEvent[] {
   const [events, setEvents] = useState<AgentEvent[]>([]);
 
   useEffect(() => {
-    setEvents([]);
-    const es = new EventSource(`/api/sessions/${sessionId}/events`);
-    es.addEventListener('event', (e: MessageEvent) => {
-      try {
-        const ev = JSON.parse(e.data) as AgentEvent;
-        setEvents((prev) => (prev.length > 8000 ? [...prev.slice(-6000), ev] : [...prev, ev]));
-      } catch {
-        /* a malformed line must not kill the feed */
-      }
-    });
-    es.onerror = () => es.close(); // the stream ends when the session ends
-    return () => es.close();
+    if (!sessionId) return;
+    let es: EventSource | null = null;
+    let retry: ReturnType<typeof setTimeout> | undefined;
+    let closed = false;
+
+    const connect = () => {
+      setEvents([]); // the server replays from the top; start clean
+      es = new EventSource(`/api/sessions/${sessionId}/events`);
+      es.addEventListener('event', (e: MessageEvent) => {
+        try {
+          const ev = JSON.parse(e.data) as AgentEvent;
+          setEvents((prev) => (prev.length > 8000 ? [...prev.slice(-6000), ev] : [...prev, ev]));
+        } catch {
+          /* a malformed line must not kill the feed */
+        }
+      });
+      // The server sends `end` when the session is over. Anything else that closes
+      // the stream is a dropped connection, and is worth retrying.
+      es.addEventListener('end', () => { closed = true; es?.close(); });
+      es.onerror = () => {
+        es?.close();
+        if (!closed) retry = setTimeout(connect, 2000);
+      };
+    };
+
+    connect();
+    return () => { closed = true; clearTimeout(retry); es?.close(); };
   }, [sessionId]);
 
   return events;
@@ -45,8 +65,13 @@ function clip(v: unknown, n = 140) {
 export function summarize(ev: AgentEvent): string {
   const d = ev.data ?? {};
   switch (ev.type) {
-    case 'session.start':
-      return `${d.producer ?? 'agent'} v${d.copilotVersion ?? '?'} · model ${d.selectedModel ?? '?'}`;
+    case 'session.start': {
+      // Every adapter reports `version`; `copilotVersion` is what Copilot's own
+      // stream calls it. Reading only the vendor key labelled every other tool
+      // `v?`, and an unknown version is left out rather than shown as one.
+      const version = d.version ?? d.copilotVersion;
+      return `${d.producer ?? 'agent'}${version ? ` v${version}` : ''} · model ${d.selectedModel ?? '?'}`;
+    }
     case 'session.model_change':
       return d.previousModel === d.newModel ? `model ${d.newModel}` : `model ${d.previousModel} → ${d.newModel}`;
     case 'session.mode_changed':

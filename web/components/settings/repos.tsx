@@ -41,7 +41,7 @@ export function ReposSection({ benchmark }: { benchmark: string }) {
       actions={<Btn variant="invisible" icon={<RefreshCw className="h-3.5 w-3.5" />} onClick={load}>Refresh</Btn>}>
       {!repos ? <Note>Loading…</Note> : repos.length === 0 ? <Note>No sources.</Note> : (
         <table className="w-full text-left text-xs">
-          <thead className="text-[10px] uppercase tracking-wide text-fg-subtle">
+          <thead className="text-[11px] uppercase tracking-wide text-fg-subtle">
             <tr className="border-b border-border">
               <th className="pb-1.5 font-medium">Source</th>
               <th className="pb-1.5 font-medium">Type</th>
@@ -54,9 +54,9 @@ export function ReposSection({ benchmark }: { benchmark: string }) {
           <tbody className="divide-y divide-border">
             {repos.map((r) => (
               <tr key={r.source}>
-                <td className="max-w-[22rem] truncate py-2 font-mono text-[11px] text-fg">{r.source}</td>
+                <td className="max-w-[22rem] truncate py-2 font-mono text-xs text-fg">{r.source}</td>
                 <td className="py-2 text-fg-muted">{r.type}</td>
-                <td className="py-2 tabular-nums text-fg-muted">{r.taskCount}</td>
+                <td className="py-2 tabular-nums text-fg-muted">{r.taskCount.toLocaleString()}</td>
                 <td className="py-2 tabular-nums text-fg-muted">{size(r.sizeBytes)}</td>
                 <td className="py-2">
                   <Badge variant={r.present ? 'success' : 'attention'}>{r.present ? 'present' : 'missing'}</Badge>

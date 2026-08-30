@@ -1,0 +1,21 @@
+Run ID,benchmark_pipeline_20260526_134819
+Status,completed
+Model,openrouter/free
+Datasets,refbench
+Setups,s2_rag (AST chunking)
+Embedding,nomic-embed-text:v1.5
+Chunking,AST (language-aware tree-sitter splits)
+Note,High timeout rate (54%) due to free model rate limits
+
+Mode,Total,Passed,Failed,Timed Out,Pass Rate
+Base,100,8,50,42,8%
+Descriptive,100,6,72,22,6%
+Lazy,100,0,2,98,0%
+ALL,300,14,124,162,4.7%
+
+Comparison:
+S1 free (lazy+LSP no RAG): 7/100 = 7%
+S2 RAG free (base AST): 8/100 = 8%
+S2 RAG free (descriptive AST): 6/100 = 6%
+
+Conclusion: openrouter/free is too unreliable for meaningful comparison (54% timeout rate). RAG shows marginal improvement on base mode (+1pp) but results are dominated by model timeouts not retrieval quality.

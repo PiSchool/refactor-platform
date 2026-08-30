@@ -1,7 +1,5 @@
 type: agent
 key: stub
 name: Stub Agent
-version: 1.0.0
 entrypoint: plugin:Plugin
-capabilities: {lsp: true, subagents: true, eval_tool: true}
-models: [stub-model]
+capabilities: {lsp: true, subagents: true, eval_tool: true, retrieval: true}

@@ -40,9 +40,9 @@ export function DiffFileBlock({ file }: { file: DiffFile }) {
         {open ? <ChevronDown className="h-3.5 w-3.5 shrink-0 text-fg-muted" /> : <ChevronRight className="h-3.5 w-3.5 shrink-0 text-fg-muted" />}
         <span className="truncate font-mono text-xs text-fg">{file.path}</span>
         {file.status !== 'modified' && (
-          <span className="shrink-0 rounded-full border border-border px-1.5 text-[10px] text-fg-muted">{STATUS_LABEL[file.status]}</span>
+          <span className="shrink-0 rounded-full border border-border px-1.5 text-[11px] text-fg-muted">{STATUS_LABEL[file.status]}</span>
         )}
-        <span className="ml-auto shrink-0 space-x-1.5 font-mono text-[11px]">
+        <span className="ml-auto shrink-0 space-x-1.5 font-mono text-xs">
           <span className="text-success-fg">+{file.additions}</span>
           <span className="text-danger-fg">−{file.deletions}</span>
         </span>
@@ -52,7 +52,7 @@ export function DiffFileBlock({ file }: { file: DiffFile }) {
         <p className="px-3 py-2 text-xs text-fg-subtle">Binary file not shown.</p>
       ) : (
         <div className="overflow-x-auto">
-          <table className="w-full border-collapse font-mono text-[11px] leading-5">
+          <table className="w-full border-collapse font-mono text-xs leading-5">
             <tbody>
               {file.hunks.map((h, hi) => (
                 <Fragment key={`h${hi}`}>

@@ -1,0 +1,11 @@
+type: agent
+key: aider
+name: Aider
+binary: aider
+install: python3 -m pip install aider-chat
+entrypoint: plugin:Plugin
+capabilities:
+  lsp: false
+  subagents: false
+  eval_tool: true
+  retrieval: false

@@ -26,7 +26,7 @@ export function Field({ label, hint, children }: { label: string; hint?: string;
     <label className="flex items-start justify-between gap-4 py-1.5">
       <span className="pt-1">
         <span className="block text-xs text-fg">{label}</span>
-        {hint && <span className="block text-[11px] text-fg-subtle">{hint}</span>}
+        {hint && <span className="block text-xs text-fg-subtle">{hint}</span>}
       </span>
       <span className="shrink-0">{children}</span>
     </label>

@@ -55,8 +55,21 @@ def parse(events_path: Path | None, terminal_log: Path | None, requested_model: 
             tool = str(data.get("toolName", "") or "")
             args = str(data.get("arguments", data.get("command", "")) or "")
             transcript.append(f"[tool:{tool}] {args}")
+            # Setup fidelity. A setup hands the agent a capability and asks it to
+            # use it; the agent may simply not. Counting the calls is the only way
+            # to know whether an "S1-LSP" run differed from an S1 run at all.
+            if tool == "lsp":
+                info.lsp_actions += 1
+            elif tool == "task":
+                info.subagent_invocations += 1
             if "eval.sh" in args:
                 info.eval_iterations += 1
+                info.eval_tool_invocations += 1
+            if "retrieve.sh" in args or "retrieval" in tool.lower() or any(
+                name in tool.lower()
+                for name in ("search_codebase", "search_file", "list_indexed_files")
+            ):
+                info.retrieval_invocations += 1
         elif etype == "session.compaction_complete":
             # the agent hit its context window and summarised the conversation
             if data.get("success", True):

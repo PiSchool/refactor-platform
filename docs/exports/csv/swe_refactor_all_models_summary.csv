@@ -1,0 +1,9 @@
+# SWE-Refactor - All Models Summary
+"# 177 compound Java tasks, Passed = Code AND Compile AND AST"
+
+Model,Setup,Code Extracted,Compiled,AST Verified,Passed
+qwen3.6-flash,S1 default,90% (159/177),28% (50/177),59% (105/177),24% (43/177)
+minimax-m3,S1 revalidated,97% (171/177),34% (60/177),55% (97/177),29% (52/177)
+GPT-4o-mini (paper),Simple,-,-,-,19% (34/177)
+GPT-4o-mini (paper),+ RAG,-,-,-,20% (36/177)
+GPT-4o-mini (paper),Multi-agent,-,-,-,66% (116/177)

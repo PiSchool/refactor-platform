@@ -1,19 +1,57 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { X, Search } from 'lucide-react';
-import { useBenchmarkTasks, useCatalog, useCreateRun, useModels } from '@/lib/api';
-import { Btn, Card } from '@/components/ui';
-import type { BenchmarkCat } from '@/lib/types';
+import { CircleAlert, Search, TerminalSquare, X } from 'lucide-react';
+import { useBenchmarkTasks, useCatalog, useCreateRun, useModels, useSettings } from '@/lib/api';
+import { Btn, Card, Select } from '@/components/ui';
+import { Checkbox, Chip, Switch } from '@/components/controls';
+import type { AgentCat, BenchmarkCat } from '@/lib/types';
 
-const STEPS = ['Benchmark', 'Tasks', 'Coding Tool', 'Setup', 'Timeouts'];
+const STEPS = ['Benchmark', 'Tasks', 'Coding tool', 'Setup', 'Review'];
 const PAGE = 200;
 
+/** One coding tool. An adapter whose CLI is absent from the backend cannot be
+ *  chosen: the run would fail inside the terminal and be read as an agent
+ *  failure, so the install command is shown instead. */
+export function AgentChoice({ agent, selected, onSelect }: {
+  agent: AgentCat;
+  selected: boolean;
+  onSelect: () => void;
+}) {
+  const missing = agent.available === false;
+  return (
+    <button disabled={missing} onClick={onSelect}
+      title={missing ? `${agent.binary} is not installed on the backend` : undefined}
+      className={`rounded-md border p-3 text-left ${missing ? 'cursor-not-allowed border-border opacity-50' : selected ? 'border-accent-fg bg-accent-subtle/30' : 'border-border hover:border-fg-muted'}`}>
+      <p className="flex items-center gap-1.5 text-sm font-medium text-fg">
+        <TerminalSquare className="h-3.5 w-3.5 shrink-0 text-fg-muted" aria-hidden="true" />
+        {agent.name}
+      </p>
+      {missing
+        ? <p className="mt-1 flex items-center gap-1 text-xs text-danger-fg">
+            <CircleAlert className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
+            <span className="font-mono">{agent.binary}</span> is not installed
+            {agent.install ? <Chip mono tone="neutral" title={`Install it with: ${agent.install}`}>{agent.install}</Chip> : null}
+          </p>
+        : <p className="mt-1 text-xs text-fg-muted">any provider model</p>}
+    </button>
+  );
+}
+
 type Task = { taskKey: string; title: string; params: Record<string, unknown> };
+
+export function LaunchControl({ canLaunch, loading, onLaunch }: {
+  canLaunch: boolean;
+  loading: boolean;
+  onLaunch: () => void;
+}) {
+  return <Btn variant="primary" loading={loading} disabled={!canLaunch} onClick={onLaunch}>Launch</Btn>;
+}
 
 export function RunWizard({ onClose }: { onClose: () => void }) {
   const { data: catalog } = useCatalog();
   const { data: modelCatalog } = useModels();
+  const { data: settings } = useSettings();
   const [step, setStep] = useState(0);
   const [benchmark, setBenchmark] = useState<BenchmarkCat | null>(null);
   const [taskKeys, setTaskKeys] = useState<string[]>([]);
@@ -115,8 +153,8 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
                     onClick={() => { setBenchmark(b); setTaskKeys([]); setSetupKey(''); resetFilters(); setStep(1); }}
                     className={`rounded-md border p-3 text-left disabled:opacity-40 ${benchmark?.id === b.id ? 'border-accent-fg bg-accent-subtle/30' : 'border-border hover:border-fg-muted'}`}>
                     <p className="text-sm font-medium text-fg">{b.name}</p>
-                    <p className="text-xs text-fg-muted">{b.taskCount} tasks · {b.language}</p>
-                    {b.dataState !== 'ready' && <p className="mt-1 text-[10px] text-attention-fg">data: {b.dataState}</p>}
+                    <p className="text-xs text-fg-muted">{b.taskCount.toLocaleString()} tasks · {b.language}</p>
+                    {b.dataState !== 'ready' && <p className="mt-1 text-[11px] text-attention-fg">data: {b.dataState}</p>}
                   </button>
                 ))}
               </div>
@@ -131,19 +169,19 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
                     if (!values.length) return null;
                     return (
                       <label key={f.key} className="flex flex-col gap-1">
-                        <span className="text-[10px] uppercase tracking-wide text-fg-subtle">{f.label}</span>
-                        <select
+                        <span className="text-[11px] uppercase tracking-wide text-fg-subtle">{f.label}</span>
+                        <Select
                           value={facetSel[f.key] ?? ''}
-                          onChange={(e) => { setFacetSel((s) => ({ ...s, [f.key]: e.target.value })); setLimit(PAGE); }}
-                          className="h-8 min-w-[9rem] rounded-md border border-border bg-canvas-inset px-2 text-xs text-fg">
-                          <option value="">All ({allTasks.length})</option>
-                          {values.map(([v, n]) => <option key={v} value={v}>{v} ({n})</option>)}
-                        </select>
+                          className="min-w-[9rem]"
+                          onChange={(e) => { setFacetSel((s) => ({ ...s, [f.key]: e.target.value })); setLimit(PAGE); }}>
+                          <option value="">All · {allTasks.length}</option>
+                          {values.map(([v, n]) => <option key={v} value={v}>{v} · {n}</option>)}
+                        </Select>
                       </label>
                     );
                   })}
                   <label className="flex min-w-[12rem] flex-1 flex-col gap-1">
-                    <span className="text-[10px] uppercase tracking-wide text-fg-subtle">Search</span>
+                    <span className="text-[11px] uppercase tracking-wide text-fg-subtle">Search</span>
                     <div className="relative">
                       <Search className="pointer-events-none absolute left-2 top-2 h-3.5 w-3.5 text-fg-subtle" />
                       <input value={search} onChange={(e) => { setSearch(e.target.value); setLimit(PAGE); }}
@@ -167,11 +205,11 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
 
                 <div className="max-h-72 space-y-0.5 overflow-auto rounded-md border border-border p-1">
                   {shown.map((t) => (
-                    <label key={t.taskKey} className="flex items-center gap-2 rounded px-2 py-1 text-xs hover:bg-neutral-subtle">
-                      <input type="checkbox" checked={taskKeys.includes(t.taskKey)}
-                        onChange={(e) => setTaskKeys((k) => e.target.checked ? [...k, t.taskKey] : k.filter((x) => x !== t.taskKey))} />
-                      <span className="truncate text-fg">{t.title || t.taskKey}</span>
-                      <span className="ml-auto shrink-0 font-mono text-[10px] text-fg-subtle">{t.taskKey.split('/')[0]}</span>
+                    <label key={t.taskKey} className="flex cursor-pointer items-center gap-2 rounded px-2 py-1 text-xs hover:bg-neutral-subtle">
+                      <Checkbox checked={taskKeys.includes(t.taskKey)} label={t.taskKey}
+                        onChange={(on) => setTaskKeys((k) => (on ? [...k, t.taskKey] : k.filter((x) => x !== t.taskKey)))} />
+                      <span className="truncate text-fg" title={t.taskKey}>{t.title || t.taskKey}</span>
+                      <span className="ml-auto shrink-0 font-mono text-[11px] text-fg-subtle">{t.taskKey.split('/')[0]}</span>
                     </label>
                   ))}
                   {filtered.length === 0 && <p className="p-3 text-xs text-fg-subtle">No tasks match these filters.</p>}
@@ -190,11 +228,14 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
               <div className="space-y-3">
                 <div className="grid gap-2 sm:grid-cols-2">
                   {catalog?.agents.map((a) => (
-                    <button key={a.id} onClick={() => { setAgentId(a.id); if (!model) setModel(a.models[0] || ''); }}
-                      className={`rounded-md border p-3 text-left ${agentId === a.id ? 'border-accent-fg bg-accent-subtle/30' : 'border-border hover:border-fg-muted'}`}>
-                      <p className="text-sm font-medium text-fg">{a.name}</p>
-                      <p className="text-xs text-fg-muted">BYOK · any provider model</p>
-                    </button>
+                    <AgentChoice key={a.id} agent={a} selected={agentId === a.id}
+                      onSelect={() => {
+                        setAgentId(a.id);
+                        // The deployment's configured default, not a per-tool list:
+                        // every tool reaches the same provider and accepts any
+                        // model id it serves.
+                        if (!model) setModel(settings?.editable.activeModel || '');
+                      }} />
                   ))}
                 </div>
 
@@ -202,12 +243,13 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
                   <div className="space-y-2">
                     <div className="flex items-end gap-2">
                       <label className="flex-1">
-                        <span className="text-[10px] uppercase tracking-wide text-fg-subtle">Model</span>
+                        <span className="text-[11px] uppercase tracking-wide text-fg-subtle">Model</span>
                         <input value={model} onChange={(e) => setModel(e.target.value)} placeholder="provider/model-id"
                           className="mt-1 h-8 w-full rounded-md border border-border bg-canvas-inset px-3 text-sm text-fg" />
                       </label>
-                      <label className="flex items-center gap-1 pb-2 text-[11px] text-fg-muted">
-                        <input type="checkbox" checked={freeOnly} onChange={(e) => setFreeOnly(e.target.checked)} />
+                      <label className="flex items-center gap-1.5 pb-2 text-xs text-fg-muted">
+                        <Switch checked={freeOnly} onChange={setFreeOnly}
+                          label="Show only models the provider charges nothing for" />
                         free only
                       </label>
                     </div>
@@ -221,8 +263,8 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
                           <button key={m.id} onClick={() => setModel(m.id)}
                             className={`flex w-full items-center gap-2 px-2 py-1 text-left text-xs hover:bg-neutral-subtle ${model === m.id ? 'bg-accent-subtle/40' : ''}`}>
                             <span className="truncate text-fg">{m.name}</span>
-                            {m.free && <span className="shrink-0 rounded bg-success-subtle px-1 text-[10px] text-success-fg">free</span>}
-                            <span className="ml-auto shrink-0 font-mono text-[10px] text-fg-subtle">{m.id}</span>
+                            {m.free && <Chip tone="success" title="The provider charges nothing for this model">free</Chip>}
+                            <span className="ml-auto shrink-0 font-mono text-[11px] text-fg-subtle">{m.id}</span>
                           </button>
                         ))}
                         {models.length === 0 && <p className="p-2 text-xs text-fg-subtle">No models match.</p>}
@@ -242,14 +284,33 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
               <div className="space-y-2">
                 {catalog?.setups.map((s) => {
                   const supported = benchmark.setups.includes(s.key);
-                  const capOk = !agent || Object.entries(s.capabilities).every(([k, v]) => !v || agent.capabilities[k]);
-                  const disabled = !supported || !capOk;
+                  // Which capability the chosen tool is missing, by name: "agent
+                  // lacks capability" gave an operator nothing to act on.
+                  const lacking = agent
+                    ? Object.entries(s.capabilities).filter(([key, needed]) => needed && !agent.capabilities[key]).map(([key]) => key)
+                    : [];
+                  const disabled = !supported || lacking.length > 0;
+                  const why = !supported
+                    ? `${benchmark.name} does not offer this setup`
+                    : lacking.length > 0
+                      ? `${agent?.name} provides no ${lacking.join(', ')}`
+                      : '';
                   return (
-                    <label key={s.key} className={`flex items-center gap-2 rounded-md border p-2.5 ${disabled ? 'opacity-40' : 'cursor-pointer hover:border-fg-muted'} ${setupKey === s.key ? 'border-accent-fg' : 'border-border'}`}>
-                      <input type="radio" name="setup" disabled={disabled} checked={setupKey === s.key} onChange={() => setSetupKey(s.key)} />
-                      <div>
-                        <p className="text-sm text-fg">{s.name}</p>
-                        <p className="text-xs text-fg-muted">{disabled ? (supported ? 'agent lacks capability' : 'not supported by benchmark') : s.description}</p>
+                    <label key={s.key} title={why || s.description}
+                      className={`flex items-start gap-2 rounded-md border p-2.5 ${disabled ? 'opacity-50' : 'cursor-pointer hover:border-fg-muted'} ${setupKey === s.key ? 'border-accent-fg bg-accent-subtle/20' : 'border-border'}`}>
+                      <input type="radio" name="setup" disabled={disabled} checked={setupKey === s.key}
+                        onChange={() => setSetupKey(s.key)}
+                        className="mt-0.5 h-3.5 w-3.5 shrink-0 accent-accent-fg" />
+                      <div className="min-w-0">
+                        <p className="flex items-center gap-1.5 text-sm text-fg">
+                          {s.name}
+                          <code className="font-mono text-[11px] text-fg-subtle">{s.key}</code>
+                        </p>
+                        {why
+                          ? <p className="mt-0.5 flex items-center gap-1 text-xs text-attention-fg">
+                              <CircleAlert className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />{why}
+                            </p>
+                          : <p className="mt-0.5 text-xs text-fg-muted">{s.description}</p>}
                       </div>
                     </label>
                   );
@@ -257,18 +318,31 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
               </div>
             )}
 
-            {/* ── Timeouts + summary ────────────────────────────────────── */}
+            {/* ── Timeout + summary ─────────────────────────────────────── */}
             {step === 4 && (
               <div className="space-y-3">
-                <label className="block text-xs text-fg-muted">Per-task timeout (seconds)</label>
-                <input type="number" value={timeout} onChange={(e) => setTimeoutS(Number(e.target.value))}
-                  className="h-8 w-40 rounded-md border border-border bg-canvas-inset px-3 text-sm text-fg" />
-                <div className="rounded-md border border-border p-3 text-xs text-fg-muted">
-                  <p>Benchmark: <span className="text-fg">{benchmark?.name}</span></p>
-                  <p>Tasks: <span className="text-fg">{taskKeys.length}</span></p>
-                  <p>Tool / model: <span className="text-fg">{agent?.name} · {model}</span></p>
-                  <p>Setup: <span className="text-fg">{setupKey}</span></p>
-                </div>
+                <label className="flex flex-col gap-1" htmlFor="task-timeout">
+                  <span className="text-[11px] uppercase tracking-wide text-fg-subtle">Task timeout</span>
+                  <span className="relative inline-flex w-40 items-center">
+                    <input id="task-timeout" type="number" value={timeout} onChange={(e) => setTimeoutS(Number(e.target.value))}
+                      className="h-8 w-40 rounded-md border border-border bg-canvas-inset pl-3 pr-7 text-sm text-fg outline-none focus:border-accent-fg" />
+                    <span className="pointer-events-none absolute right-2 text-[11px] text-fg-subtle">s</span>
+                  </span>
+                </label>
+                <dl className="grid grid-cols-[7rem_1fr] gap-x-3 gap-y-1 rounded-md border border-border p-3 text-xs">
+                  <dt className="text-fg-subtle">Benchmark</dt>
+                  <dd className="truncate text-fg">{benchmark?.name}</dd>
+                  <dt className="text-fg-subtle">Tasks</dt>
+                  <dd className="tabular-nums text-fg">{taskKeys.length}</dd>
+                  <dt className="text-fg-subtle">Coding tool</dt>
+                  <dd className="truncate text-fg">{agent?.name}</dd>
+                  <dt className="text-fg-subtle">Model</dt>
+                  <dd className="truncate font-mono text-fg">{model}</dd>
+                  <dt className="text-fg-subtle">Setup</dt>
+                  <dd className="truncate text-fg">
+                    {catalog?.setups.find((s) => s.key === setupKey)?.name ?? setupKey}
+                  </dd>
+                </dl>
               </div>
             )}
           </div>
@@ -277,7 +351,7 @@ export function RunWizard({ onClose }: { onClose: () => void }) {
             <Btn variant="invisible" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>Back</Btn>
             {step < 4
               ? <Btn variant="primary" onClick={() => setStep((s) => Math.min(4, s + 1))}>Next</Btn>
-              : <Btn variant="primary" loading={create.isPending} disabled={!canLaunch} onClick={launch}>Launch</Btn>}
+              : <LaunchControl canLaunch={Boolean(canLaunch)} loading={create.isPending} onLaunch={launch} />}
           </div>
         </div>
       </Card>

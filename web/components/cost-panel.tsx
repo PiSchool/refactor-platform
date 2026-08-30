@@ -47,11 +47,11 @@ export function CostPanel({ result }: { result: any }) {
   return (
     <div className="rounded-md border border-border">
       <div className="flex items-center justify-between border-b border-border bg-canvas-subtle px-2 py-1.5">
-        <span className="text-[11px] font-medium text-fg">Cost</span>
-        <span className="font-mono text-[10px] tabular-nums text-fg-subtle">{formatTokens(total)} tokens</span>
+        <span className="text-xs font-medium text-fg">Cost</span>
+        <span className="font-mono text-[11px] tabular-nums text-fg-subtle">{formatTokens(total)} tokens</span>
       </div>
 
-      <div className="space-y-1 px-2 py-1.5 text-[11px]">
+      <div className="space-y-1 px-2 py-1.5 text-xs">
         <Line label={used?.name ?? result.model} value={formatUsd(actual)} strong
           hint={used ? undefined : 'model not in the provider catalog'} />
         {projection && (
@@ -59,14 +59,14 @@ export function CostPanel({ result }: { result: any }) {
             delta={actual != null && projected != null ? projected - actual : null} />
         )}
         {metrics.tokensCacheRead > 0 && (
-          <p className="text-[10px] text-fg-subtle">
+          <p className="text-[11px] text-fg-subtle">
             {formatTokens(metrics.tokensCacheRead)} of the prompt came from cache (billed lower).
           </p>
         )}
       </div>
 
       <button onClick={() => setExpanded((e) => !e)}
-        className="w-full border-t border-border px-2 py-1 text-left text-[10px] text-accent-fg hover:bg-neutral-subtle">
+        className="w-full border-t border-border px-2 py-1 text-left text-[11px] text-accent-fg hover:bg-neutral-subtle">
         {expanded ? 'Hide' : 'Compare'} other models
       </button>
 
@@ -76,9 +76,9 @@ export function CostPanel({ result }: { result: any }) {
             <div className="relative flex-1">
               <Search className="pointer-events-none absolute left-2 top-1.5 h-3 w-3 text-fg-subtle" />
               <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Filter models…"
-                className="h-6 w-full rounded border border-border bg-canvas-inset pl-6 pr-2 text-[11px] text-fg" />
+                className="h-6 w-full rounded border border-border bg-canvas-inset pl-6 pr-2 text-xs text-fg" />
             </div>
-            <label className="flex shrink-0 items-center gap-1 text-[10px] text-fg-muted">
+            <label className="flex shrink-0 items-center gap-1 text-[11px] text-fg-muted">
               <input type="checkbox" checked={freeOnly} onChange={(e) => setFreeOnly(e.target.checked)} />
               free
             </label>
@@ -86,14 +86,14 @@ export function CostPanel({ result }: { result: any }) {
 
           <ul className="max-h-56 overflow-auto">
             {others.map(({ model, cost }) => (
-              <li key={model.id} className="flex items-center gap-2 py-0.5 text-[11px]">
-                <span className="truncate font-mono text-[10px] text-fg-muted">{model.id}</span>
+              <li key={model.id} className="flex items-center gap-2 py-0.5 text-xs">
+                <span className="truncate font-mono text-[11px] text-fg-muted">{model.id}</span>
                 <span className="ml-auto shrink-0 font-mono tabular-nums text-fg">{formatUsd(cost)}</span>
               </li>
             ))}
-            {others.length === 0 && <li className="py-1 text-[11px] text-fg-subtle">No priced models match.</li>}
+            {others.length === 0 && <li className="py-1 text-xs text-fg-subtle">No priced models match.</li>}
           </ul>
-          <p className="mt-1 text-[10px] text-fg-subtle">
+          <p className="mt-1 text-[11px] text-fg-subtle">
             Same token counts, different prices — a comparison, not a prediction of how another model would behave.
           </p>
         </div>
@@ -109,11 +109,11 @@ function Line({ label, value, strong, delta, hint }: {
     <div className="flex items-center justify-between gap-2">
       <span className="min-w-0 truncate text-fg-muted">
         {label}
-        {hint && <span className="ml-1 text-[10px] text-fg-subtle">({hint})</span>}
+        {hint && <span className="ml-1 text-[11px] text-fg-subtle">({hint})</span>}
       </span>
       <span className="flex shrink-0 items-center gap-1.5">
         {delta != null && delta !== 0 && (
-          <span className={`font-mono text-[10px] tabular-nums ${delta > 0 ? 'text-danger-fg' : 'text-success-fg'}`}>
+          <span className={`font-mono text-[11px] tabular-nums ${delta > 0 ? 'text-danger-fg' : 'text-success-fg'}`}>
             {delta > 0 ? '+' : '−'}{formatUsd(Math.abs(delta)).replace('$', '$')}
           </span>
         )}

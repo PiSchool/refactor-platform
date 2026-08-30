@@ -12,5 +12,6 @@ plugins/benchmarks/*/.ready
 *.db-wal
 dist/
 .pytest_cache/
+.e2e/
 .ruff_cache/
 .idea/

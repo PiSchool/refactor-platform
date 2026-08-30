@@ -1,0 +1,104 @@
+# Refactoring tasks over real Python projects, pinned to release commits.
+#
+# Each task names one transformation in one file. A task is passed only when
+# the change is recognised as that transformation (pyrefactor) and the
+# project's own suite still passes (pytest_suite), so a rewrite that happens to
+# stay green does not count.
+#
+# Targets were chosen so that a correct refactoring cannot break the suite by
+# construction: extractions add a private helper, and the renamed and inlined
+# functions are private and are not referenced by name in any test.
+#
+# Adding a project: add tasks here and its clone URL to data_bootstrap.py.
+tasks:
+- task_key: toolz/is_arity-extract
+  title: 'toolz: Extract Method in is_arity'
+  language: python
+  workspace:
+    type: git
+    source: https://github.com/pytoolz/toolz.git
+    ref: 07f30a9c75e07a4b7095d0ec93ba4e963504f259
+  instructions: >
+    In `toolz/functoolz.py`, the function `is_arity(n, func, sigspec=None)`
+    determines whether a function takes exactly `n` positional arguments. After
+    resolving the signature it performs three separate checks in sequence: the
+    required-argument count, varargs, and keywords.
+
+    Apply an Extract Method refactoring: move those checks out of `is_arity`
+    into a new private module-level function, and call it from `is_arity`.
+    The behaviour of `is_arity`, including its `None` result when validity
+    cannot be determined, must not change.
+  params:
+    project: toolz
+    refactoring: Extract Method
+    module: toolz/functoolz.py
+    symbol: is_arity
+    tests: toolz/tests
+
+- task_key: toolz/get_factory-rename
+  title: 'toolz: Rename Method _get_factory'
+  language: python
+  workspace:
+    type: git
+    source: https://github.com/pytoolz/toolz.git
+    ref: 07f30a9c75e07a4b7095d0ec93ba4e963504f259
+  instructions: >
+    In `toolz/dicttoolz.py`, the private helper `_get_factory(f, kwargs)` does
+    not only read the `factory` keyword: it removes it from `kwargs` and
+    rejects any remaining keyword. The name understates that.
+
+    Apply a Rename Method refactoring: rename `_get_factory` to
+    `_pop_factory`, and update every call site in the module. Do not change
+    the body, the signature, or any other function.
+  params:
+    project: toolz
+    refactoring: Rename Method
+    module: toolz/dicttoolz.py
+    symbol: _get_factory
+    tests: toolz/tests
+
+- task_key: more-itertools/chunked_even-extract
+  title: 'more-itertools: Extract Method in chunked_even'
+  language: python
+  workspace:
+    type: git
+    source: https://github.com/more-itertools/more-itertools.git
+    ref: 28ab73678adc39eacc2610bd67c1c4a37def6c28
+  instructions: >
+    In `more_itertools/more.py`, `chunked_even(iterable, n)` first computes the
+    chunk layout — the number of full-size chunks, the number of partial ones
+    and their sizes — and then yields the chunks according to that layout.
+
+    Apply an Extract Method refactoring: move the layout computation into a new
+    private module-level function that returns the values `chunked_even` needs,
+    and call it from `chunked_even`. The sequence of yielded chunks must be
+    unchanged for every input, including iterables shorter than `n`.
+  params:
+    project: more-itertools
+    refactoring: Extract Method
+    module: more_itertools/more.py
+    symbol: chunked_even
+    tests: tests/test_more.py
+
+- task_key: more-itertools/sliding_window-inline
+  title: 'more-itertools: Inline Method _sliding_window_islice'
+  language: python
+  workspace:
+    type: git
+    source: https://github.com/more-itertools/more-itertools.git
+    ref: 28ab73678adc39eacc2610bd67c1c4a37def6c28
+  instructions: >
+    In `more_itertools/recipes.py`, `_sliding_window_islice(iterable, n)` is a
+    three-statement helper with exactly one caller, `sliding_window`, which
+    already branches between it and `_sliding_window_deque`.
+
+    Apply an Inline Method refactoring: move the body of
+    `_sliding_window_islice` into its call site in `sliding_window` and remove
+    the now-unused helper. Leave `_sliding_window_deque` alone, and keep the
+    behaviour of `sliding_window` identical for every `n`.
+  params:
+    project: more-itertools
+    refactoring: Inline Method
+    module: more_itertools/recipes.py
+    symbol: _sliding_window_islice
+    tests: tests/test_recipes.py

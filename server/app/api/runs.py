@@ -6,6 +6,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, HTTPException, Request, Response, UploadFile
 from fastapi.responses import FileResponse
+from starlette.background import BackgroundTask
 from sqlalchemy import select
 
 from app.api.schemas import CreateRun
@@ -15,6 +16,17 @@ from app.db import engine as db_engine
 from app.db.runtime import runtime_value
 from app.db.models import AgentTool, Benchmark, Run, RunTask, Task, utcnow
 from app.execution.setups import SETUPS
+from app.execution.conformance import SetupUnavailable, ensure_agent_compatible
+from app.api.evidence import artifact_response
+from app.results.artifacts import (
+    ArtifactNotFound,
+    owned_task,
+    ref_dicts,
+    resolve_task_artifact,
+    task_artifact_refs,
+)
+from app.results.provenance import is_archived_run
+from app.results.redaction import public_data
 
 router = APIRouter(prefix="/api")
 
@@ -49,12 +61,28 @@ async def create_run(body: CreateRun, request: Request):
         tool = (await s.execute(select(AgentTool).where(AgentTool.id == body.agentToolId))).scalar_one_or_none()
         if tool is None:
             raise HTTPException(422, "unknown agent tool")
+        loaded_agent = request.app.state.registry.agents.get(tool.key)
+        if loaded_agent is None:
+            raise HTTPException(422, "agent plugin is unavailable")
+        if not loaded_agent.available:
+            raise HTTPException(422, loaded_agent.unavailable_reason())
+        try:
+            ensure_agent_compatible(SETUPS[body.setupId], loaded_agent.impl.capabilities)
+        except SetupUnavailable as exc:
+            raise HTTPException(422, str(exc)) from exc
         tasks = (await s.execute(
             select(Task).where(Task.benchmark_id == bench.id, Task.task_key.in_(body.taskKeys)))).scalars().all()
         found = {t.task_key for t in tasks}
         missing = [k for k in body.taskKeys if k not in found]
         if missing:
             raise HTTPException(422, f"tasks not in benchmark: {missing}")
+        if SETUPS[body.setupId].lsp:
+            unavailable = sorted({
+                task.language for task in tasks
+                if request.app.state.registry.lsp_for(task.language) is None
+            })
+            if unavailable:
+                raise HTTPException(422, f"no LSP plugin for task languages: {unavailable}")
 
         from app.api.config import disabled_tasks
         off = await disabled_tasks(bench.key) & set(body.taskKeys)
@@ -112,8 +140,11 @@ async def stop_run(run_id: str, request: Request):
 @router.post("/runs/{run_id}/restart", status_code=201)
 async def restart_run(run_id: str, request: Request):
     async with db_engine.session_factory()() as s:
-        if (await s.execute(select(Run).where(Run.id == run_id))).scalar_one_or_none() is None:
+        source = (await s.execute(select(Run).where(Run.id == run_id))).scalar_one_or_none()
+        if source is None:
             raise HTTPException(404, "unknown run")
+        if is_archived_run(source.config, source.setup_key):
+            raise HTTPException(422, "archived runs cannot be restarted")
     new_id = await request.app.state.worker.restart_run(run_id)
     async with db_engine.session_factory()() as s:
         run = (await s.execute(select(Run).where(Run.id == new_id))).scalar_one()
@@ -149,12 +180,43 @@ async def skip_task(run_id: str, task_id: str, request: Request):
 
 @router.post("/runs/import", status_code=201)
 async def import_run(file: UploadFile):
-    from app.results.import_run import import_zip
+    """Stream an uploaded export ZIP to a bounded temp file, then import it.
 
+    The body is never buffered whole in memory: it is copied to a temporary
+    file under `outputs/runs` in fixed-size chunks, enforcing the configured
+    upload ceiling as it goes. The temp file is always removed, and the
+    validated importer works entirely from a `Path`.
+    """
+    import os
+    import tempfile
+
+    from app.results.archive_safety import ArchiveSafetyError, ArchiveTooLarge
+    from app.results.import_run import ImportRejected, import_archive
+
+    settings = get_settings()
+    limits = settings.import_limits
+    runs_dir = settings.outputs_dir / "runs"
+    runs_dir.mkdir(parents=True, exist_ok=True)
+
+    fd, tmp_name = tempfile.mkstemp(prefix=".importing-upload-", suffix=".zip", dir=runs_dir)
+    tmp_path = Path(tmp_name)
     try:
-        run_id = await import_zip(await file.read())
-    except Exception as exc:
-        raise HTTPException(422, f"import failed: {exc}")
+        total = 0
+        with os.fdopen(fd, "wb") as buffer:
+            while chunk := await file.read(limits.chunk_bytes):
+                total += len(chunk)
+                if total > limits.max_upload_bytes:
+                    raise HTTPException(413, "uploaded archive exceeds the size limit")
+                buffer.write(chunk)
+        try:
+            run_id = await import_archive(tmp_path, limits=limits)
+        except ArchiveTooLarge as exc:
+            raise HTTPException(413, f"import rejected: {exc}") from exc
+        except (ImportRejected, ArchiveSafetyError) as exc:
+            raise HTTPException(422, f"import failed: {exc}") from exc
+    finally:
+        tmp_path.unlink(missing_ok=True)
+
     async with db_engine.session_factory()() as s:
         run = (await s.execute(select(Run).where(Run.id == run_id))).scalar_one()
         return await run_summary(run, s)
@@ -178,7 +240,6 @@ async def task_repo_state(run_id: str, task_id: str):
         "taskKey": task.task_key,
         "source": task.workspace.get("source"),
         "ref": task.workspace.get("ref"),
-        "workspacePath": str(workspace) if workspace else None,
         "live": bool(workspace and workspace.is_dir()),
     }
     if state["live"]:
@@ -192,7 +253,8 @@ async def task_repo_state(run_id: str, task_id: str):
         if meta.is_file():
             state.update(json.loads(meta.read_text(encoding="utf-8")))
             state["changedFiles"] = [{"status": "M", "path": p} for p in state.get("changedFiles", [])]
-    return state
+    settings = get_settings()
+    return public_data(state, (settings.data_dir, settings.outputs_dir))
 
 
 async def _run_task(run_id: str, task_id: str) -> RunTask:
@@ -211,7 +273,18 @@ def _task_dir(run_id: str, task_id: str) -> Path:
 def _safe_workspace_path(workspace: Path, rel: str) -> Path:
     """Anything served from a workspace must stay inside it, and never expose
     git internals — the tree hides `.git`, so the file endpoint must too."""
-    target = (workspace / rel).resolve()
+    if "\\" in rel or Path(rel).is_absolute() or ".." in Path(rel).parts:
+        raise HTTPException(400, "invalid repository-relative path")
+    lexical = workspace / rel
+    current = workspace
+    try:
+        for part in Path(rel).parts:
+            current = current / part
+            if current.is_symlink():
+                raise HTTPException(403, "symlinks are not browsable")
+    except OSError as exc:
+        raise HTTPException(404, "not found") from exc
+    target = lexical.resolve()
     root = workspace.resolve()
     if root != target and root not in target.parents:
         raise HTTPException(400, "path outside workspace")
@@ -260,7 +333,7 @@ async def task_tree(run_id: str, task_id: str, path: str = ""):
     def _listing():
         out = []
         for child in sorted(base.iterdir(), key=lambda c: (c.is_file(), c.name.lower())):
-            if child.name in _TREE_SKIP:
+            if child.name in _TREE_SKIP or child.is_symlink():
                 continue
             rel = child.relative_to(workspace).as_posix()
             out.append({"name": child.name, "path": rel, "dir": child.is_dir(),
@@ -296,22 +369,52 @@ async def task_file(run_id: str, task_id: str, path: str):
     return Response(content=await asyncio.to_thread(_read), media_type="text/plain; charset=utf-8")
 
 
+@router.get("/runs/{run_id}/tasks/{task_id}/artifacts")
+async def list_task_artifacts(run_id: str, task_id: str):
+    async with db_engine.session_factory()() as session:
+        try:
+            await owned_task(session, run_id, task_id)
+        except ArtifactNotFound as exc:
+            raise HTTPException(404, "unknown task") from exc
+    return {"artifacts": ref_dicts(task_artifact_refs(run_id, task_id))}
+
+
+@router.get("/runs/{run_id}/tasks/{task_id}/artifacts/{artifact_key}")
+async def task_artifact(
+    run_id: str,
+    task_id: str,
+    artifact_key: str,
+    download: bool = False,
+):
+    async with db_engine.session_factory()() as session:
+        try:
+            await owned_task(session, run_id, task_id)
+        except ArtifactNotFound as exc:
+            raise HTTPException(404, "unknown task") from exc
+    try:
+        artifact = resolve_task_artifact(run_id, task_id, artifact_key)
+    except ArtifactNotFound as exc:
+        raise HTTPException(404, "artifact unavailable") from exc
+    return artifact_response(artifact, download=download)
+
+
 @router.get("/runs/{run_id}/tasks/{task_id}/logs")
 async def task_eval_logs(run_id: str, task_id: str):
     """Build/test output, one entry per evaluation stage that produced any.
     This is the evidence behind a pass/fail — the raw mvn / pytest /
     RefactoringMiner output."""
-    eval_dir = get_settings().outputs_dir / "runs" / run_id / "tasks" / task_id / "eval"
-    if not eval_dir.is_dir():
-        return {"logs": []}
+    async with db_engine.session_factory()() as session:
+        try:
+            await owned_task(session, run_id, task_id)
+        except ArtifactNotFound as exc:
+            raise HTTPException(404, "unknown task") from exc
     logs = []
-    for path in sorted(eval_dir.glob("*.log")):
-        logs.append({
-            # stage names carry dots (swe.prepare_candidate); the file uses "_"
-            "stage": path.stem,
-            "path": str(path),
-            "sizeBytes": path.stat().st_size,
-        })
+    for ref in task_artifact_refs(run_id, task_id):
+        if not ref.key.startswith("eval-log:"):
+            continue
+        row = ref.model_dump(by_alias=True)
+        row["stage"] = ref.key.removeprefix("eval-log:")
+        logs.append(row)
     return {"logs": logs}
 
 
@@ -330,7 +433,20 @@ async def export_run(run_id: str):
     path = await build_zip(run_id)
     if path is None:
         raise HTTPException(404, "unknown run")
-    return FileResponse(path, media_type="application/zip", filename=f"run-{run_id}.zip")
+    return FileResponse(
+        path,
+        media_type="application/zip",
+        filename=f"run-{run_id}.zip",
+        background=BackgroundTask(_remove_export_archive, path),
+    )
+
+
+def _remove_export_archive(path: Path) -> None:
+    path.unlink(missing_ok=True)
+    try:
+        path.parent.rmdir()
+    except OSError:
+        pass
 
 
 @router.get("/runs/{run_id}/export.csv")

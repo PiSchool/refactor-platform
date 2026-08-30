@@ -1,0 +1,5 @@
+type: evaluation
+key: codebleu
+name: CodeBLEU similarity
+entrypoint: plugin:Plugin
+install: pip install codebleu

@@ -1,0 +1,45 @@
+name: Feature request
+description: Propose a focused improvement to the platform or plugin SDK
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What user or contributor problem needs solving?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe observable behavior rather than only implementation details.
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Dashboard
+        - Execution and workspaces
+        - Evaluation
+        - Results and exports
+        - Benchmark plugin
+        - Agent plugin
+        - Deployment and operations
+        - Documentation
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Architecture
+      options:
+        - label: I considered whether this can remain plugin-defined instead of adding benchmark/agent-specific logic to the core.
+          required: true

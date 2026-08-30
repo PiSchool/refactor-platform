@@ -1,0 +1,4 @@
+type: evaluation
+key: python_tests
+name: Python test file
+entrypoint: plugin:Plugin

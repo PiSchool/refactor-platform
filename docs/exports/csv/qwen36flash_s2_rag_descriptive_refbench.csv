@@ -1,0 +1,16 @@
+Run ID,benchmark_pipeline_20260611_164530
+Status,completed
+Model,qwen/qwen3.6-flash
+Datasets,refbench
+Setups,s2_rag_descriptive
+
+#,Task,Status,Input,Output,Cache,Time,Evals,Cmpct,Reqs,'+Lines,'-Lines,Files,Model,Build/Test,Model mismatch,Result,Checks,Reason,Build Log
+1,rename-send-from-directory,completed,217.4k,5.7k,'-,1m15s,0,0,12,6,6,5,yes,checked,no,PASSED,code=yes build=yes ast=- verified=yes,,
+TOT,,,217.4k,5.7k,'-,1m15s,0,0,12,,,,,,,,,,
+
+Summary,
+Total runs,1
+Passed,1
+Failed,0
+Timed out,0
+Success rate,100%

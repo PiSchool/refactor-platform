@@ -4,3 +4,9 @@ tasks:
     workspace: {type: snapshot, source: repo}
     instructions: "Append the line 'done' to target.py, then finish."
     params: {mode: base}
+  # Long enough for a browser test to press Stop while the agent is running.
+  - task_key: fixture-0002
+    title: Slow session
+    workspace: {type: snapshot, source: repo}
+    instructions: "Append the line 'done' to target.py, then finish."
+    params: {mode: base, sleepSeconds: 120}

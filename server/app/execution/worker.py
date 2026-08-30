@@ -5,6 +5,8 @@ delete) against the active run.
 from __future__ import annotations
 
 import asyncio
+import logging
+from contextlib import suppress
 
 from sqlalchemy import select
 
@@ -14,6 +16,11 @@ from app.db.models import Run, RunTask, TaskResult, new_id, utcnow
 from app.execution.pty_host import kill_pid_group
 from app.execution.taskloop import RunControl, execute_run
 from app.realtime.hub import Hub
+
+logger = logging.getLogger(__name__)
+
+# A run in one of these has finished; nothing will advance its tasks again.
+TERMINAL_RUN_STATUSES = ("completed", "failed", "stopped", "error")
 
 
 class Worker:
@@ -26,6 +33,9 @@ class Worker:
         self._running = False
 
     async def start(self) -> None:
+        # Worker is a process singleton, while tests and application reloads may
+        # give it a new event loop. Never reuse an Event bound to the old loop.
+        self._signal = asyncio.Event()
         self.hub.bind_loop(asyncio.get_running_loop())
         await self._reconcile_orphans()
         self._running = True
@@ -37,24 +47,39 @@ class Worker:
         behind them. Without this they stay 'running' in the UI forever."""
         async with db_engine.session_factory()() as s:
             runs = (await s.execute(select(Run).where(Run.status == "running"))).scalars().all()
-            if not runs:
-                return
             ids = [r.id for r in runs]
             for run in runs:
                 run.status = "error"
                 run.finished_at = utcnow()
-            tasks = (await s.execute(select(RunTask).where(
-                RunTask.run_id.in_(ids), RunTask.status == "running"))).scalars().all()
-            for rt in tasks:
-                rt.status = "error"
-                rt.finished_at = utcnow()
+            if ids:
+                tasks = (await s.execute(select(RunTask).where(
+                    RunTask.run_id.in_(ids), RunTask.status == "running"))).scalars().all()
+                for rt in tasks:
+                    rt.status = "error"
+                    rt.finished_at = utcnow()
+            # A run that ended while its tasks were still open leaves them with
+            # no process and no run to close them. They are unfinishable, and
+            # the dashboard would keep showing work in progress under a run that
+            # is over.
+            stranded = (await s.execute(
+                select(RunTask).join(Run, Run.id == RunTask.run_id).where(
+                    Run.status.in_(TERMINAL_RUN_STATUSES),
+                    RunTask.status.in_(("running", "pending"))))).scalars().all()
+            for rt in stranded:
+                rt.status = "error" if rt.status == "running" else "skipped"
+                rt.finished_at = rt.finished_at or utcnow()
             await s.commit()
 
     async def stop_worker(self) -> None:
         self._running = False
         self._signal.set()
-        if self._task:
-            self._task.cancel()
+        task = self._task
+        self._task = None
+        if task:
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
+        self._controls.clear()
 
     def enqueue(self, run_id: str) -> None:
         self._signal.set()
@@ -72,6 +97,7 @@ class Worker:
                 try:
                     await execute_run(run_id, self.registry, self.hub, control)
                 except Exception:
+                    logger.exception("run %s failed outside the per-task failure boundary", run_id)
                     await self._mark_failed(run_id)
                 finally:
                     self._controls.pop(run_id, None)
@@ -79,7 +105,7 @@ class Worker:
                         from app.results.retention import prune
                         await prune()
                     except Exception:
-                        pass
+                        logger.exception("artifact retention pass failed after run %s", run_id)
 
     async def _next_queued(self) -> str | None:
         async with db_engine.session_factory()() as s:
@@ -88,12 +114,26 @@ class Worker:
             return row.id if row else None
 
     async def _mark_failed(self, run_id: str) -> None:
+        """Close a run that died outside the per-task boundary.
+
+        Its in-flight task has no process behind it any more, so it is closed
+        with the run. Left as `running` the row survives until the next restart
+        reconciles it, and until then the dashboard shows work in progress that
+        will never finish and the task cannot be deleted.
+        """
         async with db_engine.session_factory()() as s:
             run = (await s.execute(select(Run).where(Run.id == run_id))).scalar_one_or_none()
-            if run and run.status == "running":
-                run.status = "failed"
-                run.finished_at = utcnow()
-                await s.commit()
+            if run is None or run.status != "running":
+                return
+            run.status = "failed"
+            run.finished_at = utcnow()
+            in_flight = (await s.execute(select(RunTask).where(
+                RunTask.run_id == run_id, RunTask.status.in_(("running", "pending"))))).scalars().all()
+            for rt in in_flight:
+                rt.status = "error" if rt.status == "running" else "skipped"
+                rt.finished_at = utcnow()
+            await s.commit()
+        self.hub.publish(f"run:{run_id}", "status", {"runStatus": "failed"})
 
     # ── lifecycle actions ────────────────────────────────────────────────
     async def stop_run(self, run_id: str) -> None:

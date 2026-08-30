@@ -1,0 +1,39 @@
+# RefactorBench S3 Multi-Agent (deepseek/deepseek-v4-pro)
+"# 19 never-passed tasks, descriptive mode"
+# Pattern: Supervisor -> Analyst -> Modifier -> Validator -> Fix cycle
+# Total: 1/19 passed (5.3%)
+# Run: benchmark_pipeline_20260616_052828 | Duration: 2h 8m
+# Revalidated: 5 tornado tasks re-tested after sys.path fix - all FAILED (model errors, not env)
+# 3 tornado tasks (global-objects, log-utils, option-parser-with-pretty-print) workspace cleaned, cannot revalidate
+
+#,Repo,TaskId,Passed,Duration(s),InputTok,OutputTok,CacheRead,Requests,APIDur(s),LinesAdd,LinesDel,FilesMod,FailReason
+1,ansible_refactor,new-utils-from-basic,False,531,963037,24649,645632,43,567,110,92,13,Apply failed - incomplete edits
+2,celery_refactor,annotation-utils,False,225,387382,9957,256000,25,248,12,7,3,Apply failed - missed import updates
+3,celery_refactor,combine-unpickle-task,False,213,488147,9881,79488,29,219,6,10,3,Apply failed - partial refactor
+4,django_refactor,add-log-parameter-constant-time-compare,False,350,488147,9881,79488,29,219,6,10,3,Test failed - missed call sites
+5,django_refactor,add-log-parameter-get-resolver,False,592,677835,18814,493952,28,348,21,15,7,Test failed - indentation error
+6,django_refactor,add-log-parameter-resolve-error-handler,False,469,328003,11155,12672,21,449,11,6,4,Test failed - missed call sites
+7,django_refactor,new-path-traversal-exception,False,604,1006414,20811,354304,39,585,26,19,5,Timeout - model looped
+8,flask_refactor,debughelpers-to-helpers.py,False,1,487349,7510,42446,33,231,32,0,1,Crash - used wrong model (openrouter/free)
+9,scrapy_refactor,new-verify-reactor-class,True,573,912508,30925,207104,41,557,54,52,6,PASSED
+10,scrapy_refactor,parameterize-gunzip,False,301,668853,13710,160512,35,297,22,16,5,Test failed - wrong parameter name
+11,tornado_refactor,global-objects,False,292,416505,13498,90112,23,279,46,25,4,Test failed (revalidation: workspace cleaned)
+12,tornado_refactor,log-utils,False,333,431411,13199,98816,22,319,155,131,4,Test failed (revalidation: workspace cleaned)
+13,tornado_refactor,option-parser-with-pretty-print,False,604,904055,20540,259200,39,590,53,55,3,Test failed (revalidation: workspace cleaned)
+14,tornado_refactor,options-utils,False,605,1266735,26832,821376,42,573,145,114,28,Test failed (revalidation: workspace cleaned)
+15,tornado_refactor,remove-locale-data,False,249,496361,7832,196480,23,232,64,1,1,Test failed - 2/3 assertions wrong (revalidated)
+16,tornado_refactor,rename-http1connection,False,320,352934,14296,150144,23,302,12,12,5,Test failed - 6/6 assertions wrong (revalidated)
+17,tornado_refactor,rename-to-camel-case,False,204,337589,7979,214528,21,205,8,8,2,Test failed - 4/4 assertions wrong (revalidated)
+18,tornado_refactor,resolvers-as-separate,False,604,760586,27196,401280,34,635,301,277,2,Test failed - 18/18 assertions wrong (revalidated)
+19,tornado_refactor,tcpclient-connect-params,False,604,747473,17098,404608,30,562,80,41,5,Test failed - 6/6 assertions wrong (revalidated)
+
+SUMMARY
+Passed,1/19 (5.3%)
+Model failure (all),18/19 (94.7%)
+Total input tokens,12121924
+Total output tokens,305763
+Total cache read tokens,4968148
+Total requests,580
+Total API duration (s),7417
+Avg input tokens per task,638206
+Avg output tokens per task,16093

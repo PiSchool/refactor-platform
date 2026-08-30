@@ -1,0 +1,4 @@
+type: evaluation
+key: java_build
+name: Java build and test
+entrypoint: plugin:Plugin

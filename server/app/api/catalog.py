@@ -3,7 +3,7 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException, Request
 from sqlalchemy import func, select
 
-from app.catalog.bootstrap import data_state
+from app.catalog.bootstrap import bootstrap_error, data_state
 from app.db import engine as db_engine
 from app.db.models import AgentTool, Benchmark, Task
 from app.execution.setups import SETUPS
@@ -26,20 +26,26 @@ async def catalog(request: Request):
             state = data_state(loaded) if loaded else row.data_state
             benchmarks.append({
                 "id": row.id, "key": row.key, "name": row.name, "language": row.language,
-                "taskCount": count, "dataState": state, "dataDetail": row.data_detail,
+                "taskCount": count, "dataState": state,
+                "dataDetail": bootstrap_error(loaded) if loaded else row.data_detail,
                 "facets": row.manifest.get("facets", []),
                 "setups": row.manifest.get("setups", list(SETUPS)),
             })
         agents = []
         for row in (await s.execute(select(AgentTool))).scalars():
             loaded = reg.agents.get(row.key)
+            if loaded is None:
+                continue  # a plugin that was removed; don't offer an agent that can't run
             agents.append({
                 "id": row.id, "key": row.key, "name": row.name,
-                "models": row.manifest.get("models", []),
-                "capabilities": loaded.impl.capabilities if loaded else {},
+                "capabilities": loaded.impl.capabilities,
+                "binary": loaded.manifest.binary,
+                "available": loaded.available,
+                "install": loaded.manifest.install,
             })
     setups = [{"key": k, "name": v.name, "description": v.description,
-               "capabilities": {"lsp": v.lsp, "eval_tool": v.eval_tool, "subagents": v.subagents}}
+               "capabilities": {"lsp": v.lsp, "eval_tool": v.eval_tool,
+                                "subagents": v.subagents, "retrieval": bool(v.retrieval)}}
               for k, v in SETUPS.items()]
     return {"benchmarks": benchmarks, "agents": agents, "setups": setups}
 

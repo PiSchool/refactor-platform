@@ -1,5 +1,6 @@
-"""The four platform-defined setups. Plugins declare compatibility only;
-they never define setups.
+"""The platform-defined setups: six that can be launched, and `s3_cao`, which
+exists so the study's multi-agent runs can be imported and reviewed. Plugins
+declare compatibility only; they never define setups.
 """
 from __future__ import annotations
 
@@ -24,14 +25,21 @@ diagnostics — before you finish. Include the operation and its arguments in th
 same command; do not run a bare `/lsp`.
 """.strip()
 
-_EVAL_PROMPT = """
-## Self-check tool available
+_RAG_PROMPT = """
+## Code retrieval
 
-A script `eval.sh` is present in your working directory. Run `bash eval.sh`
-at any point to check your work against the benchmark's automated checks; it
-prints PASS or a FAILED stage with guidance. Iterate — fix and re-run — until
-it prints PASS or you have exhausted your attempts. Do not read or modify
-`eval.sh` itself.
+Relevant repository context is included with this task. Verify it against the
+workspace before editing. If you need more context, use the read-only
+`search_codebase`, `search_file`, or `list_indexed_files` tools.
+""".strip()
+
+_EVAL_PROMPT = """
+## Mandatory self-check
+
+Before your final response, you MUST run `bash eval.sh` at least once. A session
+that never invokes this command is invalid for this setup. Use the reported
+stage, reason, and guidance to fix failures and re-run until it prints PASS or
+you exhaust the allowed attempts. Do not read or modify `eval.sh` itself.
 """.strip()
 
 SETUPS: dict[str, SetupProfile] = {
@@ -43,9 +51,24 @@ SETUPS: dict[str, SetupProfile] = {
     "s1_eval": SetupProfile(key="s1_eval", name="Single agent + eval tool",
                             description="Single agent with an in-session self-check tool.",
                             eval_tool=True, prompt_block=_EVAL_PROMPT),
+    "s2_rag_naive": SetupProfile(key="s2_rag_naive", name="Single agent + naive RAG",
+                                 description="Single agent with hybrid retrieval over fixed line windows.",
+                                 retrieval="naive", prompt_block=_RAG_PROMPT),
+    "s2_rag_ast": SetupProfile(key="s2_rag_ast", name="Single agent + AST RAG",
+                               description="Single agent with hybrid retrieval over AST definitions.",
+                               retrieval="ast", prompt_block=_RAG_PROMPT),
     "s3": SetupProfile(key="s3", name="Native sub-agents",
                        description="Single session; the agent may spawn native sub-agents.",
                        subagents=True, prompt_block=_S3_PROMPT),
+}
+
+ARCHIVE_SETUPS: dict[str, SetupProfile] = {
+    "s3_cao": SetupProfile(
+        key="s3_cao",
+        name="CAO multi-agent",
+        description="Historical CLI Agent Orchestrator study setup; import and review only.",
+        archived_only=True,
+    ),
 }
 
 

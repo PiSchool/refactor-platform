@@ -2,10 +2,11 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Activity, Plus } from 'lucide-react';
+import { Activity } from 'lucide-react';
 import { useOverview, useRunAction } from '@/lib/api';
 import { Btn, Card, LiveDot, SkeletonCard, StatusIcon, EmptyState } from '@/components/ui';
 import { RunWizard } from '@/components/run-wizard';
+import { NewRunButton } from '@/components/run-management-actions';
 import { formatRelative, runOutcome } from '@/lib/utils';
 import type { RunSummary } from '@/lib/types';
 
@@ -25,16 +26,15 @@ export default function OverviewPage() {
           <Activity className="h-5 w-5 text-fg-muted" />
           <h1 className="text-lg font-semibold text-fg">Workflows</h1>
         </div>
-        <Btn variant="primary" size="md" icon={<Plus className="h-4 w-4" />} onClick={() => setWizard(true)}>
-          New run
-        </Btn>
+        <NewRunButton onClick={() => setWizard(true)} />
       </div>
 
       {isLoading ? (
         <SkeletonCard rows={4} />
       ) : !data || data.runsTotal === 0 ? (
-        <EmptyState title="No runs yet" description="Launch a benchmark run to get started."
-          action={<Btn variant="primary" icon={<Plus className="h-4 w-4" />} onClick={() => setWizard(true)}>New run</Btn>} />
+        <EmptyState title="No runs yet"
+          description="Launch a benchmark run to get started."
+          action={<NewRunButton onClick={() => setWizard(true)} />} />
       ) : (
         <>
           <div className="flex items-center gap-4 text-sm text-fg-muted">

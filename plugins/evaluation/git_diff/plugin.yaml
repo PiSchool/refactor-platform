@@ -1,0 +1,4 @@
+type: evaluation
+key: git_diff
+name: Workspace diff
+entrypoint: plugin:Plugin

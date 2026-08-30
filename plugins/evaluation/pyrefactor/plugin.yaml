@@ -1,0 +1,4 @@
+type: evaluation
+key: pyrefactor
+name: Python refactoring detection
+entrypoint: plugin:Plugin

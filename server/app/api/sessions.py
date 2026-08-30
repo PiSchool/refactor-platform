@@ -1,63 +1,45 @@
-"""Session artifacts.
-
-These read files that reach tens of megabytes (terminal.log, diffs). The reads
-are pushed off the event loop — doing them inline stalled every other request,
-which surfaced in the browser as `socket hang up`.
-"""
+"""Identity-scoped session evidence."""
 from __future__ import annotations
 
-import asyncio
-from pathlib import Path
-
 from fastapi import APIRouter, HTTPException
-from fastapi.responses import PlainTextResponse
-from sqlalchemy import select
 
-from app.config import get_settings
+from app.api.evidence import artifact_response
 from app.db import engine as db_engine
-from app.db.models import AgentSession
+from app.results.artifacts import (
+    ArtifactNotFound,
+    owned_session,
+    ref_dicts,
+    resolve_session_artifact,
+    session_artifact_refs,
+)
 
 router = APIRouter(prefix="/api")
 
-_TEXT = "text/plain; charset=utf-8"
+async def _owned(run_id: str, task_id: str, session_id: str):
+    async with db_engine.session_factory()() as db:
+        try:
+            return await owned_session(db, run_id, task_id, session_id)
+        except ArtifactNotFound as exc:
+            raise HTTPException(404, "unknown session") from exc
 
 
-def _read(path: Path | None) -> str:
-    if not path or not path.is_file():
-        return ""
-    return path.read_bytes().decode("utf-8", errors="replace")
+@router.get("/runs/{run_id}/tasks/{task_id}/sessions/{session_id}/artifacts")
+async def list_session_artifacts(run_id: str, task_id: str, session_id: str):
+    session = await _owned(run_id, task_id, session_id)
+    return {"artifacts": ref_dicts(session_artifact_refs(run_id, task_id, session))}
 
 
-@router.get("/artifact")
-def artifact(path: str):
-    """Serve a persisted artifact by path, guarded to the outputs directory.
-    Declared `def` so FastAPI runs it in its threadpool."""
-    outputs = get_settings().outputs_dir.resolve()
-    p = Path(path).resolve()
-    if outputs not in p.parents:
-        raise HTTPException(403, "path outside outputs")
-    if not p.is_file():
-        raise HTTPException(404, "not found")
-    return PlainTextResponse(p.read_text(encoding="utf-8", errors="replace"), media_type=_TEXT)
-
-
-async def _session(session_id: str) -> AgentSession:
-    async with db_engine.session_factory()() as s:
-        sess = (await s.execute(select(AgentSession).where(AgentSession.id == session_id))).scalar_one_or_none()
-        if sess is None:
-            raise HTTPException(404, "unknown session")
-        return sess
-
-
-@router.get("/sessions/{session_id}/terminal-log")
-async def terminal_log(session_id: str):
-    sess = await _session(session_id)
-    path = Path(sess.terminal_path) if sess.terminal_path else None
-    return PlainTextResponse(await asyncio.to_thread(_read, path), media_type=_TEXT)
-
-
-@router.get("/sessions/{session_id}/transcript")
-async def transcript(session_id: str):
-    sess = await _session(session_id)
-    path = Path(sess.terminal_path).parent / "transcript.txt" if sess.terminal_path else None
-    return PlainTextResponse(await asyncio.to_thread(_read, path), media_type=_TEXT)
+@router.get("/runs/{run_id}/tasks/{task_id}/sessions/{session_id}/artifacts/{artifact_key}")
+async def session_artifact(
+    run_id: str,
+    task_id: str,
+    session_id: str,
+    artifact_key: str,
+    download: bool = False,
+):
+    session = await _owned(run_id, task_id, session_id)
+    try:
+        artifact = resolve_session_artifact(run_id, task_id, session, artifact_key)
+    except ArtifactNotFound as exc:
+        raise HTTPException(404, "artifact unavailable") from exc
+    return artifact_response(artifact, download=download)

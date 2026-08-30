@@ -1,9 +1,15 @@
-"""Compose a benchmark's capture + verify pipeline over a shared EvalContext.
+"""Score one finished task: prepare, record, gate, decide.
 
-Stage resolution: a name containing '.' is a plugin-defined stage
-(benchmark.hooks.stages()); otherwise a core preset. `passed` is a boolean
-expression over verify-stage names. A plugin may override the whole thing with
-a Python evaluate().
+The pipeline is what the benchmark's manifest says it is:
+
+    prepare   the benchmark's own hook, when it declares one, publishing what its
+              metrics need through `ctx.shared`
+    capture   metrics that record numbers and evidence
+    verify    metrics that can fail, in order
+    verdict   a boolean expression over the verify stages
+
+Every metric named in the manifest is an evaluation plugin, resolved by id. A
+plugin may replace the whole thing with its own `evaluate()`.
 """
 from __future__ import annotations
 
@@ -11,18 +17,15 @@ from pathlib import Path
 
 from app.catalog.sdk import EvalContext, EvalOutcome, StageResult
 from app.evaluation import expressions
-from app.evaluation.presets import CORE_PRESETS, REASON_BY_STAGE
+from app.evaluation import registry
 
-
-def _resolve_stage(name: str, hooks):
-    if "." in name:
-        stages = hooks.stages()
-        if name not in stages:
-            raise KeyError(f"plugin stage not registered: {name}")
-        return stages[name], True
-    if name not in CORE_PRESETS:
-        raise KeyError(f"unknown preset: {name}")
-    return CORE_PRESETS[name].run, False
+def _metric(name: str) -> registry.Metric:
+    metric = registry.get(name)
+    if metric is None:
+        raise KeyError(
+            f"no metric {name!r} is installed; metrics live in plugins/evaluation/"
+        )
+    return metric
 
 
 def _write_log(ctx: EvalContext, res: StageResult) -> None:
@@ -36,9 +39,10 @@ def _write_log(ctx: EvalContext, res: StageResult) -> None:
 def effective_pipeline(ev, override: dict | None) -> tuple[list[tuple[str, dict]], str]:
     """The shipped verify pipeline with the operator's Settings edits applied.
 
-    An override may retune a stage's `config`, disable a stage, or replace the
-    `passed` expression. Stages the plugin does not ship are ignored — the
-    manifest stays the source of truth for *what can* run.
+    An override may retune a stage's options, switch a stage off, add a metric the
+    benchmark does not ship, or replace the verdict rule. A stage naming a metric
+    this deployment does not have is dropped: an override outlives the plugin it
+    was written against, and a stale one must not fail every task in a run.
     """
     shipped = [(s.preset, dict(s.config)) for s in ev.verify]
     passed = ev.passed
@@ -55,6 +59,15 @@ def effective_pipeline(ev, override: dict | None) -> tuple[list[tuple[str, dict]
         if edit.get("enabled") is False:
             continue
         out.append((preset, {**config, **(edit.get("config") or {})}))
+
+    known = {preset for preset, _ in shipped}
+    for stage in override.get("verify", []):
+        preset = stage.get("preset")
+        if not preset or preset in known or stage.get("enabled") is False:
+            continue
+        if registry.get(preset) is None:
+            continue
+        out.append((preset, dict(stage.get("config") or {})))
     return out, (override.get("passed") or passed)
 
 
@@ -69,11 +82,25 @@ def evaluate(loaded, ctx: EvalContext, override: dict | None = None) -> EvalOutc
     stages: list[StageResult] = []
     metrics: dict = {}
     details: dict = {}
+    first_fail: StageResult | None = None
+
+    # prepare — one step, before anything measures, publishing what the metrics
+    # read from ctx.shared. Recorded like a stage so a failed preparation is
+    # visible, but it decides no verdict of its own.
+    if ev.prepare:
+        prepared = loaded.hooks.prepare(ctx)
+        if prepared is not None:
+            prepared.name = ev.prepare
+            stages.append(prepared)
+            details[prepared.name] = {"ok": prepared.ok, "message": prepared.message,
+                                      **(prepared.outputs or {})}
+            _write_log(ctx, prepared)
+            if not prepared.ok:
+                first_fail = prepared
 
     # capture
-    for name in ev.capture:
-        fn, _ = _resolve_stage(name, loaded.hooks)
-        res = fn(ctx, {} if name != "file_artifact" else _artifact_cfg(ev))
+    for stage in ev.capture:
+        res = _metric(stage.preset).measure(ctx, stage.config)
         stages.append(res)
         metrics.update(res.outputs)
         _write_log(ctx, res)
@@ -81,10 +108,8 @@ def evaluate(loaded, ctx: EvalContext, override: dict | None = None) -> EvalOutc
     # verify
     verify, passed_expr = effective_pipeline(ev, override)
     stage_pass: dict[str, bool] = {}
-    first_fail: StageResult | None = None
     for preset, config in verify:
-        fn, _is_plugin = _resolve_stage(preset, loaded.hooks)
-        res = fn(ctx, config)
+        res = _metric(preset).measure(ctx, config)
         stages.append(res)
         stage_pass[res.name] = res.ok
         # a stage's outputs (test counts, applied files, …) belong with its
@@ -97,12 +122,20 @@ def evaluate(loaded, ctx: EvalContext, override: dict | None = None) -> EvalOutc
     passed = expressions.evaluate(passed_expr, stage_pass)
     reason = ""
     if not passed and first_fail is not None:
-        reason = first_fail.reason or REASON_BY_STAGE.get(first_fail.name, "unknown")
+        reason = (
+            first_fail.reason
+            or registry.reason_for(first_fail.name)
+            or "unknown"
+        )
     # session-level failure flags override the reason
     if ctx.session and ctx.session.flags:
-        reason = _flag_reason(ctx.session.flags) or reason
-        if reason in ("provider_error", "model_mismatch"):
-            passed = False
+        flagged = _flag_reason(ctx.session.flags)
+        if flagged in ("provider_error", "model_mismatch"):
+            passed, reason = False, flagged
+        elif flagged and not passed:
+            # the stage that failed is the symptom: an agent that ran out of
+            # context left nothing to apply, and `apply_failed` hides why
+            reason = flagged
 
     return EvalOutcome(passed=passed, reason=reason, metrics=metrics, details=details, stages=stages)
 
@@ -112,21 +145,18 @@ def _flag_reason(flags: set[str]) -> str:
         return "model_mismatch"
     if flags & {"auth_wall", "transport_error", "rate_limited"}:
         return "provider_error"
+    if "context_limit" in flags:
+        # the request was served; the model had no room left to answer in
+        return "context_limit"
     return ""
-
-
-def _artifact_cfg(ev) -> dict:
-    if ev.artifact is None:
-        return {}
-    return {"path": ev.artifact.path}
 
 
 def seed_artifacts(loaded, workspace: Path, task) -> None:
     """Seed a templated output artifact before the agent runs (file_artifact)."""
     ev = loaded.manifest.evaluation
-    if "file_artifact" not in ev.capture or ev.artifact is None or not ev.artifact.seed:
+    if "file_artifact" not in ev.capture_ids or ev.artifact is None or not ev.artifact.seed:
         return
-    from app.evaluation.render import render
+    from app.catalog.templating import render
     rel = render(ev.artifact.path, task)
     dest = workspace / rel
     dest.parent.mkdir(parents=True, exist_ok=True)

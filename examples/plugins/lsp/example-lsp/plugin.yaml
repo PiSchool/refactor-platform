@@ -1,0 +1,5 @@
+type: lsp
+key: example-lsp              # the directory name
+name: Example Language Server
+language: python              # tasks in this language may be offered it
+entrypoint: plugin:Plugin

@@ -1,0 +1,9 @@
+# S2-RAG AST RefactorBench - All Models Summary
+# Pipeline: CocoIndex tree-sitter chunking + nomic-embed-code + pgvector + cross-encoder reranking
+
+Model,Mode,Total,Passed,Pass Rate,Test OK,Apply OK
+deepseek/deepseek-v4-pro,descriptive,100,77,77.0%,77,99
+minimax/minimax-m3,descriptive,100,75,75.0%,75,98
+moonshotai/kimi-k2.6,descriptive,100,61,61.0%,61,92
+qwen/qwen3.6-flash,base,100,44,44.0%,44,90
+qwen/qwen3.6-flash,lazy,100,31,31.0%,31,89

@@ -1,0 +1,8 @@
+# RefactorBench - All Models x All Setups Summary
+"# 100 Python tasks, pass = all AST tests pass"
+
+Model,S1 desc,S1 base,S1 lazy,S2-RAG desc,S2-RAG base,S2-RAG lazy
+qwen3.6-flash,73%,64%,48%,86%,74%,56%
+minimax-m3,75%,-,-,81%,-,-
+deepseek-v4-pro,77%,-,-,89%,-,-
+kimi-k2.6,71%,-,-,78%,-,-

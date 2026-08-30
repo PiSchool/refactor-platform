@@ -1,0 +1,598 @@
+{
+  "rates": {
+    "S1 base +LSP": {
+      "passed": 64,
+      "total": 100,
+      "rate": 64.0,
+      "ci95": [
+        54.2,
+        72.7
+      ]
+    },
+    "S1 descriptive +LSP": {
+      "passed": 73,
+      "total": 100,
+      "rate": 73.0,
+      "ci95": [
+        63.6,
+        80.7
+      ]
+    },
+    "S1 lazy +LSP": {
+      "passed": 48,
+      "total": 100,
+      "rate": 48.0,
+      "ci95": [
+        38.5,
+        57.7
+      ]
+    },
+    "S1 lazy -LSP": {
+      "passed": 44,
+      "total": 100,
+      "rate": 44.0,
+      "ci95": [
+        34.7,
+        53.8
+      ]
+    },
+    "S2-AST base": {
+      "passed": 74,
+      "total": 100,
+      "rate": 74.0,
+      "ci95": [
+        64.6,
+        81.6
+      ]
+    },
+    "S2-AST descriptive": {
+      "passed": 86,
+      "total": 100,
+      "rate": 86.0,
+      "ci95": [
+        77.9,
+        91.5
+      ]
+    },
+    "S2-AST lazy": {
+      "passed": 56,
+      "total": 100,
+      "rate": 56.0,
+      "ci95": [
+        46.2,
+        65.3
+      ]
+    },
+    "S2-naive base": {
+      "passed": 44,
+      "total": 100,
+      "rate": 44.0,
+      "ci95": [
+        34.7,
+        53.8
+      ]
+    },
+    "S2-naive descriptive": {
+      "passed": 57,
+      "total": 100,
+      "rate": 57.0,
+      "ci95": [
+        47.2,
+        66.3
+      ]
+    },
+    "S2-naive lazy": {
+      "passed": 31,
+      "total": 100,
+      "rate": 31.0,
+      "ci95": [
+        22.8,
+        40.6
+      ]
+    },
+    "S3 CAO base": {
+      "passed": 46,
+      "total": 100,
+      "rate": 46.0,
+      "ci95": [
+        36.6,
+        55.7
+      ]
+    },
+    "S3 native descriptive (full 100)": {
+      "passed": 66,
+      "total": 100,
+      "rate": 66.0,
+      "ci95": [
+        56.3,
+        74.5
+      ]
+    },
+    "S3 sub-agents descriptive (all dispatched)": {
+      "passed": 20,
+      "total": 100,
+      "rate": 20.0,
+      "ci95": [
+        13.3,
+        28.9
+      ]
+    },
+    "S3 sub-agents descriptive (executed)": {
+      "passed": 20,
+      "total": 26,
+      "rate": 76.9,
+      "ci95": [
+        57.9,
+        89.0
+      ]
+    },
+    "deepseek-v4-pro S1": {
+      "passed": 77,
+      "total": 100,
+      "rate": 77.0,
+      "ci95": [
+        67.8,
+        84.2
+      ]
+    },
+    "deepseek-v4-pro S2-AST": {
+      "passed": 89,
+      "total": 100,
+      "rate": 89.0,
+      "ci95": [
+        81.4,
+        93.7
+      ]
+    },
+    "gpt-5-mini S1 (SWE)": {
+      "passed": 15,
+      "total": 75,
+      "rate": 20.0,
+      "ci95": [
+        12.5,
+        30.4
+      ]
+    },
+    "gpt-5-mini S1-eval (SWE)": {
+      "passed": 28,
+      "total": 33,
+      "rate": 84.8,
+      "ci95": [
+        69.1,
+        93.3
+      ]
+    },
+    "kimi-k2.6 S1": {
+      "passed": 61,
+      "total": 100,
+      "rate": 61.0,
+      "ci95": [
+        51.2,
+        70.0
+      ]
+    },
+    "kimi-k2.6 S2-AST": {
+      "passed": 78,
+      "total": 100,
+      "rate": 78.0,
+      "ci95": [
+        68.9,
+        85.0
+      ]
+    },
+    "minimax-m3 S1": {
+      "passed": 75,
+      "total": 100,
+      "rate": 75.0,
+      "ci95": [
+        65.7,
+        82.5
+      ]
+    },
+    "minimax-m3 S1 (SWE)": {
+      "passed": 52,
+      "total": 177,
+      "rate": 29.4,
+      "ci95": [
+        23.2,
+        36.5
+      ]
+    },
+    "minimax-m3 S2-AST": {
+      "passed": 81,
+      "total": 100,
+      "rate": 81.0,
+      "ci95": [
+        72.2,
+        87.5
+      ]
+    },
+    "qwen3.6-flash S1": {
+      "passed": 73,
+      "total": 100,
+      "rate": 73.0,
+      "ci95": [
+        63.6,
+        80.7
+      ]
+    },
+    "qwen3.6-flash S2-AST": {
+      "passed": 86,
+      "total": 100,
+      "rate": 86.0,
+      "ci95": [
+        77.9,
+        91.5
+      ]
+    }
+  },
+  "comparisons": [
+    {
+      "comparison": "AST vs naive chunking (descriptive)",
+      "a": "S2-AST descriptive",
+      "b": "S2-naive descriptive",
+      "rate_a_on_shared": 86.0,
+      "rate_b_on_shared": 57.0,
+      "delta_pp": 29.0,
+      "delta_ci95": [
+        20.0,
+        38.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 30,
+      "discordant_b_only": 1,
+      "p_value": 2.9802322387695312e-08,
+      "p_holm": 5.662441253662109e-07,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "AST vs naive chunking (base)",
+      "a": "S2-AST base",
+      "b": "S2-naive base",
+      "rate_a_on_shared": 74.0,
+      "rate_b_on_shared": 44.0,
+      "delta_pp": 30.0,
+      "delta_ci95": [
+        20.0,
+        40.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 32,
+      "discordant_b_only": 2,
+      "p_value": 6.938353180885315e-08,
+      "p_holm": 1.2489035725593567e-06,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "AST vs naive chunking (lazy)",
+      "a": "S2-AST lazy",
+      "b": "S2-naive lazy",
+      "rate_a_on_shared": 56.0,
+      "rate_b_on_shared": 31.0,
+      "delta_pp": 25.0,
+      "delta_ci95": [
+        16.0,
+        34.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 27,
+      "discordant_b_only": 2,
+      "p_value": 1.6242265701293945e-06,
+      "p_holm": 2.5987625122070312e-05,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "S2-AST vs S1 (descriptive)",
+      "a": "S2-AST descriptive",
+      "b": "S1 descriptive +LSP",
+      "rate_a_on_shared": 86.0,
+      "rate_b_on_shared": 73.0,
+      "delta_pp": 13.0,
+      "delta_ci95": [
+        7.0,
+        20.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 13,
+      "discordant_b_only": 0,
+      "p_value": 0.000244140625,
+      "p_holm": 0.003173828125,
+      "significance_holm": "**"
+    },
+    {
+      "comparison": "S2-AST vs S1 (base)",
+      "a": "S2-AST base",
+      "b": "S1 base +LSP",
+      "rate_a_on_shared": 74.0,
+      "rate_b_on_shared": 64.0,
+      "delta_pp": 10.0,
+      "delta_ci95": [
+        2.0,
+        19.0
+      ],
+      "significance": "*",
+      "n_paired": 100,
+      "discordant_a_only": 15,
+      "discordant_b_only": 5,
+      "p_value": 0.04138946533203125,
+      "p_holm": 0.2483367919921875,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S2-AST vs S1 (lazy)",
+      "a": "S2-AST lazy",
+      "b": "S1 lazy +LSP",
+      "rate_a_on_shared": 56.0,
+      "rate_b_on_shared": 48.0,
+      "delta_pp": 8.0,
+      "delta_ci95": [
+        -1.0,
+        17.0
+      ],
+      "significance": "n.s.",
+      "n_paired": 100,
+      "discordant_a_only": 14,
+      "discordant_b_only": 6,
+      "p_value": 0.11531829833984375,
+      "p_holm": 0.5765914916992188,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S2-naive vs S1 (descriptive)",
+      "a": "S2-naive descriptive",
+      "b": "S1 descriptive +LSP",
+      "rate_a_on_shared": 57.0,
+      "rate_b_on_shared": 73.0,
+      "delta_pp": -16.0,
+      "delta_ci95": [
+        -27.0,
+        -5.0
+      ],
+      "significance": "**",
+      "n_paired": 100,
+      "discordant_a_only": 8,
+      "discordant_b_only": 24,
+      "p_value": 0.0070003666914999485,
+      "p_holm": 0.05600293353199959,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "LSP on vs off (lazy)",
+      "a": "S1 lazy +LSP",
+      "b": "S1 lazy -LSP",
+      "rate_a_on_shared": 48.0,
+      "rate_b_on_shared": 44.0,
+      "delta_pp": 4.0,
+      "delta_ci95": [
+        -5.0,
+        13.0
+      ],
+      "significance": "n.s.",
+      "n_paired": 100,
+      "discordant_a_only": 13,
+      "discordant_b_only": 9,
+      "p_value": 0.5234670639038086,
+      "p_holm": 1.0,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S2-AST vs S3 native (full 100)",
+      "a": "S2-AST descriptive",
+      "b": "S3 native descriptive (full 100)",
+      "rate_a_on_shared": 86.0,
+      "rate_b_on_shared": 66.0,
+      "delta_pp": 20.0,
+      "delta_ci95": [
+        12.0,
+        28.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 20,
+      "discordant_b_only": 0,
+      "p_value": 1.9073486328125e-06,
+      "p_holm": 2.86102294921875e-05,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "S1 vs S3 native (full 100)",
+      "a": "S1 descriptive +LSP",
+      "b": "S3 native descriptive (full 100)",
+      "rate_a_on_shared": 73.0,
+      "rate_b_on_shared": 66.0,
+      "delta_pp": 7.0,
+      "delta_ci95": [
+        0.0,
+        15.0
+      ],
+      "significance": "n.s.",
+      "n_paired": 100,
+      "discordant_a_only": 11,
+      "discordant_b_only": 4,
+      "p_value": 0.11846923828125,
+      "p_holm": 0.5765914916992188,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S2-AST vs S3 sub-agents (matched 26, superseded)",
+      "a": "S2-AST descriptive",
+      "b": "S3 sub-agents descriptive (executed)",
+      "rate_a_on_shared": 80.8,
+      "rate_b_on_shared": 76.9,
+      "delta_pp": 3.8,
+      "delta_ci95": [
+        0.0,
+        11.5
+      ],
+      "significance": "n.s.",
+      "n_paired": 26,
+      "discordant_a_only": 1,
+      "discordant_b_only": 0,
+      "p_value": 1.0,
+      "p_holm": 1.0,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S1 vs S3 sub-agents (matched 26, superseded)",
+      "a": "S1 descriptive +LSP",
+      "b": "S3 sub-agents descriptive (executed)",
+      "rate_a_on_shared": 73.1,
+      "rate_b_on_shared": 76.9,
+      "delta_pp": -3.8,
+      "delta_ci95": [
+        -11.5,
+        0.0
+      ],
+      "significance": "n.s.",
+      "n_paired": 26,
+      "discordant_a_only": 0,
+      "discordant_b_only": 1,
+      "p_value": 1.0,
+      "p_holm": 1.0,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "S2-AST vs S3 CAO (base, full 100)",
+      "a": "S2-AST base",
+      "b": "S3 CAO base",
+      "rate_a_on_shared": 74.0,
+      "rate_b_on_shared": 46.0,
+      "delta_pp": 28.0,
+      "delta_ci95": [
+        18.0,
+        38.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 31,
+      "discordant_b_only": 3,
+      "p_value": 7.660128176212311e-07,
+      "p_holm": 1.3022217899560928e-05,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "S1 vs S3 CAO (base, full 100)",
+      "a": "S1 base +LSP",
+      "b": "S3 CAO base",
+      "rate_a_on_shared": 64.0,
+      "rate_b_on_shared": 46.0,
+      "delta_pp": 18.0,
+      "delta_ci95": [
+        9.0,
+        27.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 22,
+      "discordant_b_only": 4,
+      "p_value": 0.0005335211753845215,
+      "p_holm": 0.00537109375,
+      "significance_holm": "**"
+    },
+    {
+      "comparison": "deepseek-v4-pro S2 vs S1",
+      "a": "deepseek-v4-pro S2-AST",
+      "b": "deepseek-v4-pro S1",
+      "rate_a_on_shared": 89.0,
+      "rate_b_on_shared": 77.0,
+      "delta_pp": 12.0,
+      "delta_ci95": [
+        6.0,
+        19.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 12,
+      "discordant_b_only": 0,
+      "p_value": 0.00048828125,
+      "p_holm": 0.00537109375,
+      "significance_holm": "**"
+    },
+    {
+      "comparison": "minimax-m3 S2 vs S1",
+      "a": "minimax-m3 S2-AST",
+      "b": "minimax-m3 S1",
+      "rate_a_on_shared": 81.0,
+      "rate_b_on_shared": 75.0,
+      "delta_pp": 6.0,
+      "delta_ci95": [
+        2.0,
+        11.0
+      ],
+      "significance": "*",
+      "n_paired": 100,
+      "discordant_a_only": 6,
+      "discordant_b_only": 0,
+      "p_value": 0.03125,
+      "p_holm": 0.21875,
+      "significance_holm": "n.s."
+    },
+    {
+      "comparison": "kimi-k2.6 S2 vs S1",
+      "a": "kimi-k2.6 S2-AST",
+      "b": "kimi-k2.6 S1",
+      "rate_a_on_shared": 78.0,
+      "rate_b_on_shared": 61.0,
+      "delta_pp": 17.0,
+      "delta_ci95": [
+        10.0,
+        25.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 17,
+      "discordant_b_only": 0,
+      "p_value": 1.52587890625e-05,
+      "p_holm": 0.000213623046875,
+      "significance_holm": "***"
+    },
+    {
+      "comparison": "qwen3.6-flash S2 vs S1",
+      "a": "qwen3.6-flash S2-AST",
+      "b": "qwen3.6-flash S1",
+      "rate_a_on_shared": 86.0,
+      "rate_b_on_shared": 73.0,
+      "delta_pp": 13.0,
+      "delta_ci95": [
+        7.0,
+        20.0
+      ],
+      "significance": "***",
+      "n_paired": 100,
+      "discordant_a_only": 13,
+      "discordant_b_only": 0,
+      "p_value": 0.000244140625,
+      "p_holm": 0.003173828125,
+      "significance_holm": "**"
+    },
+    {
+      "comparison": "gpt-5-mini S1-eval vs S1 (SWE, matched)",
+      "a": "gpt-5-mini S1-eval (SWE)",
+      "b": "gpt-5-mini S1 (SWE)",
+      "rate_a_on_shared": 87.5,
+      "rate_b_on_shared": 43.8,
+      "delta_pp": 43.8,
+      "delta_ci95": [
+        25.0,
+        62.5
+      ],
+      "significance": "***",
+      "n_paired": 32,
+      "discordant_a_only": 15,
+      "discordant_b_only": 1,
+      "p_value": 0.000518798828125,
+      "p_holm": 0.00537109375,
+      "significance_holm": "**"
+    }
+  ],
+  "method": {
+    "interval": "Wilson score, 95%",
+    "test": "McNemar exact, two-sided",
+    "multiplicity": "Holm-Bonferroni over the 19 comparisons",
+    "delta_interval": "paired bootstrap over tasks, 10000 draws, seed 20260824"
+  }
+}

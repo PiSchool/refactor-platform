@@ -1,0 +1,19 @@
+type: benchmark
+key: example-bench            # the directory name
+name: Example Benchmark
+language: python
+setups: [s1]                  # the setups a run may select for it
+prompt:
+  template: prompts/task.md
+  appliesTo: every task in this benchmark
+  variables:
+    - name: task.instructions
+      summary: What the task asks the agent to do.
+      required: true
+evaluation:
+  capture: [git_diff, events_metrics]     # recorded for every task, never gating
+  verify:                                 # each can fail the task, in order
+    - {preset: workspace_changed}
+  passed: "workspace_changed"             # the verdict, over the verify stages
+display:
+  tabs: {output: Diff, response: Response}

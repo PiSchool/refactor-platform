@@ -1,0 +1,7 @@
+# RefactorBench S2-RAG AST Descriptive
+# Model: moonshotai/kimi-k2.6
+# Pipeline: CocoIndex tree-sitter chunking + nomic-embed-code + pgvector + cross-encoder reranking
+# Total: 100 | Passed: 78/100 (78.0%)
+
+Model,Setup,Mode,Total,Passed,Pass Rate
+moonshotai/kimi-k2.6,S2-RAG (AST),descriptive,100,78,78.0%

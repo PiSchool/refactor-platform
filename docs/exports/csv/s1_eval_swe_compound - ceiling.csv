@@ -1,0 +1,20 @@
+task_id,project,type,model,passed,duration_seconds,eval_loop_count,reason
+67b98ab96e15fba231ca494c7ce3752cce0a9654_57_71__61_75_86_91,checkstyle,Inline Method,qwen/qwen3.6-flash,True,157,0,the Inline Method operation is successful. | Build succeeded.
+67b98ab96e15fba231ca494c7ce3752cce0a9654_57_71__61_75_86_91,checkstyle,Inline Method,deepseek/deepseek-v4-pro,True,179,1,the Inline Method operation is successful. | Build succeeded.
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,237,0,metadata bug: sourceCodeBeforeRefactoring strips wrong code from origin file
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,295,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,204,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,210,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,171,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,226,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,98,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,90,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,169,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,qwen/qwen3.6-flash,False,94,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,deepseek/deepseek-v4-pro,False,308,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,deepseek/deepseek-v4-pro,False,130,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,deepseek/deepseek-v4-pro,False,319,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,deepseek/deepseek-v4-pro,False,323,0,compile error line 82 (eval metadata bug)
+e2c6e148a92e01b3c6037b33440ee7006f742793_373_383__372_388_79_87,checkstyle,Move And Inline Method,deepseek/deepseek-v4-pro,False,3840,0,compile error line 82 (eval metadata bug) - interrupted after 1h04m
+
+TOTAL,17 attempts,,, 2 passed,,,15 failed (metadata bug)

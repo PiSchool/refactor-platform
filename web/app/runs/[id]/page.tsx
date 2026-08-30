@@ -3,9 +3,9 @@
 import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import {
-  Download, FileSpreadsheet, ListTree, RotateCcw, SkipForward, Square, Terminal as TerminalIcon, Trash2,
+  ListTree, Terminal as TerminalIcon,
 } from 'lucide-react';
-import { useRun, useRunAction } from '@/lib/api';
+import { fetchArtifactText, findArtifact, useRun, useRunAction } from '@/lib/api';
 import { Btn, Card, Elapsed, ProgressBar, StatusBadge, StatusIcon, SkeletonCard } from '@/components/ui';
 import { Terminal } from '@/components/terminal';
 import { EventsFeed } from '@/components/events-feed';
@@ -15,13 +15,18 @@ import { OutputView } from '@/components/output-view';
 import { ChecksPanel } from '@/components/checks-panel';
 import { UsageBar } from '@/components/usage-bar';
 import { CostPanel } from '@/components/cost-panel';
+import { RunHeaderActions, SkipTaskAction } from '@/components/run-management-actions';
 import { formatDurationSeconds, runOutcome } from '@/lib/utils';
+import type { ArtifactRef } from '@/lib/types';
 
-const TABS = ['Agent', 'Repository', 'Output', 'Prompt', 'Events'] as const;
+const TABS = ['Agent', 'Repository', 'Output', 'Prompt', 'Retrieval', 'Events'] as const;
 type Tab = (typeof TABS)[number];
 
 /** Which artifact backs each text tab. Repository/Output are served live. */
-const ARTIFACT: Partial<Record<Tab, 'prompt'>> = { Prompt: 'prompt' };
+const ARTIFACT: Partial<Record<Tab, string>> = {
+  Prompt: 'prompt',
+  Retrieval: 'retrieval-context',
+};
 
 export default function RunDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
@@ -29,7 +34,7 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
   const { stop, restart, del, skip } = useRunAction();
   const [selected, setSelected] = useState<string | null>(null);
   const [tab, setTab] = useState<Tab>('Agent');
-  const [agentView, setAgentView] = useState<'steps' | 'terminal'>('steps');
+  const [agentView, setAgentView] = useState<'steps' | 'terminal'>('terminal');
   const [text, setText] = useState('');
   const [loadingText, setLoadingText] = useState(false);
 
@@ -37,24 +42,33 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
   const current = tasks.find((t) => t.id === selected) || tasks[0];
   const live = ['running', 'queued'].includes(run?.status || '');
   const s3 = run?.setup.key === 's3';
+  const s2 = run?.setup.key.startsWith('s2_') ?? false;
+  const visibleTabs = s2 ? TABS : TABS.filter((item) => item !== 'Retrieval');
+  const textArtifact = current ? findArtifact(current.artifacts, ARTIFACT[tab] ?? '') : undefined;
+  const terminalArtifact = current?.session
+    ? findArtifact(current.session.artifacts, 'terminal')
+    : undefined;
 
   useEffect(() => { if (!selected && tasks[0]) setSelected(tasks[0].id); }, [tasks, selected]);
 
+  // While a task is running the terminal is the live view; once it finishes the
+  // steps (parsed transcript) are the useful view. Switch with the task's state
+  // and when the selected task changes; manual toggles hold until the next change.
   useEffect(() => {
-    const key = ARTIFACT[tab];
+    if (current) setAgentView(current.status === 'running' ? 'terminal' : 'steps');
+  }, [current?.status, current?.id]);
+
+  useEffect(() => {
     setText('');
-    if (!key || !current) return;
-    const path = current.artifacts?.[key] ?? current.result?.artifacts[key];
-    if (!path) return;
+    if (!textArtifact) return;
     let stale = false;
     setLoadingText(true);
-    fetch(`/api/artifact?path=${encodeURIComponent(path)}`)
-      .then((r) => (r.ok ? r.text() : r.status === 404 ? '' : `(unavailable: HTTP ${r.status})`))
+    fetchArtifactText(textArtifact)
       .then((t) => { if (!stale) setText(t); })
       .catch((e) => { if (!stale) setText(`(failed to load: ${e})`); })
       .finally(() => { if (!stale) setLoadingText(false); });
     return () => { stale = true; };
-  }, [tab, current]);
+  }, [textArtifact?.viewUrl]);
 
   if (isLoading || !run) return <SkeletonCard rows={6} />;
 
@@ -70,13 +84,10 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
             <span className="font-mono text-sm text-fg">{run.id.slice(0, 8)}</span>
             <Elapsed startedAt={run.startedAt} finishedAt={run.finishedAt} className="text-xs text-fg-muted" />
           </div>
-          <div className="flex items-center gap-1.5">
-            <a href={`/api/runs/${run.id}/export.csv`}><Btn variant="outline" icon={<FileSpreadsheet className="h-3.5 w-3.5" />}>CSV</Btn></a>
-            <a href={`/api/runs/${run.id}/export`}><Btn variant="outline" icon={<Download className="h-3.5 w-3.5" />}>Export ZIP</Btn></a>
-            {!live && <Btn variant="outline" icon={<RotateCcw className="h-3.5 w-3.5" />} onClick={() => restart.mutate(run.id)}>Restart</Btn>}
-            {live && <Btn variant="danger" icon={<Square className="h-3.5 w-3.5" />} onClick={() => stop.mutate(run.id)}>Stop</Btn>}
-            {!live && <Btn variant="invisible" icon={<Trash2 className="h-3.5 w-3.5" />} onClick={() => del.mutate(run.id)}>Delete</Btn>}
-          </div>
+          <RunHeaderActions runId={run.id} live={live}
+            stopping={live && (stop.isPending || stop.isSuccess)}
+            onRestart={() => restart.mutate(run.id)} onStop={() => stop.mutate(run.id)}
+            onDelete={() => del.mutate(run.id)} />
         </div>
         <p className="mt-1 text-xs text-fg-muted">
           {run.agentTool.name} · {run.model} · {run.benchmark.name} · {run.setup.name}
@@ -97,7 +108,7 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
                 <StatusIcon status={t.status} />
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-mono text-xs text-fg">{t.taskKey}</p>
-                  <p className="text-[10px] text-fg-subtle">
+                  <p className="text-[11px] text-fg-subtle">
                     {t.result
                       ? `${formatDurationSeconds(t.result.durationSeconds)} · ${t.result.tokensInput + t.result.tokensOutput} tok`
                       : t.status === 'running'
@@ -106,9 +117,7 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
                   </p>
                 </div>
                 {live && current?.id === t.id && t.status === 'running' && (
-                  <span onClick={(e) => { e.stopPropagation(); skip.mutate({ runId: run.id, taskId: t.id }); }} title="Skip">
-                    <SkipForward className="h-3.5 w-3.5 text-fg-muted hover:text-fg" />
-                  </span>
+                  <SkipTaskAction onSkip={() => skip.mutate({ runId: run.id, taskId: t.id })} />
                 )}
               </button>
             ))}
@@ -118,7 +127,7 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
         {/* Session viewer */}
         <Card className="flex min-h-0 flex-col">
           <div className="flex shrink-0 items-center gap-1 border-b border-border px-2 py-1.5">
-            {TABS.map((t) => (
+            {visibleTabs.map((t) => (
               <button key={t} onClick={() => setTab(t)}
                 className={`rounded px-2 py-1 text-xs ${tab === t ? 'bg-neutral-subtle text-fg' : 'text-fg-muted hover:text-fg'}`}>
                 {t === 'Agent' && s3 ? 'Copilot · sub-agents' : t}
@@ -140,7 +149,7 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
                 <UsageBar sessionId={current.session.id} model={run.model} />
                 <div className="min-h-0 flex-1">
                   {agentView === 'terminal'
-                    ? <Terminal sessionId={current.session.id} live={live && current.status === 'running'} />
+                    ? <Terminal sessionId={current.session.id} live={live && current.status === 'running'} artifact={terminalArtifact} />
                     : <StepsView sessionId={current.session.id} />}
                 </div>
               </div>
@@ -149,7 +158,19 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
             ) : tab === 'Repository' ? (
               <RepositoryView runId={run.id} taskId={current.id} live={current.status === 'running'} />
             ) : tab === 'Output' ? (
-              <OutputView runId={run.id} taskId={current.id} stages={current.result?.details} />
+              <OutputView artifacts={current.artifacts} stages={current.result?.details} />
+            ) : tab === 'Retrieval' ? (
+              <div className="flex h-full min-h-0 flex-col gap-2">
+                <div className="flex shrink-0 flex-wrap gap-2 text-xs">
+                  <ArtifactLink artifact={findArtifact(current.artifacts, 'retrieval-queries')}>Queries</ArtifactLink>
+                  <ArtifactLink artifact={findArtifact(current.artifacts, 'retrieval-hits')}>Ranked hits</ArtifactLink>
+                  <ArtifactLink artifact={findArtifact(current.artifacts, 'retrieval-provenance')}>Provenance</ArtifactLink>
+                  <ArtifactLink artifact={findArtifact(current.artifacts, 'retrieval-invocations')}>Tool calls</ArtifactLink>
+                </div>
+                <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-canvas-inset p-3 text-xs text-fg-muted">
+                  {loadingText ? 'Loading…' : text || emptyHint(tab, Boolean(current.result))}
+                </pre>
+              </div>
             ) : (
               <pre className="h-full min-h-0 overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-canvas-inset p-3 text-xs text-fg-muted">
                 {loadingText ? 'Loading…' : text || emptyHint(tab, Boolean(current.result))}
@@ -184,10 +205,20 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
   );
 }
 
+function ArtifactLink({ artifact, children }: { artifact?: ArtifactRef; children: React.ReactNode }) {
+  if (!artifact) return null;
+  return (
+    <a href={artifact.viewUrl} target="_blank" rel="noreferrer"
+      className="rounded-md border border-border px-2 py-1 text-accent-fg hover:bg-neutral-subtle">
+      {children}
+    </a>
+  );
+}
+
 function ToggleBtn({ active, onClick, icon, children }: { active: boolean; onClick: () => void; icon: React.ReactNode; children: React.ReactNode }) {
   return (
     <button onClick={onClick}
-      className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-[11px] ${active ? 'bg-neutral-subtle text-fg' : 'text-fg-muted hover:text-fg'}`}>
+      className={`flex items-center gap-1 rounded px-1.5 py-0.5 text-xs ${active ? 'bg-neutral-subtle text-fg' : 'text-fg-muted hover:text-fg'}`}>
       {icon}{children}
     </button>
   );
@@ -209,9 +240,11 @@ function emptyHint(tab: Tab, finished: boolean): string {
   return '(empty)';
 }
 
-/** Live score for the whole run: the progress bar belongs with the numbers.
- *  `passRate` is over *scored* tasks, so it must not be shown as a bare "%" —
- *  "100%" next to "1 / 3 passed" reads as a lie while a run is still going. */
+/** Live score for the whole run.
+ *  `passRate` is over *scored* tasks, so the bare "%" carries what it is a
+ *  fraction of on hover: "100%" beside "1 / 3 passed" would otherwise read as a
+ *  lie while a run is still going. The count of scored tasks is shown only while
+ *  it differs from the total, and the rate is not repeated as a sentence. */
 function Score({ run }: { run: any }) {
   const { passed, failed, timedOut, total } = run.counts;
   const scored = passed + failed + timedOut;
@@ -221,19 +254,20 @@ function Score({ run }: { run: any }) {
       <div className="flex items-baseline gap-1.5">
         <span className="text-2xl font-semibold tabular-nums text-fg">{passed}</span>
         <span className="text-sm text-fg-muted">/ {total} passed</span>
+        {scored > 0 && (
+          <span className="ml-auto text-sm tabular-nums text-fg-muted"
+            title={`pass rate over the ${scored} task${scored === 1 ? '' : 's'} scored${scored < total ? ' so far' : ''}`}>
+            {rate}%
+          </span>
+        )}
       </div>
       <ProgressBar value={passed} total={total} state={run.status} />
-      <div className="flex gap-3 text-[11px] text-fg-muted">
+      <div className="flex gap-3 text-xs text-fg-muted">
         <span><b className="text-success-fg">{passed}</b> passed</span>
         <span><b className="text-danger-fg">{failed}</b> failed</span>
         {timedOut > 0 && <span><b className="text-attention-fg">{timedOut}</b> timed out</span>}
-        <span className="ml-auto">{scored}/{total} scored</span>
+        {scored < total && <span className="ml-auto">{scored}/{total} scored</span>}
       </div>
-      {scored > 0 && (
-        <p className="text-[11px] text-fg-subtle">
-          <span className="tabular-nums text-fg">{rate}%</span> pass rate over {scored} scored{scored < total ? ' so far' : ''}
-        </p>
-      )}
     </div>
   );
 }

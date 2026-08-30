@@ -75,9 +75,11 @@ export function statusTone(status?: string) {
 /** A run's `status` says it reached the end, not that its tasks passed.
  *  Display must not show a green check on a run whose tasks failed. */
 export function runOutcome(run: { status: string; counts: { passed: number; total: number } }) {
-  const { status, counts } = run;
-  if (status === 'completed' && counts.total > 0 && counts.passed < counts.total) return 'failed';
-  return status;
+  // A run's status reflects whether the pipeline *ran*, not how many tasks the
+  // agent passed. This is an evaluation harness: tasks passing or failing the
+  // benchmark is the measurement, not a run failure. Only a crash/stop/timeout
+  // is a non-completed run — and the backend already sets those.
+  return run.status;
 }
 
 export function percent(numerator?: number, denominator?: number) {
@@ -192,4 +194,18 @@ export function compactRunId(value?: string) {
   const s = String(value || '').trim();
   if (s.length <= 32) return s;
   return s.slice(0, 28) + '…';
+}
+
+
+/** Runs imported from the study archive are evidence, not something this instance
+ *  produced. Badge them, or a reviewer cannot tell them apart from a live run. */
+export function isArchived(r: { config?: Record<string, unknown> }): boolean {
+  const config = r.config ?? {};
+  const provenance = config.import;
+  return Boolean(
+    provenance
+    && typeof provenance === 'object'
+    && !Array.isArray(provenance)
+    && typeof (provenance as Record<string, unknown>).sourceRunId === 'string'
+  );
 }

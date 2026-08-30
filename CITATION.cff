@@ -1,0 +1,60 @@
+cff-version: 1.2.0
+message: "If you use RefactorPlatform, please cite the paper below."
+title: "RefactorPlatform: An Open-Source Harness for Controlled Evaluation of Repository-Scale Refactoring Agents"
+abstract: >-
+  An open-source evaluation harness for repository-scale refactoring agents. It
+  holds the execution environment fixed and varies one design axis at a time —
+  model backbone, execution regime (baseline, retrieval-augmented, multi-agent),
+  retrieval chunking strategy, and prompt specificity — with per-task isolated
+  workspaces, live terminal streaming, token and diff telemetry, AST-based
+  verification for Python, and compilation, test and RefactoringMiner gates for
+  Java.
+type: software
+license: MIT
+repository-code: "https://github.com/PiSchool/refactor-platform"
+version: 1.0.0
+authors:
+  - family-names: "Ben Amor"
+    given-names: "Aziz"
+    affiliation: "Pi School"
+  - family-names: "Mali"
+    given-names: "Drish"
+    affiliation: "Pi School"
+  - family-names: "Acharya"
+    given-names: "Mann"
+    affiliation: "Pi School"
+  - family-names: "Iyer"
+    given-names: "Vijayasri"
+    affiliation: "Pi School"
+  - family-names: "Bratières"
+    given-names: "Sébastien"
+    affiliation: "Pi School; Translated"
+keywords:
+  - refactoring
+  - coding agents
+  - evaluation harness
+  - retrieval-augmented generation
+  - large language models
+preferred-citation:
+  type: conference-paper
+  title: "RefactorPlatform: An Open-Source Harness for Controlled Evaluation of Repository-Scale Refactoring Agents"
+  year: 2026
+  collection-title: "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: System Demonstrations"
+  publisher:
+    name: "Association for Computational Linguistics"
+  authors:
+    - family-names: "Ben Amor"
+      given-names: "Aziz"
+      affiliation: "Pi School"
+    - family-names: "Mali"
+      given-names: "Drish"
+      affiliation: "Pi School"
+    - family-names: "Acharya"
+      given-names: "Mann"
+      affiliation: "Pi School"
+    - family-names: "Iyer"
+      given-names: "Vijayasri"
+      affiliation: "Pi School"
+    - family-names: "Bratières"
+      given-names: "Sébastien"
+      affiliation: "Pi School; Translated"

@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react';
 import { Check, ChevronDown, Search } from 'lucide-react';
+import { Chip, Switch } from '@/components/controls';
 import { useModels, type ProviderModel } from '@/lib/api';
 import { formatTokens } from '@/lib/cost';
 
@@ -17,11 +18,12 @@ function perMillion(m: ProviderModel): string {
 
 /** Searchable dropdown over the live provider catalog. Falls back to a text
  *  field when the catalog is unreachable, so the platform stays usable offline. */
-export function ModelPicker({ value, onChange, allowEmpty = false, placeholder = 'provider/model-id' }: {
+export function ModelPicker({ value, onChange, allowEmpty = false, placeholder = 'provider/model-id', disabled = false }: {
   value: string;
   onChange: (id: string) => void;
   allowEmpty?: boolean;
   placeholder?: string;
+  disabled?: boolean;
 }) {
   const { data } = useModels();
   const [open, setOpen] = useState(false);
@@ -40,7 +42,7 @@ export function ModelPicker({ value, onChange, allowEmpty = false, placeholder =
 
   if (!live) {
     return (
-      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder}
+      <input value={value} onChange={(e) => onChange(e.target.value)} placeholder={placeholder} disabled={disabled}
         className="h-8 w-72 rounded-md border border-border bg-canvas-inset px-3 text-sm text-fg" />
     );
   }
@@ -49,14 +51,14 @@ export function ModelPicker({ value, onChange, allowEmpty = false, placeholder =
 
   return (
     <div className="relative w-72">
-      <button type="button" onClick={() => setOpen((o) => !o)}
+      <button type="button" disabled={disabled} onClick={() => setOpen((o) => !o)}
         className="flex h-8 w-full items-center gap-2 rounded-md border border-border bg-canvas-inset px-3 text-left text-sm text-fg">
         <span className="truncate">{value || <span className="text-fg-subtle">Select a model…</span>}</span>
-        {selected?.free && <span className="shrink-0 rounded bg-success-subtle px-1 text-[10px] text-success-fg">free</span>}
+        {selected?.free && <Chip tone="success" title="The provider charges nothing for this model">free</Chip>}
         <ChevronDown className="ml-auto h-3.5 w-3.5 shrink-0 text-fg-muted" />
       </button>
 
-      {open && (
+      {open && !disabled && (
         <div className="absolute z-30 mt-1 w-[26rem] rounded-md border border-border bg-canvas shadow-lg">
           <div className="flex items-center gap-2 border-b border-border p-2">
             <div className="relative flex-1">
@@ -64,8 +66,8 @@ export function ModelPicker({ value, onChange, allowEmpty = false, placeholder =
               <input autoFocus value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search models…"
                 className="h-7 w-full rounded border border-border bg-canvas-inset pl-7 pr-2 text-xs text-fg" />
             </div>
-            <label className="flex shrink-0 items-center gap-1 text-[11px] text-fg-muted">
-              <input type="checkbox" checked={freeOnly} onChange={(e) => setFreeOnly(e.target.checked)} />
+            <label className="flex shrink-0 items-center gap-1.5 text-xs text-fg-muted">
+              <Switch checked={freeOnly} onChange={setFreeOnly} label="Show only models the provider charges nothing for" />
               free
             </label>
           </div>
@@ -87,18 +89,18 @@ export function ModelPicker({ value, onChange, allowEmpty = false, placeholder =
                   {value === m.id ? <Check className="h-3 w-3 shrink-0 text-accent-fg" /> : <span className="w-3 shrink-0" />}
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs text-fg">{m.name}</p>
-                    <p className="truncate font-mono text-[10px] text-fg-subtle">{m.id}</p>
+                    <p className="truncate font-mono text-[11px] text-fg-subtle">{m.id}</p>
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className={`text-[10px] ${m.free ? 'text-success-fg' : 'text-fg-muted'}`}>{perMillion(m)}</p>
-                    {m.contextLength && <p className="text-[10px] text-fg-subtle">{formatTokens(m.contextLength)} ctx</p>}
+                    <p className={`text-[11px] ${m.free ? 'text-success-fg' : 'text-fg-muted'}`}>{perMillion(m)}</p>
+                    {m.contextLength && <p className="text-[11px] text-fg-subtle">{formatTokens(m.contextLength)} ctx</p>}
                   </div>
                 </button>
               </li>
             ))}
             {shown.length === 0 && <li className="p-3 text-xs text-fg-subtle">No models match.</li>}
           </ul>
-          <div className="border-t border-border px-2 py-1 text-[10px] text-fg-subtle">
+          <div className="border-t border-border px-2 py-1 text-[11px] text-fg-subtle">
             {models.length} models · prices live from the provider
           </div>
         </div>

@@ -1,0 +1,98 @@
+{
+  "swe": [
+    {
+      "config": "gpt-5-mini S1-eval",
+      "full": {
+        "passed": 28,
+        "total": 33,
+        "rate": 84.8
+      },
+      "matched": {
+        "passed": 27,
+        "total": 31,
+        "rate": 87.1
+      }
+    },
+    {
+      "config": "gpt-5-mini S1",
+      "full": {
+        "passed": 15,
+        "total": 75,
+        "rate": 20.0
+      },
+      "matched": {
+        "passed": 13,
+        "total": 31,
+        "rate": 41.9
+      }
+    },
+    {
+      "config": "minimax-m3 S1",
+      "full": {
+        "passed": 52,
+        "total": 177,
+        "rate": 29.4
+      },
+      "matched": {
+        "passed": 17,
+        "total": 31,
+        "rate": 54.8
+      }
+    },
+    {
+      "config": "qwen3.6-flash S1",
+      "full": {
+        "passed": 32,
+        "total": 155,
+        "rate": 20.6
+      },
+      "matched": {
+        "passed": 12,
+        "total": 31,
+        "rate": 38.7
+      }
+    }
+  ],
+  "refbench": [
+    {
+      "config": "S3 sub-agents (crashed)",
+      "full": {
+        "passed": 20,
+        "total": 26,
+        "rate": 76.9
+      },
+      "matched": {
+        "passed": 20,
+        "total": 26,
+        "rate": 76.9
+      }
+    },
+    {
+      "config": "S1 baseline",
+      "full": {
+        "passed": 73,
+        "total": 100,
+        "rate": 73.0
+      },
+      "matched": {
+        "passed": 19,
+        "total": 26,
+        "rate": 73.1
+      }
+    },
+    {
+      "config": "S2 AST retrieval",
+      "full": {
+        "passed": 86,
+        "total": 100,
+        "rate": 86.0
+      },
+      "matched": {
+        "passed": 21,
+        "total": 26,
+        "rate": 80.8
+      }
+    }
+  ],
+  "s3TasksExecuted": 26
+}

@@ -1,0 +1,129 @@
+name: CI
+
+# Every job calls a Makefile target. A contributor runs the same target, so a
+# check cannot pass locally and fail here for a different command line.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    services:
+      retrieval-db:
+        image: pgvector/pgvector:pg16@sha256:1d533553fefe4f12e5d80c7b80622ba0c382abb5758856f52983d8789179f0fb
+        env:
+          POSTGRES_DB: refactor_retrieval
+          POSTGRES_USER: refactor
+          POSTGRES_PASSWORD: ci-retrieval-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U refactor -d refactor_retrieval"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      RETRIEVAL_TEST_DATABASE_URL: postgresql://refactor:ci-retrieval-only@127.0.0.1:5432/refactor_retrieval
+      PLATFORM_TEST_DATABASE_URL: postgresql+asyncpg://refactor:ci-retrieval-only@127.0.0.1:5432/refactor_retrieval
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.7"
+          enable-cache: true
+      - name: Install server dependencies
+        working-directory: server
+        run: uv sync --frozen --group dev
+      - name: Server tests, against real pgvector
+        run: make backend
+      - name: Every shipped plugin against the contracts
+        run: make plugins
+
+  frontend:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install dashboard dependencies
+        working-directory: web
+        run: npm ci
+      - name: Dashboard tests, types and production build
+        run: make web types build
+
+  docs:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Every link, anchor and figure
+        run: make docs
+
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.10.7"
+          enable-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install the isolated API and the dashboard
+        run: |
+          cd server && uv sync --frozen --group dev
+          cd ../web && npm ci
+      - name: Install Chromium
+        working-directory: web
+        run: npx playwright install --with-deps chromium
+      - name: Dashboard workflow in a real browser
+        run: make browser
+
+  containers:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    env:
+      RETRIEVAL_DB_PASSWORD: ci-writer-only
+      RETRIEVAL_DB_READER_PASSWORD: ci-reader-only
+    steps:
+      - uses: actions/checkout@v4
+      # The backend image is about 5 GB: four JDKs, Maven, Gradle, Node, six
+      # agent CLIs and the server's dependency set. The runner's preinstalled
+      # Android, .NET, Haskell, Swift and CodeQL toolchains are unused by this
+      # job and hold more space than the build needs.
+      - name: Reclaim runner disk
+        run: |
+          df -h /
+          sudo rm -rf /usr/local/lib/android /usr/share/dotnet /opt/ghc \
+            /usr/local/.ghcup /usr/share/swift /usr/local/share/powershell \
+            /opt/hostedtoolcache/CodeQL
+          df -h /
+      - name: Validate the Compose model
+        run: docker compose config --quiet
+      # Built by the daemon's own builder. The container driver configured here
+      # before exported each image to a tarball and imported it again, so the
+      # backend image existed three times at once and the runner filled up.
+      - name: Build production images
+        run: |
+          docker compose build
+          docker image ls --format '{{.Repository}}:{{.Tag}} {{.Size}}'
+          df -h /

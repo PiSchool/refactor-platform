@@ -10,7 +10,7 @@ from dataclasses import asdict
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.catalog.bootstrap import data_state
+from app.catalog.bootstrap import bootstrap_error, data_state
 from app.catalog.loader import Registry
 from app.db.models import AgentTool, Benchmark, RunTask, Task, utcnow
 
@@ -24,10 +24,9 @@ async def sync_catalog(registry: Registry, session: AsyncSession) -> None:
             session.add(row)
         row.name = m.name
         row.language = m.language
-        row.version = m.version
         row.manifest = m.model_dump(mode="json")
         row.data_state = data_state(loaded)
-        row.data_detail = _read_error(loaded)
+        row.data_detail = bootstrap_error(loaded)
         row.discovered_at = utcnow()
         await session.flush()
         await _sync_tasks(row, loaded, session)
@@ -39,13 +38,17 @@ async def sync_catalog(registry: Registry, session: AsyncSession) -> None:
             row = AgentTool(key=key)
             session.add(row)
         row.name = m.name
-        row.version = m.version
         row.manifest = m.model_dump(mode="json")
 
-
-def _read_error(loaded) -> str:
-    err = loaded.data_dir / ".error"
-    return err.read_text(encoding="utf-8").strip() if err.is_file() else ""
+    # Prune agents whose plugin was removed, unless a run still references them
+    # (those rows must stay for the run's history to resolve).
+    from app.db.models import Run
+    for row in (await session.execute(select(AgentTool))).scalars().all():
+        if row.key in registry.agents:
+            continue
+        used = (await session.execute(select(Run.id).where(Run.agent_tool_id == row.id).limit(1))).first()
+        if not used:
+            await session.delete(row)
 
 
 async def _sync_tasks(bench_row: Benchmark, loaded, session: AsyncSession) -> None:

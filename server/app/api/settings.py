@@ -4,11 +4,12 @@ from fastapi import APIRouter, HTTPException, Request
 from sqlalchemy import select
 
 from app.api.schemas import SettingsUpdate
-from app.catalog.bootstrap import data_state
-from app.config import get_settings, secret_presence
+from app.catalog import tools
+from app.catalog.bootstrap import bootstrap_error, data_state, start_background_bootstrap_one
+from app.config import get_settings, provider_inventory, secret_presence
 from app.db import engine as db_engine
 from app.db.models import RuntimeSetting
-from app.execution.setups import SETUPS
+from app.evaluation import metrics
 
 router = APIRouter(prefix="/api")
 
@@ -36,22 +37,31 @@ async def _doc(request: Request) -> dict:
             "costModel": rt.get("costModel", ""),
         },
         "secrets": secret_presence(),
+        # Declared in config.yaml; adding one needs no code change, so the
+        # dashboard reads the registry rather than naming a vendor.
+        "providers": provider_inventory(),
         "plugins": {
             "benchmarks": [{
                 "key": k,
                 "name": v.manifest.name,
                 "language": v.manifest.language,
-                "version": v.manifest.version,
                 "taskCount": len(v.tasks),
                 "dataState": data_state(v),
+                "dataError": bootstrap_error(v),
                 "setups": v.manifest.setups,
             } for k, v in reg.benchmarks.items()],
-            "agents": [{"key": k, "name": v.manifest.name, "version": v.manifest.version,
-                        "capabilities": v.impl.capabilities} for k, v in reg.agents.items()],
-            "setups": [{"key": k, "name": v.name, "description": v.description,
-                        "capabilities": {"lsp": v.lsp, "evalTool": v.eval_tool, "subagents": v.subagents}}
-                       for k, v in SETUPS.items()],
-            "lsp": [{"key": k, "language": v.manifest.language,
+            # `command` is the deployment's answer, not the manifest's: whether the
+            # declared executable is here and which version it reports.
+            "agents": [{"key": k, "name": v.manifest.name,
+                        "capabilities": v.impl.capabilities,
+                        "available": v.available,
+                        "command": tools.command_state(v.manifest)}
+                       for k, v in reg.agents.items()],
+            # One row per metric: what it measures, whether it can decide a
+            # verdict, and whether this deployment can run it at all.
+            "metrics": [{**entry, "install": reg.evaluation[entry["id"]].manifest.install}
+                        for entry in metrics.catalogue().values()],
+            "lsp": [{"key": k, "name": v.manifest.name or k, "language": v.manifest.language,
                      "available": v.impl.ensure()[0]} for k, v in reg.lsp.items()],
         },
         "errors": reg.errors,
@@ -61,29 +71,17 @@ async def _doc(request: Request) -> dict:
 @router.post("/benchmarks/{key}/bootstrap")
 async def bootstrap_benchmark(key: str, request: Request):
     """Provision a benchmark's data ahead of runs (never at task time)."""
-    from app.catalog.bootstrap import data_state as state, start_background_bootstrap
-
     loaded = request.app.state.registry.benchmarks.get(key)
     if loaded is None:
         raise HTTPException(404, f"unknown benchmark: {key}")
-    if state(loaded) == "ready":
+    if data_state(loaded) == "ready":
         return {"key": key, "dataState": "ready"}
     start_background_bootstrap_one(loaded)
-    return {"key": key, "dataState": "provisioning"}
-
-
-def start_background_bootstrap_one(loaded) -> None:
-    import threading
-
-    from app.catalog.bootstrap import run_bootstrap
-
-    def _go():
-        try:
-            run_bootstrap(loaded)
-        except Exception:
-            pass  # error sentinel is written; surfaced via dataState
-
-    threading.Thread(target=_go, daemon=True).start()
+    return {
+        "key": key,
+        "dataState": data_state(loaded),
+        "dataError": bootstrap_error(loaded),
+    }
 
 
 @router.get("/settings")

@@ -1,0 +1,5 @@
+type: evaluation
+key: pytest_suite
+name: Repository test suite
+entrypoint: plugin:Plugin
+install: pip install pytest

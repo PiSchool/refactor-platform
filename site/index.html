@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RefactorPlatform — EMNLP 2026 System Demonstrations</title>
+    <meta
+      name="description"
+      content="An open-source evaluation harness for repository-scale refactoring agents. Accepted to EMNLP 2026, System Demonstrations."
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <h1>RefactorPlatform</h1>
+        <p class="subtitle">
+          An Open-Source Harness for Controlled Evaluation of Repository-Scale
+          Refactoring Agents
+        </p>
+
+        <ul class="authors">
+          <li>
+            <a href="https://www.linkedin.com/in/aziz-benamor/" target="_blank" rel="noopener noreferrer">Aziz Ben Amor</a
+            ><sup>1,*</sup>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/drish-mali/" target="_blank" rel="noopener noreferrer">Drish Mali</a
+            ><sup>1,*</sup>
+          </li>
+          <li>
+            <a href="https://mannacharya.com" target="_blank" rel="noopener noreferrer">Mann Acharya</a><sup>1,*</sup>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/vijayasriiyer/" target="_blank" rel="noopener noreferrer"
+              >Vijayasri Iyer</a
+            ><sup>1</sup>
+          </li>
+          <li>
+            <a href="https://www.linkedin.com/in/sebastien-bratieres/" target="_blank" rel="noopener noreferrer"
+              >Sébastien Bratières</a
+            ><sup>1,2</sup>
+          </li>
+        </ul>
+        <p class="affiliation"><sup>1</sup>Pi School, <sup>2</sup>Translated</p>
+
+        <p class="venue">EMNLP 2026 &middot; System Demonstrations</p>
+
+        <p class="footnote">*Equal contribution.</p>
+
+        <nav class="links">
+          <a class="button" href="https://2026.emnlp.org/calls/demos/" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12.5h8V14H8v-1.5zm0 3.5h8v1.5H8V16zm0-7h4v1.5H8v-1.5z"
+              ></path>
+            </svg>
+            Paper
+          </a>
+          <a class="button" href="https://youtu.be/placeholder-demo-video" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 5.5 7 4.5-7 4.5v-9z"
+              ></path>
+            </svg>
+            Video
+          </a>
+          <a
+            class="button"
+            href="https://github.com/PiSchool/refactor-platform"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path
+                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+              ></path>
+            </svg>
+            Code
+          </a>
+          <a
+            class="button"
+            href="https://github.com/PiSchool/refactor-platform/blob/main/docs/README.md"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M12 4.5c-1.9-1.4-5-1.9-8-1v16c3-1 6.1-.5 8 1 1.9-1.5 5-2 8-1v-16c-3-.9-6.1-.4-8 1z"
+              ></path>
+            </svg>
+            Docs
+          </a>
+          <a class="button" href="#bibtex">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path
+                d="M6.5 7C4.57 7 3 8.57 3 10.5V17h6.5v-6.5H6.2c.05-1.1.95-2 2.05-2V6.5c-.6 0-1.15.06-1.75.5zm10 0c-1.93 0-3.5 1.57-3.5 3.5V17H19.5v-6.5h-3.3c.05-1.1.95-2 2.05-2V6.5c-.6 0-1.15.06-1.75.5z"
+              ></path>
+            </svg>
+            Cite
+          </a>
+        </nav>
+      </header>
+
+      <section class="teaser">
+        <div class="panel-grid">
+          <figure>
+            <img
+              alt="Coding tool step: the agent plugin, a free-text model field, and the provider's searchable model catalogue"
+              src="assets/ui-wizard-light.png"
+            />
+            <figcaption>(a) Configure</figcaption>
+          </figure>
+          <figure>
+            <img
+              alt="The same task's terminal, replayed from the captured PTY bytes with workspace paths redacted"
+              src="assets/ui-terminal-light.png"
+            />
+            <figcaption>(b) Watch it run</figcaption>
+          </figure>
+          <figure>
+            <img
+              alt="Run detail: agent steps on the left, live terminal and diff in the centre, evaluation checks and token accounting on the right"
+              src="assets/ui-run-detail-light.png"
+            />
+            <figcaption>(c) Inspect the diff</figcaption>
+          </figure>
+          <figure>
+            <img
+              alt="Settings, Evaluation and metrics: the verdict rule over three gating stages, each with its failure reason, what it records, which plugin provides it and how many options it accepts, above the metrics recorded on every task"
+              src="assets/ui-evaluation-light.png"
+            />
+            <figcaption>(d) Verify the result</figcaption>
+          </figure>
+        </div>
+        <p class="teaser-caption">
+          RefactorPlatform walks an operator from configuring a run to
+          verifying its result, live.
+        </p>
+      </section>
+
+      <section class="abstract">
+        <h2>Abstract</h2>
+        <p>
+          An open-source evaluation harness for repository-scale refactoring
+          agents. It holds the execution environment fixed and varies one design
+          axis at a time — model backbone, execution regime (baseline,
+          retrieval-augmented, multi-agent), retrieval chunking strategy, and
+          prompt specificity — with per-task isolated workspaces, live terminal
+          streaming, token and diff telemetry, AST-based verification for
+          Python, and compilation, test and RefactoringMiner gates for Java.
+        </p>
+      </section>
+
+      <section class="results">
+        <h2>Results</h2>
+
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">86%</span>
+            <span class="stat-label"
+              >Best pass rate<br />(qwen3.6-flash, S2 AST retrieval)</span
+            >
+          </div>
+          <div class="stat">
+            <span class="stat-value">+25&ndash;30pp</span>
+            <span class="stat-label">AST-aware vs. naive chunking</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">$0.13</span>
+            <span class="stat-label">Cost per successful refactor</span>
+          </div>
+        </div>
+
+        <table>
+          <caption>
+            Cross-model pass rate on RefactorBench (100 tasks), descriptive
+            prompts.
+          </caption>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>S<sub>1</sub> Baseline</th>
+              <th>S<sub>2</sub> + AST Retrieval</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>qwen3.6-flash</td>
+              <td>73%</td>
+              <td>86%</td>
+            </tr>
+            <tr>
+              <td>minimax-m3</td>
+              <td>75%</td>
+              <td>81%</td>
+            </tr>
+            <tr>
+              <td>kimi-k2.6</td>
+              <td>71%</td>
+              <td>78%</td>
+            </tr>
+            <tr>
+              <td>deepseek-v4-pro</td>
+              <td>77%</td>
+              <td>89%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="note">
+          A single lean retrieval-augmented agent (86%) also outperforms the one
+          orchestrated multi-agent topology evaluated (77%, S<sub>3</sub>,
+          Copilot sub-agents), and retrieval's accuracy gains absorb its token
+          overhead: cost per successful refactoring shifts by no more than $0.01
+          across all four models. See <a href="#bibtex">the paper</a> for the
+          full ablation, cost-efficiency, and Java (SWE-Refactor) results.
+        </p>
+
+        <div class="figure-columns">
+          <div class="figure-col">
+            <h3>Structural retrieval</h3>
+            <p>
+              AST-aware chunking sits alone on the purity/integrity frontier
+              that naive fixed-line windows only approach at much larger
+              window sizes.
+            </p>
+            <img
+              alt="Integrity against purity for each chunking strategy: fixed line windows trace a steep trade-off from 20-line windows at 30 percent purity and 63 percent integrity to 240-line windows at 10 percent purity and 98 percent integrity, while AST chunks sit alone at 93 percent purity and 92 percent integrity"
+              src="assets/chunking-frontier-light.png"
+            />
+          </div>
+          <div class="figure-col">
+            <h3>Prompt sensitivity</h3>
+            <p>
+              AST-chunk retrieval leads at every prompt specificity level;
+              naive line-window retrieval trails even the no-retrieval
+              baseline.
+            </p>
+            <img
+              alt="RefactorBench pass counts by prompt mode: S1 agent 48/64/73, retrieval over line windows 31/44/57, retrieval over AST chunks 56/74/86"
+              src="assets/refactorbench-prompt-modes-light.png"
+            />
+          </div>
+        </div>
+
+        <div class="figure-columns">
+          <div class="figure-col">
+            <h3>Cross-model gains</h3>
+            <p>
+              AST-aware retrieval improves pass rate for every model family
+              evaluated, not just the flagship backbone.
+            </p>
+            <img
+              alt="RefactorBench descriptive prompt per model: deepseek-v4-pro 77 to 89, qwen3.6-flash 73 to 86, minimax-m3 75 to 81, kimi-k2.6 71 to 78"
+              src="assets/refactorbench-models-light.png"
+            />
+          </div>
+          <div class="figure-col">
+            <h3>SWE-Refactor verification</h3>
+            <p>
+              Java is held to a triple gate: code extraction, structural
+              detection, and a green build and test suite, applied in
+              sequence.
+            </p>
+            <img
+              alt="SWE-Refactor funnel: 159 of 177 tasks produced code, 105 were detected as the requested refactoring, 50 kept the build and tests green, 43 satisfied all three"
+              src="assets/swe-verification-funnel-light.png"
+            />
+          </div>
+        </div>
+      </section>
+
+      <section id="bibtex" class="bibtex">
+        <h2>BibTeX</h2>
+        <pre><code>@inproceedings{refactorplatform2026,
+  title     = {RefactorPlatform: An Open-Source Harness for Controlled Evaluation of Repository-Scale Refactoring Agents},
+  author    = {Ben Amor, Aziz and Mali, Drish and Acharya, Mann and Iyer, Vijayasri and Bratières, Sébastien},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: System Demonstrations},
+  publisher = {Association for Computational Linguistics},
+  year      = {2026}
+}</code></pre>
+      </section>
+
+      <footer>
+        <a href="https://picampus-school.com/" class="pischool-link" target="_blank" rel="noopener noreferrer">
+          <img
+            src="assets/pischool-wordmark.png"
+            alt="Pi School"
+            class="pischool-logo"
+          />
+        </a>
+        <p>
+          Platform source code is
+          <a
+            href="https://github.com/PiSchool/refactor-platform/blob/main/LICENSE"
+            target="_blank"
+            rel="noopener noreferrer"
+            >MIT</a
+          >
+          licensed. See
+          <a
+            href="https://github.com/PiSchool/refactor-platform/blob/main/CONTRIBUTING.md"
+            target="_blank"
+            rel="noopener noreferrer"
+            >CONTRIBUTING.md</a
+          >
+          to get involved.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

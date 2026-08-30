@@ -5,7 +5,7 @@ import asyncio
 import pytest
 from sqlalchemy import select
 
-from tests.helpers import FIXTURES, make_run, seed_catalog
+from tests.helpers import FIXTURES, add_second_task, make_run, seed_catalog, task_statuses
 
 
 @pytest.mark.asyncio
@@ -23,11 +23,84 @@ async def test_task_passes_end_to_end(tmp_env):
 
     async with db_engine.session_factory()() as s:
         rt = (await s.execute(select(RunTask).where(RunTask.run_id == run_id))).scalar_one()
-        assert rt.status == "passed"
         res = (await s.execute(select(TaskResult).where(TaskResult.run_task_id == rt.id))).scalar_one()
+        assert rt.status == "passed", res.details
         assert res.passed is True
         assert res.tokens_input == 100 and res.tokens_output == 50
         assert res.model == "stub-model"
+
+
+@pytest.mark.asyncio
+async def test_a_result_that_cannot_be_recorded_fails_only_its_own_task(tmp_env, monkeypatch):
+    """Recording an outcome belongs to the task that produced it.
+
+    When this ran outside the per-task failure boundary, one unwritable result
+    aborted the whole run: the tasks behind it never executed and the row stayed
+    `running` with no process behind it.
+    """
+    from app.db import engine as db_engine
+    from app.db.models import Run, RunTask, TaskResult
+    from app.execution import taskloop
+    from app.execution.taskloop import RunControl, execute_run
+    from app.realtime.hub import hub
+
+    reg = await seed_catalog()
+    hub.bind_loop(asyncio.get_running_loop())
+    run_id = await make_run("s1")
+    await add_second_task(run_id)
+
+    record = taskloop._persist
+    attempts = {"n": 0}
+
+    async def fails_once(*args, **kwargs):
+        attempts["n"] += 1
+        if attempts["n"] == 1:
+            raise RuntimeError("the results database went away")
+        return await record(*args, **kwargs)
+
+    monkeypatch.setattr(taskloop, "_persist", fails_once)
+    await execute_run(run_id, reg, hub, RunControl(run_id=run_id))
+
+    assert await task_statuses(run_id) == ["error", "passed"]
+    async with db_engine.session_factory()() as s:
+        assert (await s.execute(select(Run).where(Run.id == run_id))).scalar_one().status == "completed"
+        first = (await s.execute(select(RunTask).where(
+            RunTask.run_id == run_id).order_by(RunTask.ordinal))).scalars().first()
+        result = (await s.execute(select(TaskResult).where(
+            TaskResult.run_task_id == first.id))).scalar_one()
+        assert result.reason == "result_not_recorded"
+        assert result.passed is False
+        assert "results database went away" in result.details["error"]
+
+
+@pytest.mark.asyncio
+async def test_an_adapter_that_breaks_the_session_contract_fails_its_task(tmp_env, monkeypatch):
+    """A plugin defect is that task's failure, and it names the plugin.
+
+    Unchecked, the wrong type propagates into code that has no idea which
+    plugin produced it, and the traceback lands outside the task boundary.
+    """
+    from app.db import engine as db_engine
+    from app.db.models import Run, RunTask, TaskResult
+    from app.execution.taskloop import RunControl, execute_run
+    from app.realtime.hub import hub
+
+    reg = await seed_catalog()
+    hub.bind_loop(asyncio.get_running_loop())
+    monkeypatch.setattr(type(reg.agents["stub"].impl), "parse_session",
+                        lambda self, events_path, terminal_log_path: {"model": "stub-model"})
+    run_id = await make_run("s1")
+
+    await execute_run(run_id, reg, hub, RunControl(run_id=run_id))
+
+    assert await task_statuses(run_id) == ["error"]
+    async with db_engine.session_factory()() as s:
+        assert (await s.execute(select(Run).where(Run.id == run_id))).scalar_one().status == "completed"
+        rt = (await s.execute(select(RunTask).where(RunTask.run_id == run_id))).scalar_one()
+        result = (await s.execute(select(TaskResult).where(
+            TaskResult.run_task_id == rt.id))).scalar_one()
+        assert "'stub'" in result.details["error"]
+        assert "expected SessionInfo" in result.details["error"]
 
 
 @pytest.mark.asyncio
@@ -113,6 +186,37 @@ def test_every_setup_with_capability_has_a_prompt_block():
         assert SETUPS[key].prompt_block.strip(), f"{key} has no prompt block"
 
 
+def test_eval_setup_makes_self_check_mandatory():
+    from app.execution.setups import SETUPS
+
+    block = SETUPS["s1_eval"].prompt_block.lower()
+    assert "eval.sh" in block
+    assert "must" in block
+    assert "at least once" in block
+
+
+def test_retrieval_prompt_describes_usage_without_exposing_implementation():
+    from app.execution.setups import SETUPS
+
+    block = SETUPS["s2_rag_ast"].prompt_block
+
+    assert "code retrieval" in block.lower()
+    assert "search_codebase" in block
+    for internal_term in ("cpu", "s2", "bm25", "reciprocal-rank", "cross-encoder"):
+        assert internal_term not in block.lower()
+
+
+def test_retrieved_context_does_not_expose_execution_device():
+    from app.retrieval.models import CodeChunk, SearchHit
+    from app.retrieval.service import _render_context
+
+    chunk = CodeChunk("chunk", "module.py", 1, 1, "f", "def f(): pass\n", "python")
+    context = _render_context([SearchHit(chunk)], 10_000)
+
+    assert "Retrieved code context" in context
+    assert "cpu" not in context.lower()
+
+
 def test_prompt_artifact_is_exactly_what_the_agent_receives(tmp_path):
     """prompt.md must be the same bytes passed via `-p @prompt.md`."""
     from app.catalog.sdk import SessionCtx, SetupProfile, TaskDef, WorkspaceSpec
@@ -122,8 +226,12 @@ def test_prompt_artifact_is_exactly_what_the_agent_receives(tmp_path):
         def build_prompt(self, task, ctx):
             return "BODY"
 
+    class _Manifest:
+        prompt = None       # this benchmark builds its prompt in Python
+
     class _Loaded:
         hooks = _Hooks()
+        manifest = _Manifest()
 
     setup = SetupProfile("s3", "S3", "", subagents=True, prompt_block="BLOCK")
     task = TaskDef("k", "t", "python", WorkspaceSpec("snapshot", "r"), "i", {})
@@ -131,7 +239,10 @@ def test_prompt_artifact_is_exactly_what_the_agent_receives(tmp_path):
                      workspace=tmp_path, artifacts_dir=tmp_path, prompt_path=tmp_path / "prompt.md",
                      config_dir=tmp_path, model="m", setup=setup, requested_env={})
     prompt = _build_prompt(_Loaded(), task, ctx, setup)
-    assert prompt == "BODY\n\nBLOCK\n"
+    # The benchmark's body and the setup's block are framed by one platform
+    # statement of where the repository is; nothing else is added.
+    assert prompt == f"Repository root: {tmp_path}\nThat is your working " \
+        "directory. Every file path in this task is relative to it.\n\nBODY\n\nBLOCK\n"
     ctx.prompt_path.write_text(prompt, encoding="utf-8")
     assert ctx.prompt_path.read_text(encoding="utf-8") == prompt
 
@@ -185,13 +296,13 @@ def test_prompt_override_wins_over_shipped_default(tmp_env, tmp_path, monkeypatc
         plugin_dir = tmp_path / "plugin"
 
     (_Loaded.plugin_dir / "prompts").mkdir(parents=True)
-    (_Loaded.plugin_dir / "prompts" / "t.j2").write_text("SHIPPED")
-    assert _template_text(_Loaded(), "prompts/t.j2") == "SHIPPED"
+    (_Loaded.plugin_dir / "prompts" / "t.md").write_text("SHIPPED")
+    assert _template_text(_Loaded(), "prompts/t.md") == "SHIPPED"
 
     over = get_settings().prompt_overrides_dir / "demo"
     over.mkdir(parents=True)
-    (over / "t.j2").write_text("EDITED")
-    assert _template_text(_Loaded(), "prompts/t.j2") == "EDITED"
+    (over / "t.md").write_text("EDITED")
+    assert _template_text(_Loaded(), "prompts/t.md") == "EDITED"
 
 
 async def test_events_path_is_published_while_the_agent_runs(tmp_env, tmp_path):

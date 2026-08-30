@@ -1,12 +1,34 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import type { Catalog, Overview, RunSummary, RunTask, SettingsDoc } from '@/lib/types';
+import type {
+  ArtifactRef,
+  Catalog,
+  Overview,
+  RunSummary,
+  RunTask,
+  SettingsDoc,
+} from '@/lib/types';
 
 async function j<T>(url: string, init?: RequestInit): Promise<T> {
   const res = await fetch(url, { ...init, headers: { 'Content-Type': 'application/json', ...(init?.headers || {}) } });
   if (!res.ok) throw new Error(`${res.status} ${await res.text().catch(() => res.statusText)}`);
   return res.json();
+}
+
+/** Resolve only references supplied by the backend; never derive storage URLs
+ *  or artifact keys from filesystem paths in the browser. */
+export function findArtifact(
+  artifacts: readonly ArtifactRef[] | null | undefined,
+  key: string,
+): ArtifactRef | undefined {
+  return artifacts?.find((artifact) => artifact.key === key && artifact.available);
+}
+
+export async function fetchArtifactText(artifact: ArtifactRef): Promise<string> {
+  const res = await fetch(artifact.viewUrl, { headers: { Accept: artifact.mediaType } });
+  if (!res.ok) throw new Error(`${res.status} ${await res.text().catch(() => res.statusText)}`);
+  return res.text();
 }
 
 export function useOverview() {
@@ -61,7 +83,12 @@ export function useModels() {
 }
 
 export function useSettings() {
-  return useQuery({ queryKey: ['settings'], queryFn: () => j<SettingsDoc>('/api/settings') });
+  return useQuery({
+    queryKey: ['settings'],
+    queryFn: () => j<SettingsDoc>('/api/settings'),
+    staleTime: 30_000,
+    refetchOnWindowFocus: false,
+  });
 }
 
 export function useCreateRun() {
