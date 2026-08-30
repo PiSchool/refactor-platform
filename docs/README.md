@@ -1,5 +1,7 @@
 # Documentation
 
+[← Back to README](../README.md)
+
 | Document | Scope |
 |---|---|
 | [Deployment](deployment.md) | Installing the stack, remote hosts, upgrades and backups |
