@@ -24,6 +24,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          # The repository had no Pages site, so this step failed the first
+          # deployment looking for one. Creating it needs a setting a repository
+          # administrator flips once; asking the action to create it lets the
+          # workflow stand on its own, and it is a no-op once the site exists.
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site
