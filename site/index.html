@@ -11,7 +11,10 @@
       name="description"
       content="An open-source evaluation harness for repository-scale refactoring agents. Accepted to EMNLP 2026, System Demonstrations."
     />
-    <link rel="canonical" href="https://pischool.github.io/refactor-platform/" />
+    <link
+      rel="canonical"
+      href="https://pischool.github.io/refactor-platform/"
+    />
 
     <!-- Open Graph / social previews -->
     <meta property="og:type" content="website" />
@@ -23,7 +26,10 @@
       property="og:description"
       content="An open-source evaluation harness for repository-scale refactoring agents. Accepted to EMNLP 2026, System Demonstrations."
     />
-    <meta property="og:url" content="https://pischool.github.io/refactor-platform/" />
+    <meta
+      property="og:url"
+      content="https://pischool.github.io/refactor-platform/"
+    />
     <meta
       property="og:image"
       content="https://pischool.github.io/refactor-platform/assets/ui-run-detail-light.png"
@@ -233,8 +239,10 @@
               stroke-linejoin="round"
               aria-hidden="true"
             >
-              <path d="M3 5.5c2-1 5-1.2 7 .3v13c-2-1.5-5-1.3-7-.3z" />
-              <path d="M21 5.5c-2-1-5-1.2-7 .3v13c2-1.5 5-1.3 7-.3z" />
+              <path d="M12 5v16" />
+              <path
+                d="M20.001 19A2 2 0 0 0 22 17V5a2 2 0 0 0-1.999-2L16 3.002A5 5 0 0 0 12 5a5 5 0 0 0-4-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 1.999 2H8a5 5 0 0 1 4 2 5 5 0 0 1 4-2z"
+              />
             </svg>
             Docs
           </a>
@@ -248,8 +256,12 @@
               stroke-linejoin="round"
               aria-hidden="true"
             >
-              <path d="M7 8c-2 0-3 1.5-3 3.5S5 15 7 15c0 2-1 3.5-3 4" />
-              <path d="M16 8c-2 0-3 1.5-3 3.5S14 15 16 15c0 2-1 3.5-3 4" />
+              <path
+                d="M16 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"
+              />
+              <path
+                d="M5 3a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2 1 1 0 0 1 1 1v1a2 2 0 0 1-2 2 1 1 0 0 0-1 1v2a1 1 0 0 0 1 1 6 6 0 0 0 6-6V5a2 2 0 0 0-2-2z"
+              />
             </svg>
             Cite
           </a>
@@ -259,13 +271,37 @@
       <section class="teaser">
         <div class="carousel">
           <div class="carousel-controls">
-            <button class="carousel-arrow carousel-arrow--prev" type="button" aria-label="Previous screenshot">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <button
+              class="carousel-arrow carousel-arrow--prev"
+              type="button"
+              aria-label="Previous screenshot"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
                 <polyline points="15 18 9 12 15 6" />
               </svg>
             </button>
-            <button class="carousel-arrow carousel-arrow--next" type="button" aria-label="Next screenshot">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <button
+              class="carousel-arrow carousel-arrow--next"
+              type="button"
+              aria-label="Next screenshot"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
                 <polyline points="9 18 15 12 9 6" />
               </svg>
             </button>
@@ -273,38 +309,72 @@
           <div class="carousel-track">
             <figure class="carousel-slide">
               <img
+                class="zoomable"
                 alt="Coding tool step: the agent plugin, a free-text model field, and the provider's searchable model catalogue"
                 src="assets/ui-wizard-light.png"
               />
-              <figcaption>(a) Configure</figcaption>
+              <figcaption>
+                Pick the agent plugin and model you want to run.
+              </figcaption>
             </figure>
             <figure class="carousel-slide">
               <img
+                class="zoomable"
                 alt="The same task's terminal, replayed from the captured PTY bytes with workspace paths redacted"
                 src="assets/ui-terminal-light.png"
               />
-              <figcaption>(b) Watch it run</figcaption>
+              <figcaption>Watch the agent work in a live terminal.</figcaption>
             </figure>
             <figure class="carousel-slide">
               <img
+                class="zoomable"
                 alt="Run detail: agent steps on the left, live terminal and diff in the centre, evaluation checks and token accounting on the right"
                 src="assets/ui-run-detail-light.png"
               />
-              <figcaption>(c) Inspect the diff</figcaption>
+              <figcaption>
+                Inspect the agent's steps, terminal, and diff side by side.
+              </figcaption>
             </figure>
             <figure class="carousel-slide">
               <img
+                class="zoomable"
                 alt="Settings, Evaluation and metrics: the verdict rule over three gating stages, each with its failure reason, what it records, which plugin provides it and how many options it accepts, above the metrics recorded on every task"
                 src="assets/ui-evaluation-light.png"
               />
-              <figcaption>(d) Verify the result</figcaption>
+              <figcaption>
+                Verify the result against the evaluation gates and metrics.
+              </figcaption>
             </figure>
           </div>
-          <div class="carousel-dots" role="tablist" aria-label="Screenshot navigation">
-            <button class="carousel-dot" type="button" data-index="0" aria-label="Go to slide 1"></button>
-            <button class="carousel-dot" type="button" data-index="1" aria-label="Go to slide 2"></button>
-            <button class="carousel-dot" type="button" data-index="2" aria-label="Go to slide 3"></button>
-            <button class="carousel-dot" type="button" data-index="3" aria-label="Go to slide 4"></button>
+          <div
+            class="carousel-dots"
+            role="tablist"
+            aria-label="Screenshot navigation"
+          >
+            <button
+              class="carousel-dot"
+              type="button"
+              data-index="0"
+              aria-label="Go to slide 1"
+            ></button>
+            <button
+              class="carousel-dot"
+              type="button"
+              data-index="1"
+              aria-label="Go to slide 2"
+            ></button>
+            <button
+              class="carousel-dot"
+              type="button"
+              data-index="2"
+              aria-label="Go to slide 3"
+            ></button>
+            <button
+              class="carousel-dot"
+              type="button"
+              data-index="3"
+              aria-label="Go to slide 4"
+            ></button>
           </div>
         </div>
         <p class="teaser-caption">
@@ -400,6 +470,7 @@
               sizes.
             </p>
             <img
+              class="zoomable"
               alt="Integrity against purity for each chunking strategy: fixed line windows trace a steep trade-off from 20-line windows at 30 percent purity and 63 percent integrity to 240-line windows at 10 percent purity and 98 percent integrity, while AST chunks sit alone at 93 percent purity and 92 percent integrity"
               src="assets/chunking-frontier-light.png"
             />
@@ -411,6 +482,7 @@
               line-window retrieval trails even the no-retrieval baseline.
             </p>
             <img
+              class="zoomable"
               alt="RefactorBench pass counts by prompt mode: S1 agent 48/64/73, retrieval over line windows 31/44/57, retrieval over AST chunks 56/74/86"
               src="assets/refactorbench-prompt-modes-light.png"
             />
@@ -425,6 +497,7 @@
               evaluated, not just the flagship backbone.
             </p>
             <img
+              class="zoomable"
               alt="RefactorBench descriptive prompt per model: deepseek-v4-pro 77 to 89, qwen3.6-flash 73 to 86, minimax-m3 75 to 81, kimi-k2.6 71 to 78"
               src="assets/refactorbench-models-light.png"
             />
@@ -436,6 +509,7 @@
               detection, and a green build and test suite, applied in sequence.
             </p>
             <img
+              class="zoomable"
               alt="SWE-Refactor funnel: 159 of 177 tasks produced code, 105 were detected as the requested refactoring, 50 kept the build and tests green, 43 satisfied all three"
               src="assets/swe-verification-funnel-light.png"
             />
@@ -455,37 +529,69 @@
       </section>
 
       <footer>
-        <a
-          href="https://picampus-school.com/"
-          class="pischool-link"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            src="assets/pischool-wordmark.png"
-            alt="Pi School"
-            class="pischool-logo"
-          />
-        </a>
-        <p>
-          Platform source code is
-          <a
-            href="https://github.com/PiSchool/refactor-platform/blob/main/LICENSE"
-            target="_blank"
-            rel="noopener noreferrer"
-            >MIT</a
-          >
-          licensed. See
-          <a
-            href="https://github.com/PiSchool/refactor-platform/blob/main/CONTRIBUTING.md"
-            target="_blank"
-            rel="noopener noreferrer"
-            >CONTRIBUTING.md</a
-          >
-          to get involved.
-        </p>
+        <div class="footer__container">
+          <p>
+            <span class="footer-brand">
+              <img
+                class="footer-icon"
+                src="assets/favicon-32x32.png"
+                alt=""
+              />
+              <a
+                href="https://picampus-school.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                >Pi School</a
+              >
+            </span>
+            <span class="footer-text">
+              Platform source code is
+              <a
+                href="https://github.com/PiSchool/refactor-platform/blob/main/LICENSE"
+                target="_blank"
+                rel="noopener noreferrer"
+                >MIT</a
+              >
+              licensed. See
+              <a
+                href="https://github.com/PiSchool/refactor-platform/blob/main/CONTRIBUTING.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                >CONTRIBUTING.md</a
+              >
+              to get involved.
+            </span>
+          </p>
+        </div>
       </footer>
     </main>
+
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+      <button
+        class="lightbox-close"
+        id="lightboxClose"
+        type="button"
+        aria-label="Close"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <line x1="6" y1="6" x2="18" y2="18" />
+          <line x1="18" y1="6" x2="6" y2="18" />
+        </svg>
+      </button>
+      <div class="lightbox-track" id="lightboxTrack"></div>
+      <div class="lightbox-caption-bar">
+        <p class="lightbox-caption" id="lightboxCaption"></p>
+        <p class="lightbox-counter" id="lightboxCounter"></p>
+      </div>
+    </div>
 
     <script>
       (function () {
@@ -540,10 +646,259 @@
             clearTimeout(scrollTimer);
             scrollTimer = setTimeout(updateDots, 80);
           },
-          { passive: true }
+          { passive: true },
         );
 
         updateDots();
+      })();
+
+      (function () {
+        var zoomImgs = Array.from(document.querySelectorAll(".zoomable"));
+        var lightbox = document.getElementById("lightbox");
+        var lbTrack = document.getElementById("lightboxTrack");
+        var lbClose = document.getElementById("lightboxClose");
+        var lbCounter = document.getElementById("lightboxCounter");
+        var lbCaption = document.getElementById("lightboxCaption");
+        if (!lightbox || !zoomImgs.length) return;
+
+        var lbSlides = [];
+        var lbCaptions = [];
+        var lbIndex = 0;
+        var lbZoom = { scale: 1, x: 0, y: 0 };
+        var pointers = new Map();
+        var mode = "idle";
+        var gestureStartX = 0;
+        var gestureStartY = 0;
+        var swipeBaseX = 0;
+        var swipeDx = 0;
+        var panStart = { x: 0, y: 0, imgX: 0, imgY: 0 };
+        var pinchStartDist = 0;
+        var pinchStartScale = 1;
+        var lastTap = 0;
+
+        zoomImgs.forEach(function (srcImg, i) {
+          var lbSlide = document.createElement("div");
+          lbSlide.className = "lightbox-slide";
+          var lbImg = document.createElement("img");
+          lbImg.src = srcImg.src;
+          lbImg.alt = srcImg.alt;
+          lbImg.draggable = false;
+          lbSlide.appendChild(lbImg);
+          lbTrack.appendChild(lbSlide);
+          lbSlides.push(lbImg);
+
+          var captionEl =
+            (srcImg.closest("figure") &&
+              srcImg.closest("figure").querySelector("figcaption")) ||
+            (srcImg.closest(".figure-col") &&
+              srcImg.closest(".figure-col").querySelector("h3"));
+          lbCaptions.push(captionEl ? captionEl.textContent : "");
+
+          srcImg.style.cursor = "zoom-in";
+          srcImg.addEventListener("click", function () {
+            openLightbox(i);
+          });
+        });
+
+        function dist(a, b) {
+          return Math.hypot(a.x - b.x, a.y - b.y);
+        }
+
+        function applyZoom(animated) {
+          var img = lbSlides[lbIndex];
+          if (!img) return;
+          img.style.transition = animated ? "transform 0.2s ease" : "";
+          img.style.transform =
+            "translate(" +
+            lbZoom.x +
+            "px, " +
+            lbZoom.y +
+            "px) scale(" +
+            lbZoom.scale +
+            ")";
+        }
+
+        function clampZoomPan() {
+          var img = lbSlides[lbIndex];
+          if (!img) return;
+          var maxX = (img.offsetWidth * (lbZoom.scale - 1)) / 2;
+          var maxY = (img.offsetHeight * (lbZoom.scale - 1)) / 2;
+          lbZoom.x = Math.max(-maxX, Math.min(maxX, lbZoom.x));
+          lbZoom.y = Math.max(-maxY, Math.min(maxY, lbZoom.y));
+        }
+
+        function resetZoom(animated) {
+          lbZoom = { scale: 1, x: 0, y: 0 };
+          applyZoom(animated);
+        }
+
+        function toggleZoom() {
+          lbZoom =
+            lbZoom.scale > 1.02
+              ? { scale: 1, x: 0, y: 0 }
+              : { scale: 2.2, x: 0, y: 0 };
+          applyZoom(true);
+        }
+
+        function positionTrack(animated) {
+          lbTrack.style.transition = animated ? "transform 0.25s ease" : "none";
+          lbTrack.style.transform =
+            "translateX(" + -lbIndex * lightbox.clientWidth + "px)";
+        }
+
+        function updateCounter() {
+          lbCounter.textContent = lbIndex + 1 + " / " + lbSlides.length;
+          var caption = lbCaptions[lbIndex] || "";
+          lbCaption.textContent = caption;
+          lbCaption.style.display = caption ? "block" : "none";
+        }
+
+        function goTo(i) {
+          lbIndex = Math.max(0, Math.min(lbSlides.length - 1, i));
+          resetZoom(false);
+          positionTrack(true);
+          updateCounter();
+        }
+
+        function openLightbox(i) {
+          lbIndex = i;
+          resetZoom(false);
+          lightbox.classList.add("is-open");
+          lightbox.setAttribute("aria-hidden", "false");
+          document.body.style.overflow = "hidden";
+          positionTrack(false);
+          updateCounter();
+        }
+
+        function closeLightbox() {
+          lightbox.classList.remove("is-open");
+          lightbox.setAttribute("aria-hidden", "true");
+          document.body.style.overflow = "";
+        }
+
+        lbClose.addEventListener("click", closeLightbox);
+
+        document.addEventListener("keydown", function (e) {
+          if (!lightbox.classList.contains("is-open")) return;
+          if (e.key === "Escape") closeLightbox();
+          else if (e.key === "ArrowRight") goTo(lbIndex + 1);
+          else if (e.key === "ArrowLeft") goTo(lbIndex - 1);
+        });
+
+        window.addEventListener("resize", function () {
+          if (lightbox.classList.contains("is-open")) positionTrack(false);
+        });
+
+        lbTrack.addEventListener("pointerdown", function (e) {
+          lbTrack.setPointerCapture(e.pointerId);
+          pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+          if (pointers.size === 1) {
+            gestureStartX = e.clientX;
+            gestureStartY = e.clientY;
+            if (lbZoom.scale > 1.02) {
+              mode = "pan";
+              panStart = {
+                x: e.clientX,
+                y: e.clientY,
+                imgX: lbZoom.x,
+                imgY: lbZoom.y,
+              };
+            } else {
+              mode = "swipe";
+              swipeDx = 0;
+              swipeBaseX = -lbIndex * lightbox.clientWidth;
+              lbTrack.style.transition = "none";
+            }
+          } else if (pointers.size === 2) {
+            mode = "pinch";
+            var pts = Array.from(pointers.values());
+            pinchStartDist = dist(pts[0], pts[1]);
+            pinchStartScale = lbZoom.scale;
+          }
+        });
+
+        lbTrack.addEventListener("pointermove", function (e) {
+          if (!pointers.has(e.pointerId)) return;
+          pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+          if (mode === "swipe") {
+            swipeDx = e.clientX - gestureStartX;
+            lbTrack.style.transform =
+              "translateX(" + (swipeBaseX + swipeDx) + "px)";
+          } else if (mode === "pan") {
+            lbZoom.x = panStart.imgX + (e.clientX - panStart.x);
+            lbZoom.y = panStart.imgY + (e.clientY - panStart.y);
+            clampZoomPan();
+            applyZoom(false);
+          } else if (mode === "pinch" && pointers.size === 2) {
+            var pts = Array.from(pointers.values());
+            var d = dist(pts[0], pts[1]);
+            lbZoom.scale = Math.max(
+              1,
+              Math.min(4, pinchStartScale * (d / pinchStartDist)),
+            );
+            clampZoomPan();
+            applyZoom(false);
+          }
+        });
+
+        function endPointer(e) {
+          var wasSwipe = mode === "swipe" && pointers.size === 1;
+          var moved =
+            Math.abs(e.clientX - gestureStartX) > 10 ||
+            Math.abs(e.clientY - gestureStartY) > 10;
+          pointers.delete(e.pointerId);
+
+          if (wasSwipe) {
+            var threshold = lightbox.clientWidth * 0.18;
+            if (swipeDx < -threshold && lbIndex < lbSlides.length - 1)
+              lbIndex++;
+            else if (swipeDx > threshold && lbIndex > 0) lbIndex--;
+            positionTrack(true);
+            updateCounter();
+
+            if (!moved) {
+              var now = Date.now();
+              if (now - lastTap < 300) {
+                toggleZoom();
+                lastTap = 0;
+              } else {
+                lastTap = now;
+              }
+            }
+          }
+
+          if (mode === "pan" && !moved) {
+            var now2 = Date.now();
+            if (now2 - lastTap < 300) {
+              toggleZoom();
+              lastTap = 0;
+            } else {
+              lastTap = now2;
+            }
+          }
+
+          if (pointers.size < 2 && mode === "pinch" && lbZoom.scale <= 1.02) {
+            resetZoom(true);
+          }
+
+          if (pointers.size === 1) {
+            var remaining = Array.from(pointers.values())[0];
+            panStart = {
+              x: remaining.x,
+              y: remaining.y,
+              imgX: lbZoom.x,
+              imgY: lbZoom.y,
+            };
+            mode = "pan";
+          } else if (pointers.size === 0) {
+            mode = "idle";
+          }
+        }
+
+        lbTrack.addEventListener("pointerup", endPointer);
+        lbTrack.addEventListener("pointercancel", endPointer);
       })();
     </script>
   </body>
