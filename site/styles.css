@@ -113,10 +113,18 @@ h1 {
 }
 
 .venue {
-  color: var(--accent);
   font-size: clamp(0.95rem, 3vw, 1.1rem);
   font-weight: 600;
   margin: 0 0 1.25rem;
+}
+
+.venue a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.venue a:hover {
+  text-decoration: underline;
 }
 
 .footnote {
