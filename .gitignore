@@ -15,3 +15,4 @@ dist/
 .e2e/
 .ruff_cache/
 .idea/
+.DS_Store

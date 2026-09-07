@@ -3,10 +3,89 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>RefactorPlatform — EMNLP 2026 System Demonstrations</title>
+    <title>
+      RefactorPlatform: An Open-Source Harness for Controlled Evaluation of
+      Repository-Scale Refactoring Agents
+    </title>
     <meta
       name="description"
       content="An open-source evaluation harness for repository-scale refactoring agents. Accepted to EMNLP 2026, System Demonstrations."
+    />
+    <link rel="canonical" href="https://pischool.github.io/refactor-platform/" />
+
+    <!-- Open Graph / social previews -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="RefactorPlatform: An Open-Source Harness for Controlled Evaluation of Repository-Scale Refactoring Agents"
+    />
+    <meta
+      property="og:description"
+      content="An open-source evaluation harness for repository-scale refactoring agents. Accepted to EMNLP 2026, System Demonstrations."
+    />
+    <meta property="og:url" content="https://pischool.github.io/refactor-platform/" />
+    <meta
+      property="og:image"
+      content="https://pischool.github.io/refactor-platform/assets/ui-run-detail-light.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="RefactorPlatform: An Open-Source Harness for Controlled Evaluation of Repository-Scale Refactoring Agents"
+    />
+    <meta
+      name="twitter:description"
+      content="An open-source evaluation harness for repository-scale refactoring agents. Accepted to EMNLP 2026, System Demonstrations."
+    />
+    <meta
+      name="twitter:image"
+      content="https://pischool.github.io/refactor-platform/assets/ui-run-detail-light.png"
+    />
+
+    <!-- Google Scholar indexing (Highwire Press tags) -->
+    <meta
+      name="citation_title"
+      content="RefactorPlatform: An Open-Source Harness for Controlled Evaluation of Repository-Scale Refactoring Agents"
+    />
+    <meta name="citation_author" content="Ben Amor, Aziz" />
+    <meta name="citation_author" content="Mali, Drish" />
+    <meta name="citation_author" content="Acharya, Mann" />
+    <meta name="citation_author" content="Iyer, Vijayasri" />
+    <meta name="citation_author" content="Bratières, Sébastien" />
+    <meta name="citation_publication_date" content="2026" />
+    <meta
+      name="citation_conference_title"
+      content="Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing: System Demonstrations"
+    />
+    <meta name="citation_arxiv_id" content="2609.04898" />
+    <meta name="citation_pdf_url" content="https://arxiv.org/pdf/2609.04898" />
+    <meta
+      name="citation_abstract_html_url"
+      content="https://arxiv.org/abs/2609.04898"
+    />
+
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="assets/favicon-16x16.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="assets/favicon-32x32.png"
+    />
+    <link
+      rel="apple-touch-icon"
+      sizes="128x128"
+      href="assets/favicon-128x128.png"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Assistant:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -21,47 +100,108 @@
 
         <ul class="authors">
           <li>
-            <a href="https://www.linkedin.com/in/aziz-benamor/" target="_blank" rel="noopener noreferrer">Aziz Ben Amor</a
+            <a
+              href="https://www.linkedin.com/in/aziz-benamor/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Aziz Ben Amor</a
             ><sup>1,*</sup>
           </li>
           <li>
-            <a href="https://www.linkedin.com/in/drish-mali/" target="_blank" rel="noopener noreferrer">Drish Mali</a
+            <a
+              href="https://www.linkedin.com/in/drish-mali/"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Drish Mali</a
             ><sup>1,*</sup>
           </li>
           <li>
-            <a href="https://mannacharya.com" target="_blank" rel="noopener noreferrer">Mann Acharya</a><sup>1,*</sup>
+            <a
+              href="https://mannacharya.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Mann Acharya</a
+            ><sup>1,*</sup>
           </li>
           <li>
-            <a href="https://www.linkedin.com/in/vijayasriiyer/" target="_blank" rel="noopener noreferrer"
+            <a
+              href="https://www.linkedin.com/in/vijayasriiyer/"
+              target="_blank"
+              rel="noopener noreferrer"
               >Vijayasri Iyer</a
             ><sup>1</sup>
           </li>
           <li>
-            <a href="https://www.linkedin.com/in/sebastien-bratieres/" target="_blank" rel="noopener noreferrer"
+            <a
+              href="https://www.linkedin.com/in/sebastien-bratieres/"
+              target="_blank"
+              rel="noopener noreferrer"
               >Sébastien Bratières</a
             ><sup>1,2</sup>
           </li>
         </ul>
-        <p class="affiliation"><sup>1</sup>Pi School, <sup>2</sup>Translated</p>
-
-        <p class="venue">EMNLP 2026 &middot; System Demonstrations</p>
+        <p class="affiliation">
+          <sup>1</sup
+          ><a
+            href="https://picampus-school.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Pi School</a
+          >, <sup>2</sup
+          ><a
+            href="https://translated.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Translated</a
+          >
+        </p>
 
         <p class="footnote">*Equal contribution.</p>
 
+        <p class="venue">EMNLP 2026 System Demonstrations</p>
+
         <nav class="links">
-          <a class="button" href="https://2026.emnlp.org/calls/demos/" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <a
+            class="button"
+            href="https://arxiv.org/abs/2609.04898"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
               <path
-                d="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6H6zm7 1.5L18.5 9H13V3.5zM8 12.5h8V14H8v-1.5zm0 3.5h8v1.5H8V16zm0-7h4v1.5H8v-1.5z"
-              ></path>
+                d="M6 3h9l5 5v11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"
+              />
+              <path d="M14 3v5h5" />
+              <line x1="9" y1="13" x2="15" y2="13" />
+              <line x1="9" y1="17" x2="15" y2="17" />
             </svg>
             Paper
           </a>
-          <a class="button" href="https://youtu.be/placeholder-demo-video" target="_blank" rel="noopener noreferrer">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm-2 5.5 7 4.5-7 4.5v-9z"
-              ></path>
+          <a
+            class="button"
+            href="https://youtu.be/placeholder-demo-video"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <polygon points="10,8.5 16,12 10,15.5" />
             </svg>
             Video
           </a>
@@ -84,18 +224,32 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M12 4.5c-1.9-1.4-5-1.9-8-1v16c3-1 6.1-.5 8 1 1.9-1.5 5-2 8-1v-16c-3-.9-6.1-.4-8 1z"
-              ></path>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M3 5.5c2-1 5-1.2 7 .3v13c-2-1.5-5-1.3-7-.3z" />
+              <path d="M21 5.5c-2-1-5-1.2-7 .3v13c2-1.5 5-1.3 7-.3z" />
             </svg>
             Docs
           </a>
           <a class="button" href="#bibtex">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-              <path
-                d="M6.5 7C4.57 7 3 8.57 3 10.5V17h6.5v-6.5H6.2c.05-1.1.95-2 2.05-2V6.5c-.6 0-1.15.06-1.75.5zm10 0c-1.93 0-3.5 1.57-3.5 3.5V17H19.5v-6.5h-3.3c.05-1.1.95-2 2.05-2V6.5c-.6 0-1.15.06-1.75.5z"
-              ></path>
+            <svg
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M7 8c-2 0-3 1.5-3 3.5S5 15 7 15c0 2-1 3.5-3 4" />
+              <path d="M16 8c-2 0-3 1.5-3 3.5S14 15 16 15c0 2-1 3.5-3 4" />
             </svg>
             Cite
           </a>
@@ -103,39 +257,59 @@
       </header>
 
       <section class="teaser">
-        <div class="panel-grid">
-          <figure>
-            <img
-              alt="Coding tool step: the agent plugin, a free-text model field, and the provider's searchable model catalogue"
-              src="assets/ui-wizard-light.png"
-            />
-            <figcaption>(a) Configure</figcaption>
-          </figure>
-          <figure>
-            <img
-              alt="The same task's terminal, replayed from the captured PTY bytes with workspace paths redacted"
-              src="assets/ui-terminal-light.png"
-            />
-            <figcaption>(b) Watch it run</figcaption>
-          </figure>
-          <figure>
-            <img
-              alt="Run detail: agent steps on the left, live terminal and diff in the centre, evaluation checks and token accounting on the right"
-              src="assets/ui-run-detail-light.png"
-            />
-            <figcaption>(c) Inspect the diff</figcaption>
-          </figure>
-          <figure>
-            <img
-              alt="Settings, Evaluation and metrics: the verdict rule over three gating stages, each with its failure reason, what it records, which plugin provides it and how many options it accepts, above the metrics recorded on every task"
-              src="assets/ui-evaluation-light.png"
-            />
-            <figcaption>(d) Verify the result</figcaption>
-          </figure>
+        <div class="carousel">
+          <div class="carousel-controls">
+            <button class="carousel-arrow carousel-arrow--prev" type="button" aria-label="Previous screenshot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
+            </button>
+            <button class="carousel-arrow carousel-arrow--next" type="button" aria-label="Next screenshot">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+          <div class="carousel-track">
+            <figure class="carousel-slide">
+              <img
+                alt="Coding tool step: the agent plugin, a free-text model field, and the provider's searchable model catalogue"
+                src="assets/ui-wizard-light.png"
+              />
+              <figcaption>(a) Configure</figcaption>
+            </figure>
+            <figure class="carousel-slide">
+              <img
+                alt="The same task's terminal, replayed from the captured PTY bytes with workspace paths redacted"
+                src="assets/ui-terminal-light.png"
+              />
+              <figcaption>(b) Watch it run</figcaption>
+            </figure>
+            <figure class="carousel-slide">
+              <img
+                alt="Run detail: agent steps on the left, live terminal and diff in the centre, evaluation checks and token accounting on the right"
+                src="assets/ui-run-detail-light.png"
+              />
+              <figcaption>(c) Inspect the diff</figcaption>
+            </figure>
+            <figure class="carousel-slide">
+              <img
+                alt="Settings, Evaluation and metrics: the verdict rule over three gating stages, each with its failure reason, what it records, which plugin provides it and how many options it accepts, above the metrics recorded on every task"
+                src="assets/ui-evaluation-light.png"
+              />
+              <figcaption>(d) Verify the result</figcaption>
+            </figure>
+          </div>
+          <div class="carousel-dots" role="tablist" aria-label="Screenshot navigation">
+            <button class="carousel-dot" type="button" data-index="0" aria-label="Go to slide 1"></button>
+            <button class="carousel-dot" type="button" data-index="1" aria-label="Go to slide 2"></button>
+            <button class="carousel-dot" type="button" data-index="2" aria-label="Go to slide 3"></button>
+            <button class="carousel-dot" type="button" data-index="3" aria-label="Go to slide 4"></button>
+          </div>
         </div>
         <p class="teaser-caption">
-          RefactorPlatform walks an operator from configuring a run to
-          verifying its result, live.
+          RefactorPlatform walks an operator from configuring a run to verifying
+          its result, live.
         </p>
       </section>
 
@@ -213,8 +387,8 @@
           orchestrated multi-agent topology evaluated (77%, S<sub>3</sub>,
           Copilot sub-agents), and retrieval's accuracy gains absorb its token
           overhead: cost per successful refactoring shifts by no more than $0.01
-          across all four models. See <a href="#bibtex">the paper</a> for the
-          full ablation, cost-efficiency, and Java (SWE-Refactor) results.
+          across all four models. See the paper for the full ablation,
+          cost-efficiency, and Java (SWE-Refactor) results.
         </p>
 
         <div class="figure-columns">
@@ -222,8 +396,8 @@
             <h3>Structural retrieval</h3>
             <p>
               AST-aware chunking sits alone on the purity/integrity frontier
-              that naive fixed-line windows only approach at much larger
-              window sizes.
+              that naive fixed-line windows only approach at much larger window
+              sizes.
             </p>
             <img
               alt="Integrity against purity for each chunking strategy: fixed line windows trace a steep trade-off from 20-line windows at 30 percent purity and 63 percent integrity to 240-line windows at 10 percent purity and 98 percent integrity, while AST chunks sit alone at 93 percent purity and 92 percent integrity"
@@ -233,9 +407,8 @@
           <div class="figure-col">
             <h3>Prompt sensitivity</h3>
             <p>
-              AST-chunk retrieval leads at every prompt specificity level;
-              naive line-window retrieval trails even the no-retrieval
-              baseline.
+              AST-chunk retrieval leads at every prompt specificity level; naive
+              line-window retrieval trails even the no-retrieval baseline.
             </p>
             <img
               alt="RefactorBench pass counts by prompt mode: S1 agent 48/64/73, retrieval over line windows 31/44/57, retrieval over AST chunks 56/74/86"
@@ -260,8 +433,7 @@
             <h3>SWE-Refactor verification</h3>
             <p>
               Java is held to a triple gate: code extraction, structural
-              detection, and a green build and test suite, applied in
-              sequence.
+              detection, and a green build and test suite, applied in sequence.
             </p>
             <img
               alt="SWE-Refactor funnel: 159 of 177 tasks produced code, 105 were detected as the requested refactoring, 50 kept the build and tests green, 43 satisfied all three"
@@ -283,7 +455,12 @@
       </section>
 
       <footer>
-        <a href="https://picampus-school.com/" class="pischool-link" target="_blank" rel="noopener noreferrer">
+        <a
+          href="https://picampus-school.com/"
+          class="pischool-link"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <img
             src="assets/pischool-wordmark.png"
             alt="Pi School"
@@ -309,5 +486,65 @@
         </p>
       </footer>
     </main>
+
+    <script>
+      (function () {
+        var track = document.querySelector(".carousel-track");
+        var slides = track ? Array.from(track.children) : [];
+        var dots = Array.from(document.querySelectorAll(".carousel-dot"));
+        var prevBtn = document.querySelector(".carousel-arrow--prev");
+        var nextBtn = document.querySelector(".carousel-arrow--next");
+        if (!track || !slides.length) return;
+
+        function currentIndex() {
+          var closest = 0;
+          var min = Infinity;
+          slides.forEach(function (slide, i) {
+            var d = Math.abs(slide.offsetLeft - track.scrollLeft);
+            if (d < min) {
+              min = d;
+              closest = i;
+            }
+          });
+          return closest;
+        }
+
+        function scrollToIndex(i) {
+          i = Math.max(0, Math.min(slides.length - 1, i));
+          track.scrollTo({ left: slides[i].offsetLeft, behavior: "smooth" });
+        }
+
+        function updateDots() {
+          var i = currentIndex();
+          dots.forEach(function (dot, di) {
+            dot.setAttribute("aria-current", di === i ? "true" : "false");
+          });
+        }
+
+        prevBtn.addEventListener("click", function () {
+          scrollToIndex(currentIndex() - 1);
+        });
+        nextBtn.addEventListener("click", function () {
+          scrollToIndex(currentIndex() + 1);
+        });
+        dots.forEach(function (dot, i) {
+          dot.addEventListener("click", function () {
+            scrollToIndex(i);
+          });
+        });
+
+        var scrollTimer;
+        track.addEventListener(
+          "scroll",
+          function () {
+            clearTimeout(scrollTimer);
+            scrollTimer = setTimeout(updateDots, 80);
+          },
+          { passive: true }
+        );
+
+        updateDots();
+      })();
+    </script>
   </body>
 </html>
