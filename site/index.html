@@ -393,13 +393,28 @@
       <section class="abstract">
         <h2>Abstract</h2>
         <p>
-          An open-source evaluation harness for repository-scale refactoring
-          agents. It holds the execution environment fixed and varies one design
-          axis at a time — model backbone, execution regime (baseline,
-          retrieval-augmented, multi-agent), retrieval chunking strategy, and
-          prompt specificity — with per-task isolated workspaces, live terminal
-          streaming, token and diff telemetry, AST-based verification for
-          Python, and compilation, test and RefactoringMiner gates for Java.
+          Repository-scale refactoring requires coding agents to propagate a
+          single change across many interdependent files without altering
+          program behavior, yet to our knowledge no existing harness isolates
+          the design choices that determine agent success on this task. We
+          present RefactorPlatform, an open-source evaluation harness that holds
+          the environment fixed and varies each design axis explicitly: model
+          backbone (via OpenRouter and GitHub Copilot CLI), execution regime
+          (baseline, retrieval-augmented, and multi-agent), and prompt
+          specificity. Each run executes in an isolated workspace with live
+          terminal streaming, per-task logging of tokens, diffs, and
+          transcripts, AST-based verification, and exportable telemetry for
+          audit and reproduction. Demonstrating the platform on 100 multi-file
+          RefactorBench tasks across four model families, we illustrate the
+          analyses it supports: AST-aware chunking outperforms naive
+          token-window chunking by 25-30% across prompt modes, whereas naive
+          retrieval falls below the retrieval-free baseline; a lean
+          retrieval-augmented single agent (86%) beats the sub-agent
+          configuration we evaluated (66%) on matched tasks with no task passing
+          under delegation that fails under retrieval; and retrieval's accuracy
+          gains absorb its token overhead, leaving cost per successful
+          refactoring unchanged. RefactorPlatform is open-sourced to make
+          refactoring-agent evaluation reproducible and auditable.
         </p>
       </section>
 
@@ -460,12 +475,13 @@
         </table>
 
         <p class="note">
-          A single lean retrieval-augmented agent (86%) also outperforms the one
-          orchestrated multi-agent topology evaluated (77%, S<sub>3</sub>,
-          Copilot sub-agents), and retrieval's accuracy gains absorb its token
-          overhead: cost per successful refactoring shifts by no more than $0.01
-          across all four models. See the paper for the full ablation,
-          cost-efficiency, and Java (SWE-Refactor) results.
+          A single lean retrieval-augmented agent (86%) also outperforms
+          sub-agent delegation (66%, S<sub>3</sub>, Copilot sub-agents), with no
+          task passing under delegation that fails under retrieval, and
+          retrieval's accuracy gains absorb its token overhead: cost per
+          successful refactoring shifts by no more than $0.01 across all four
+          models. See the paper for the full ablation, cost-efficiency, and
+          Java (SWE-Refactor) results.
         </p>
 
         <div class="figure-columns">
