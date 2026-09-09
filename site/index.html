@@ -90,7 +90,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Assistant:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Assistant:wght@400;500;600;700&family=Roboto:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
@@ -200,7 +200,7 @@
           </a>
           <a
             class="button"
-            href="https://youtu.be/placeholder-demo-video"
+            href="https://www.youtube.com/@pischool621/featured"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -385,8 +385,8 @@
           </div>
         </div>
         <p class="teaser-caption">
-          RefactorPlatform walks an operator from configuring a run to verifying
-          its result, live.
+          RefactorPlatform demonstration: How operators can configure, run, and
+          verify refactoring tasks, live.
         </p>
       </section>
 
@@ -418,6 +418,118 @@
         </p>
       </section>
 
+      <section class="why">
+        <h2>Motivation</h2>
+        <p class="why-lead">
+          Manual propagation of repository-scale changes is slow and a
+          persistent source of technical debt. Evaluating whether a coding agent
+          can automate it is a distinct problem from evaluating code generation:
+          benchmarks built for function-level synthesis or issue resolution do
+          not test multi-file propagation under a behavior-preservation
+          constraint.
+        </p>
+        <div class="why-grid">
+          <div class="why-item">
+            <h3>Repository scale is a distinct evaluation problem</h3>
+            <p>
+              Function-level benchmarks do not exercise cross-file reasoning;
+              issue-resolution suites such as SWE-bench do not require the
+              change to preserve behavior. Repository-scale refactoring requires
+              both at once.
+            </p>
+          </div>
+          <div class="why-item">
+            <h3>Design choices are entangled in prior evaluations</h3>
+            <p>
+              Model backbone, retrieval, prompting, and orchestration typically
+              change together between runs, so a pass-rate difference cannot be
+              attributed to any one of them.
+            </p>
+          </div>
+          <div class="why-item">
+            <h3>Surface similarity does not imply correctness</h3>
+            <p>
+              A patch that compiles or resembles a reference diff can still be
+              behaviorally wrong, yet many evaluations stop at that surface
+              check.
+            </p>
+          </div>
+          <div class="why-item">
+            <h3>Agent behavior is often hard to audit</h3>
+            <p>
+              Aggregate pass rates say little about how a result was reached;
+              without per-task transcripts, diffs, and token accounting, a
+              failure is difficult to diagnose after the fact.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="approach">
+        <h2>Approach</h2>
+        <p>
+          Most agent evaluations change several things at once — model,
+          scaffolding, and prompt together — so a pass-rate difference can't be
+          attributed to any one of them. RefactorPlatform holds the task and
+          workspace fixed and varies exactly one design axis per run, across
+          three cumulative execution regimes, so each comparison isolates a
+          single cause. The same infrastructure serves two audiences:
+          researchers isolating which design choice drives a result, and
+          practitioners auditing a configuration against their own codebase
+          before committing to one in production.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <h3>1) Task</h3>
+            <p>
+              A multi-file refactoring instruction against a real repository.
+            </p>
+          </div>
+
+          <div class="step">
+            <h3>2) Isolated workspace</h3>
+            <p>
+              Every run executes in an isolated workspace, escalated across
+              three cumulative execution regimes:
+            </p>
+            <ul class="regime-rows">
+              <li>
+                <strong>S<sub>1</sub> Baseline</strong> — a terminal coding
+                assistant, no retrieval or delegation.
+              </li>
+              <li>
+                <strong>S<sub>2</sub> +Retrieval</strong> — adds task-scoped AST
+                retrieval, grounding edits in syntax-tree chunks rather than
+                fixed line windows.
+              </li>
+              <li>
+                <strong>S<sub>3</sub> +Delegation</strong> — adds native
+                sub-agent delegation on top of S<sub>1</sub>+S<sub>2</sub>.
+              </li>
+            </ul>
+            <p class="regime-note">
+              Cumulative — each regime is a superset of the last.
+            </p>
+          </div>
+
+          <div class="step">
+            <h3>3) Verification gate</h3>
+            <p>
+              AST unit tests for Python, or extract, compile, test, and
+              RefactoringMiner for Java.
+            </p>
+          </div>
+
+          <div class="step">
+            <h3>4) Telemetry export</h3>
+            <p>
+              Diffs, tokens, and transcripts, exportable per task as CSV/ZIP.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="results">
         <h2>Results</h2>
 
@@ -437,52 +549,6 @@
             <span class="stat-label">Cost per successful refactor</span>
           </div>
         </div>
-
-        <table>
-          <caption>
-            Cross-model pass rate on RefactorBench (100 tasks), descriptive
-            prompts.
-          </caption>
-          <thead>
-            <tr>
-              <th>Model</th>
-              <th>S<sub>1</sub> Baseline</th>
-              <th>S<sub>2</sub> + AST Retrieval</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>qwen3.6-flash</td>
-              <td>73%</td>
-              <td>86%</td>
-            </tr>
-            <tr>
-              <td>minimax-m3</td>
-              <td>75%</td>
-              <td>81%</td>
-            </tr>
-            <tr>
-              <td>kimi-k2.6</td>
-              <td>71%</td>
-              <td>78%</td>
-            </tr>
-            <tr>
-              <td>deepseek-v4-pro</td>
-              <td>77%</td>
-              <td>89%</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <p class="note">
-          A single lean retrieval-augmented agent (86%) also outperforms
-          sub-agent delegation (66%, S<sub>3</sub>, Copilot sub-agents), with no
-          task passing under delegation that fails under retrieval, and
-          retrieval's accuracy gains absorb its token overhead: cost per
-          successful refactoring shifts by no more than $0.01 across all four
-          models. See the paper for the full ablation, cost-efficiency, and
-          Java (SWE-Refactor) results.
-        </p>
 
         <div class="figure-columns">
           <div class="figure-col">
@@ -538,6 +604,117 @@
             />
           </div>
         </div>
+
+        <table>
+          <caption>
+            Cross-model pass rate and cost-efficiency on RefactorBench (100
+            tasks), descriptive prompts.
+          </caption>
+          <thead>
+            <tr>
+              <th>Model</th>
+              <th>S<sub>1</sub> Baseline</th>
+              <th>S<sub>2</sub> + AST Retrieval</th>
+              <th>&Delta;</th>
+              <th>$/success (S<sub>1</sub>)</th>
+              <th>$/success (S<sub>2</sub>)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>qwen3.6-flash</td>
+              <td>73%</td>
+              <td>86%</td>
+              <td>+13pp</td>
+              <td>$0.13</td>
+              <td>$0.13</td>
+            </tr>
+            <tr>
+              <td>minimax-m3</td>
+              <td>75%</td>
+              <td>81%</td>
+              <td>+6pp</td>
+              <td>$0.65</td>
+              <td>$0.66</td>
+            </tr>
+            <tr>
+              <td>kimi-k2.6</td>
+              <td>71%</td>
+              <td>78%</td>
+              <td>+7pp</td>
+              <td>$0.63</td>
+              <td>$0.63</td>
+            </tr>
+            <tr>
+              <td>deepseek-v4-pro</td>
+              <td>77%</td>
+              <td>89%</td>
+              <td>+12pp</td>
+              <td>$1.39</td>
+              <td>$1.39</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="note">
+          A single lean retrieval-augmented agent (86%) also outperforms
+          sub-agent delegation (66%, S<sub>3</sub>, Copilot sub-agents), with no
+          task passing under delegation that fails under retrieval, and
+          retrieval's accuracy gains absorb its token overhead: cost per
+          successful refactoring shifts by no more than $0.01 across all four
+          models. See the paper for the full Java (SWE-Refactor) results.
+        </p>
+
+        <table>
+          <caption>
+            qwen3.6-flash — full ablation on RefactorBench: LSP enforcement
+            (S<sub>1</sub>) and chunking strategy (S<sub>2</sub>), by prompt
+            mode.
+          </caption>
+          <thead>
+            <tr>
+              <th>Prompt mode</th>
+              <th>S<sub>1</sub> +LSP</th>
+              <th>S<sub>1</sub> &minus;LSP</th>
+              <th>S<sub>2</sub> Naive chunking</th>
+              <th>S<sub>2</sub> AST chunking</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Descriptive</td>
+              <td>73%</td>
+              <td>71%</td>
+              <td>57%</td>
+              <td>86%</td>
+            </tr>
+            <tr>
+              <td>Base</td>
+              <td>64%</td>
+              <td>59%</td>
+              <td>44%</td>
+              <td>74%</td>
+            </tr>
+            <tr>
+              <td>Lazy</td>
+              <td>48%</td>
+              <td>44%</td>
+              <td>31%</td>
+              <td>56%</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <p class="note">
+          S<sub>3</sub> (Copilot sub-agents, native delegation) was run once
+          under descriptive prompting and scored 66% — behind S<sub>2</sub>'s
+          86% and roughly matching S<sub>1</sub>'s 73%. AST-aware chunking beats
+          naive fixed-line-window chunking by 25&ndash;30pp at every prompt
+          mode, and beats the no-retrieval S<sub>1</sub> baseline by
+          8&ndash;13pp; naive chunking trails the no-retrieval baseline
+          outright. See the paper for the full cost-efficiency and Java
+          (SWE-Refactor) results.
+        </p>
       </section>
 
       <section id="bibtex" class="bibtex">
@@ -564,7 +741,7 @@
               >
             </span>
             <span class="footer-text">
-              Platform source code is
+              RefactorPlatform is
               <a
                 href="https://github.com/PiSchool/refactor-platform/blob/main/LICENSE"
                 target="_blank"
@@ -646,15 +823,40 @@
           });
         }
 
+        var AUTOPLAY_DELAY = 4000;
+        var autoplayTimer = null;
+
+        function stopAutoplay() {
+          if (autoplayTimer) {
+            clearInterval(autoplayTimer);
+            autoplayTimer = null;
+          }
+        }
+
+        function startAutoplay() {
+          stopAutoplay();
+          autoplayTimer = setInterval(function () {
+            var next = currentIndex() + 1;
+            if (next >= slides.length) next = 0;
+            scrollToIndex(next);
+          }, AUTOPLAY_DELAY);
+        }
+
+        window.pauseCarouselAutoplay = stopAutoplay;
+        window.resumeCarouselAutoplay = startAutoplay;
+
         prevBtn.addEventListener("click", function () {
           scrollToIndex(currentIndex() - 1);
+          startAutoplay();
         });
         nextBtn.addEventListener("click", function () {
           scrollToIndex(currentIndex() + 1);
+          startAutoplay();
         });
         dots.forEach(function (dot, i) {
           dot.addEventListener("click", function () {
             scrollToIndex(i);
+            startAutoplay();
           });
         });
 
@@ -669,6 +871,7 @@
         );
 
         updateDots();
+        startAutoplay();
       })();
 
       (function () {
@@ -787,12 +990,14 @@
           document.body.style.overflow = "hidden";
           positionTrack(false);
           updateCounter();
+          if (window.pauseCarouselAutoplay) window.pauseCarouselAutoplay();
         }
 
         function closeLightbox() {
           lightbox.classList.remove("is-open");
           lightbox.setAttribute("aria-hidden", "true");
           document.body.style.overflow = "";
+          if (window.resumeCarouselAutoplay) window.resumeCarouselAutoplay();
         }
 
         lbClose.addEventListener("click", closeLightbox);
