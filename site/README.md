@@ -27,3 +27,10 @@ Then open http://localhost:8000.
 Pushing to `main` with changes under `site/` triggers
 [`.github/workflows/pages.yml`](../.github/workflows/pages.yml), which
 publishes this directory as-is to GitHub Pages.
+
+## CI
+
+PRs and pushes that only touch `site/**` are excluded (via `paths-ignore`)
+from [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — the
+backend/frontend/docs/browser/container checks don't apply to a static
+page and won't run.
