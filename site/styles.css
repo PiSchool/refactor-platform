@@ -16,6 +16,21 @@
     "Assistant", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     Helvetica, Arial, sans-serif;
   --mono: "SF Mono", "Cascadia Code", "Roboto Mono", Menlo, monospace;
+
+  /* brand accents, shared by the footer band, the evaluation-pipeline
+     diagram, and the hero buttons — darker "-d" variants are readable as
+     text/border color on white, the base tones are for fills */
+  --stage-pink: #f2789e;
+  --stage-pink-d: #a9546e;
+  --stage-green: #a8d24c;
+  --stage-green-d: #647e2d;
+  --stage-purple: #8f8fd9;
+  --stage-purple-d: #646497;
+  --stage-yellow: #eee87a;
+  --stage-yellow-d: #77743d;
+  --stage-blue: #8ecdf0;
+  --stage-blue-d: #557b90;
+  --stage-hair: #c3c9d2;
 }
 
 * {
@@ -168,6 +183,31 @@ h1 {
   transform: translateY(-1px);
 }
 
+.button--pink:hover {
+  border-color: var(--stage-pink);
+  color: var(--stage-pink-d);
+}
+
+.button--green:hover {
+  border-color: var(--stage-green);
+  color: var(--stage-green-d);
+}
+
+.button--purple:hover {
+  border-color: var(--stage-purple);
+  color: var(--stage-purple-d);
+}
+
+.button--yellow:hover {
+  border-color: var(--stage-yellow);
+  color: var(--stage-yellow-d);
+}
+
+.button--blue:hover {
+  border-color: var(--stage-blue);
+  color: var(--stage-blue-d);
+}
+
 .button svg {
   width: 1.0625rem;
   height: 1.0625rem;
@@ -199,7 +239,7 @@ figcaption {
   margin-top: 0.75rem;
   font-size: 1.05rem;
   font-weight: 500;
-  color: var(--fg);
+  color: var(--muted);
   text-align: center;
 }
 
@@ -290,7 +330,7 @@ figcaption {
 
 .teaser-caption {
   margin: 0.75rem auto 0;
-  max-width: 620px;
+  max-width: 760px;
   font-size: 1.15rem;
   color: var(--fg);
   text-align: center;
@@ -300,7 +340,7 @@ figcaption {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 2.5rem;
-  margin-top: 2.5rem;
+  margin: 2.5rem 0;
 }
 
 .figure-col h3 {
@@ -354,13 +394,6 @@ h2 {
   text-align: justify;
 }
 
-.approach p {
-  color: var(--fg);
-  font-size: 1.02rem;
-  line-height: 1.65;
-  margin: 0 0 2.75rem;
-}
-
 .why-lead {
   color: var(--fg);
   font-size: 1.04rem;
@@ -390,70 +423,255 @@ h2 {
   margin: 0;
 }
 
-.steps {
-  display: flex;
-  flex-direction: column;
+.approach .dek {
+  color: var(--fg);
+  font-size: 1.02rem;
+  line-height: 1.65;
+  max-width: 680px;
+  margin: 0 0 2.5rem;
 }
 
-.step {
-  padding: 1.75rem 0;
-  border-top: 1px solid var(--border);
-}
-
-.step:first-child {
-  padding-top: 0;
-  border-top: none;
-}
-
-.step:last-child {
-  padding-bottom: 0;
-}
-
-.step h3 {
+.approach .figure-intro h3 {
   font-family: var(--serif);
-  font-size: 1.15rem;
+  font-size: 1.25rem;
   font-weight: 500;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5rem;
+}
+
+.approach .figure-intro p {
+  font-size: 0.98rem;
+  color: var(--fg);
+  margin: 0 0 1rem;
+  max-width: 680px;
+}
+
+/* ---------- pipeline figure ---------- */
+.approach figure {
+  width: 100vw;
+  max-width: 1080px;
+  margin: 0 0 2.5rem 50%;
+  transform: translateX(-50%);
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
+
+.approach .scroller {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.approach svg {
+  display: block;
+  width: 100%;
+  min-width: 900px;
+  height: auto;
+}
+
+.approach .hint {
+  display: none;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  color: var(--muted);
   margin: 0 0 0.6rem;
 }
 
-.step > p {
-  font-size: 0.95rem;
-  color: var(--muted);
-  line-height: 1.6;
-  margin: 0 0 0.9rem;
-  max-width: 620px;
+@media (max-width: 960px) {
+  .approach .hint {
+    display: block;
+  }
 }
 
-.step > p:last-child {
-  margin-bottom: 0;
+.approach .t-stage {
+  font-family: var(--serif);
+  font-size: 16px;
+  font-weight: 600;
+  fill: var(--fg);
 }
 
-.regime-rows {
-  list-style: none;
-  margin: 0 0 1rem;
-  padding: 0;
+.approach .t-num {
+  font-family: var(--sans);
+  font-size: 13px;
+  fill: var(--stage-hair);
+}
+
+.approach .t-node {
+  font-family: var(--sans);
+  font-size: 12.5px;
+  fill: var(--fg);
+}
+
+.approach .t-node.b {
+  font-weight: 600;
+}
+
+.approach .t-node.q {
+  fill: var(--muted);
+}
+
+.approach .t-lane {
+  font-family: var(--sans);
+  font-size: 13px;
+  fill: var(--fg);
+}
+
+.approach .t-lane tspan.sub {
+  font-size: 9.5px;
+}
+
+.approach .t-lane tspan.mod {
+  fill: var(--muted);
+}
+
+.approach .t-small {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  fill: var(--muted);
+}
+
+.approach .flow {
+  stroke: #5a616c;
+  stroke-width: 1.1;
+  fill: none;
+}
+
+.approach .rule {
+  stroke: var(--stage-hair);
+  stroke-width: 1;
+}
+
+.approach .plain {
+  fill: #fff;
+  stroke: var(--stage-hair);
+  stroke-width: 1;
+}
+
+.approach .node {
+  fill: #fff;
+  stroke: #cdd3db;
+  stroke-width: 1;
+}
+
+.approach .node.on {
+  stroke: #a6adb8;
+}
+
+.approach .bar {
+  stroke: none;
+}
+
+.approach .bar.q {
+  opacity: 0.38;
+}
+
+/* ---------- written steps ---------- */
+.approach .steps {
+  border-top: 1px solid var(--border);
+}
+
+.approach .step {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 0 2rem;
+  padding: 2.1rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.approach .step-label {
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 1rem;
+}
+
+.approach .key {
+  display: flex;
+  height: 6px;
+  width: 56px;
+  border-radius: 1px;
+  overflow: hidden;
+}
+
+.approach .key i {
+  flex: 1;
+  display: block;
+}
+
+.approach .step h3 {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  font-weight: 500;
+  letter-spacing: -0.006em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.approach .step h3 em {
+  display: block;
+  font-style: normal;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  margin-bottom: 0.25rem;
+}
+
+.approach .step p {
+  margin: 0;
+  font-size: 0.95rem;
+  color: var(--fg);
+  line-height: 1.6;
   max-width: 620px;
 }
 
-.regime-rows li {
-  font-size: 0.92rem;
-  line-height: 1.55;
+.approach .step p + p {
+  margin-top: 0.6rem;
+}
+
+.approach .regimes {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+.approach .regime {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 0 1.5rem;
+  align-items: start;
+}
+
+.approach .regime .rname {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 600;
   color: var(--fg);
 }
 
-.regime-rows strong {
-  font-weight: 600;
-  color: var(--accent);
+.approach .regime .rname span {
+  font-weight: 400;
+  color: var(--muted);
 }
 
-.regime-note {
-  font-size: 0.82rem;
-  font-style: italic;
-  color: var(--muted);
-  margin: 0;
+.approach .regime p {
+  font-size: 0.92rem;
+}
+
+@media (max-width: 760px) {
+  .approach .step {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+  }
+
+  .approach .regime {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .approach .regime .chip {
+    max-width: 180px;
+  }
 }
 
 @media (max-width: 720px) {
@@ -519,9 +737,15 @@ table {
 caption {
   caption-side: top;
   text-align: left;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.55;
   color: var(--muted);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+caption strong {
+  color: var(--fg);
+  font-weight: 600;
 }
 
 th,

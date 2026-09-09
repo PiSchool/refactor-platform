@@ -175,7 +175,7 @@
 
         <nav class="links">
           <a
-            class="button"
+            class="button button--pink"
             href="https://arxiv.org/abs/2609.04898"
             target="_blank"
             rel="noopener noreferrer"
@@ -199,7 +199,7 @@
             Paper
           </a>
           <a
-            class="button"
+            class="button button--green"
             href="https://www.youtube.com/@pischool621/featured"
             target="_blank"
             rel="noopener noreferrer"
@@ -219,7 +219,7 @@
             Video
           </a>
           <a
-            class="button"
+            class="button button--purple"
             href="https://github.com/PiSchool/refactor-platform"
             target="_blank"
             rel="noopener noreferrer"
@@ -232,7 +232,7 @@
             Code
           </a>
           <a
-            class="button"
+            class="button button--yellow"
             href="https://github.com/PiSchool/refactor-platform/blob/main/docs/README.md"
             target="_blank"
             rel="noopener noreferrer"
@@ -253,7 +253,7 @@
             </svg>
             Docs
           </a>
-          <a class="button" href="#bibtex">
+          <a class="button button--blue" href="#bibtex">
             <svg
               viewBox="0 0 24 24"
               fill="none"
@@ -407,7 +407,7 @@
           audit and reproduction. Demonstrating the platform on 100 multi-file
           RefactorBench tasks across four model families, we illustrate the
           analyses it supports: AST-aware chunking outperforms naive
-          token-window chunking by 25-30% across prompt modes, whereas naive
+          token-window chunking by 25-30pp across prompt modes, whereas naive
           retrieval falls below the retrieval-free baseline; a lean
           retrieval-augmented single agent (86%) beats the sub-agent
           configuration we evaluated (66%) on matched tasks with no task passing
@@ -467,65 +467,437 @@
 
       <section class="approach">
         <h2>Approach</h2>
-        <p>
-          Most agent evaluations change several things at once — model,
-          scaffolding, and prompt together — so a pass-rate difference can't be
-          attributed to any one of them. RefactorPlatform holds the task and
-          workspace fixed and varies exactly one design axis per run, across
-          three cumulative execution regimes, so each comparison isolates a
-          single cause. The same infrastructure serves two audiences:
-          researchers isolating which design choice drives a result, and
-          practitioners auditing a configuration against their own codebase
-          before committing to one in production.
+        <p class="dek">
+          Every task is executed three times in a fresh workspace under
+          escalating capability, then judged by the same gate and exported
+          with the same telemetry.
         </p>
+
+        <div class="figure-intro">
+          <h3>Evaluation pipeline</h3>
+          <p>
+            One task, three runs. Color marks capability: the terminal agent
+            is present in every regime, retrieval is added at S<sub>2</sub>,
+            delegation at S<sub>3</sub>.
+          </p>
+        </div>
+
+        <figure>
+          <p class="hint">Scroll sideways to see the whole figure.</p>
+          <div class="scroller">
+            <svg
+              viewBox="0 0 1120 392"
+              role="img"
+              aria-labelledby="pipelineFigTitle pipelineFigDesc"
+            >
+              <title id="pipelineFigTitle">Evaluation pipeline</title>
+              <desc id="pipelineFigDesc">
+                A refactoring task enters an isolated workspace and is run
+                three times under cumulative regimes: baseline, baseline plus
+                AST retrieval, and baseline plus retrieval plus sub-agent
+                delegation. Every run passes through the same verification
+                gate and emits the same telemetry.
+              </desc>
+
+              <defs>
+                <marker
+                  id="pipelineArrow"
+                  viewBox="0 0 8 8"
+                  refX="7.2"
+                  refY="4"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M0 0 L8 4 L0 8 Z" fill="#5A616C" />
+                </marker>
+              </defs>
+
+              <!-- stage titles -->
+              <text class="t-num" x="8" y="60">1</text>
+              <text class="t-stage" x="24" y="60">Task</text>
+              <text class="t-num" x="176" y="60">2</text>
+              <text class="t-stage" x="192" y="60">Isolated workspace</text>
+              <text class="t-num" x="774" y="60">3</text>
+              <text class="t-stage" x="790" y="60">Verification gate</text>
+              <text class="t-num" x="980" y="60">4</text>
+              <text class="t-stage" x="996" y="60">Telemetry</text>
+
+              <!-- 1 · task -->
+              <rect class="plain" x="8" y="190" width="140" height="84" rx="2" />
+              <text class="t-node b" x="78" y="219" text-anchor="middle">
+                repository
+              </text>
+              <text class="t-node q" x="78" y="238" text-anchor="middle">
+                multi-file refactoring
+              </text>
+              <text class="t-node q" x="78" y="255" text-anchor="middle">
+                instruction
+              </text>
+              <line
+                class="flow"
+                x1="148"
+                y1="232"
+                x2="176"
+                y2="232"
+                marker-end="url(#pipelineArrow)"
+              />
+
+              <!-- 2 · workspace -->
+              <rect
+                x="176"
+                y="104"
+                width="546"
+                height="248"
+                rx="3"
+                fill="none"
+                stroke="#C6CCD5"
+                stroke-width="1"
+                stroke-dasharray="5 4"
+              />
+              <text class="t-small" x="190" y="128">
+                fresh container per run, no shared state
+              </text>
+
+              <!-- lane 1 -->
+              <text class="t-lane" x="190" y="164">
+                S
+                <tspan class="sub" dy="3">1</tspan>
+                <tspan dy="-3" dx="3">Baseline</tspan>
+              </text>
+              <rect
+                class="node on"
+                x="300"
+                y="138"
+                width="118"
+                height="44"
+                rx="2"
+              />
+              <rect
+                class="bar"
+                x="301"
+                y="139"
+                width="4"
+                height="42"
+                fill="var(--stage-pink)"
+              />
+              <text class="t-node b" x="359" y="158" text-anchor="middle">
+                terminal
+              </text>
+              <text class="t-node b" x="359" y="173" text-anchor="middle">
+                coding agent
+              </text>
+              <line
+                class="flow"
+                x1="418"
+                y1="160"
+                x2="774"
+                y2="160"
+                marker-end="url(#pipelineArrow)"
+              />
+
+              <!-- lane 2 -->
+              <text class="t-lane" x="190" y="236">
+                S
+                <tspan class="sub" dy="3">2</tspan>
+                <tspan class="mod" dy="-3" dx="3">+ Retrieval</tspan>
+              </text>
+              <rect class="node" x="300" y="210" width="118" height="44" rx="2" />
+              <rect
+                class="bar q"
+                x="301"
+                y="211"
+                width="4"
+                height="42"
+                fill="var(--stage-pink)"
+              />
+              <text class="t-node" x="359" y="230" text-anchor="middle">
+                terminal
+              </text>
+              <text class="t-node" x="359" y="245" text-anchor="middle">
+                coding agent
+              </text>
+              <line
+                class="flow"
+                x1="418"
+                y1="232"
+                x2="440"
+                y2="232"
+                marker-end="url(#pipelineArrow)"
+              />
+              <rect
+                class="node on"
+                x="440"
+                y="210"
+                width="118"
+                height="44"
+                rx="2"
+              />
+              <rect
+                class="bar"
+                x="441"
+                y="211"
+                width="4"
+                height="42"
+                fill="var(--stage-green)"
+              />
+              <text class="t-node b" x="499" y="230" text-anchor="middle">
+                task-scoped
+              </text>
+              <text class="t-node b" x="499" y="245" text-anchor="middle">
+                AST retrieval
+              </text>
+              <line
+                class="flow"
+                x1="558"
+                y1="232"
+                x2="774"
+                y2="232"
+                marker-end="url(#pipelineArrow)"
+              />
+
+              <!-- lane 3 -->
+              <text class="t-lane" x="190" y="308">
+                S
+                <tspan class="sub" dy="3">3</tspan>
+                <tspan class="mod" dy="-3" dx="3">+ Delegation</tspan>
+              </text>
+              <rect class="node" x="300" y="282" width="118" height="44" rx="2" />
+              <rect
+                class="bar q"
+                x="301"
+                y="283"
+                width="4"
+                height="42"
+                fill="var(--stage-pink)"
+              />
+              <text class="t-node" x="359" y="302" text-anchor="middle">
+                terminal
+              </text>
+              <text class="t-node" x="359" y="317" text-anchor="middle">
+                coding agent
+              </text>
+              <line
+                class="flow"
+                x1="418"
+                y1="304"
+                x2="440"
+                y2="304"
+                marker-end="url(#pipelineArrow)"
+              />
+              <rect class="node" x="440" y="282" width="118" height="44" rx="2" />
+              <rect
+                class="bar q"
+                x="441"
+                y="283"
+                width="4"
+                height="42"
+                fill="var(--stage-green)"
+              />
+              <text class="t-node" x="499" y="302" text-anchor="middle">
+                task-scoped
+              </text>
+              <text class="t-node" x="499" y="317" text-anchor="middle">
+                AST retrieval
+              </text>
+              <line
+                class="flow"
+                x1="558"
+                y1="304"
+                x2="580"
+                y2="304"
+                marker-end="url(#pipelineArrow)"
+              />
+              <rect
+                class="node on"
+                x="580"
+                y="282"
+                width="118"
+                height="44"
+                rx="2"
+              />
+              <rect
+                class="bar"
+                x="581"
+                y="283"
+                width="4"
+                height="42"
+                fill="var(--stage-purple)"
+              />
+              <text class="t-node b" x="639" y="302" text-anchor="middle">
+                native sub-agent
+              </text>
+              <text class="t-node b" x="639" y="317" text-anchor="middle">
+                delegation
+              </text>
+              <line
+                class="flow"
+                x1="698"
+                y1="304"
+                x2="774"
+                y2="304"
+                marker-end="url(#pipelineArrow)"
+              />
+
+              <!-- 3 · gate -->
+              <rect
+                class="node"
+                x="774"
+                y="120"
+                width="168"
+                height="216"
+                rx="2"
+              />
+              <rect
+                class="bar"
+                x="775"
+                y="121"
+                width="4"
+                height="214"
+                fill="var(--stage-yellow)"
+              />
+              <text class="t-small" x="790" y="152">PYTHON</text>
+              <text class="t-node" x="790" y="172">AST unit tests</text>
+              <line class="rule" x1="790" y1="196" x2="926" y2="196" />
+              <text class="t-small" x="790" y="222">JAVA</text>
+              <text class="t-node" x="790" y="242">extract</text>
+              <text class="t-node" x="790" y="260">compile, test</text>
+              <text class="t-node" x="790" y="278">RefactoringMiner</text>
+              <text class="t-small" x="790" y="312">pass / fail per run</text>
+              <line
+                class="flow"
+                x1="942"
+                y1="232"
+                x2="980"
+                y2="232"
+                marker-end="url(#pipelineArrow)"
+              />
+
+              <!-- 4 · telemetry -->
+              <rect
+                class="node"
+                x="980"
+                y="176"
+                width="132"
+                height="112"
+                rx="2"
+              />
+              <rect
+                class="bar"
+                x="981"
+                y="177"
+                width="4"
+                height="110"
+                fill="var(--stage-blue)"
+              />
+              <text class="t-node" x="996" y="204">diffs</text>
+              <text class="t-node" x="996" y="222">token counts</text>
+              <text class="t-node" x="996" y="240">transcripts</text>
+              <line class="rule" x1="996" y1="256" x2="1096" y2="256" />
+              <text class="t-small" x="996" y="274">CSV or ZIP, per task</text>
+            </svg>
+          </div>
+        </figure>
 
         <div class="steps">
           <div class="step">
-            <h3>1) Task</h3>
-            <p>
-              A multi-file refactoring instruction against a real repository.
-            </p>
+            <div class="step-label">
+              <span class="key"><i style="background: #dde1e7"></i></span>
+              <h3><em>01</em>Task</h3>
+            </div>
+            <div>
+              <p>
+                A multi-file refactoring instruction against a real
+                repository, drawn from RefactorBench (Python) or SWE-Refactor
+                (Java).
+              </p>
+            </div>
           </div>
 
           <div class="step">
-            <h3>2) Isolated workspace</h3>
-            <p>
-              Every run executes in an isolated workspace, escalated across
-              three cumulative execution regimes:
-            </p>
-            <ul class="regime-rows">
-              <li>
-                <strong>S<sub>1</sub> Baseline</strong> — a terminal coding
-                assistant, no retrieval or delegation.
-              </li>
-              <li>
-                <strong>S<sub>2</sub> +Retrieval</strong> — adds task-scoped AST
-                retrieval, grounding edits in syntax-tree chunks rather than
-                fixed line windows.
-              </li>
-              <li>
-                <strong>S<sub>3</sub> +Delegation</strong> — adds native
-                sub-agent delegation on top of S<sub>1</sub>+S<sub>2</sub>.
-              </li>
-            </ul>
-            <p class="regime-note">
-              Cumulative — each regime is a superset of the last.
-            </p>
+            <div class="step-label">
+              <span class="key">
+                <i style="background: var(--stage-pink)"></i>
+                <i style="background: var(--stage-green)"></i>
+                <i style="background: var(--stage-purple)"></i>
+              </span>
+              <h3><em>02</em>Isolated workspace</h3>
+            </div>
+            <div>
+              <p>
+                Every run executes in its own workspace, escalated across
+                three cumulative execution regimes — each a strict superset
+                of the last, so the three runs differ by exactly one
+                capability at a time.
+              </p>
+
+              <div class="regimes">
+                <div class="regime">
+                  <div>
+                    <span class="rname"
+                      >S<sub>1</sub> <span>Baseline</span></span
+                    >
+                  </div>
+                  <p>A terminal coding assistant — no retrieval, no delegation.</p>
+                </div>
+
+                <div class="regime">
+                  <div>
+                    <span class="rname"
+                      >S<sub>2</sub> <span>+ Retrieval</span></span
+                    >
+                  </div>
+                  <p>
+                    Adds task-scoped AST retrieval, grounding edits in
+                    syntax-tree chunks rather than fixed line windows.
+                  </p>
+                </div>
+
+                <div class="regime">
+                  <div>
+                    <span class="rname"
+                      >S<sub>3</sub> <span>+ Delegation</span></span
+                    >
+                  </div>
+                  <p>
+                    Adds native sub-agent delegation on top of S<sub
+                      >1</sub
+                    >
+                    and S<sub>2</sub>.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="step">
-            <h3>3) Verification gate</h3>
-            <p>
-              AST unit tests for Python, or extract, compile, test, and
-              RefactoringMiner for Java.
-            </p>
+            <div class="step-label">
+              <span class="key"
+                ><i style="background: var(--stage-yellow)"></i
+              ></span>
+              <h3><em>03</em>Verification gate</h3>
+            </div>
+            <div>
+              <p>
+                AST unit tests for Python, or extract, compile, test, and
+                RefactoringMiner for Java.
+              </p>
+            </div>
           </div>
 
           <div class="step">
-            <h3>4) Telemetry export</h3>
-            <p>
-              Diffs, tokens, and transcripts, exportable per task as CSV/ZIP.
-            </p>
+            <div class="step-label">
+              <span class="key"
+                ><i style="background: var(--stage-blue)"></i
+              ></span>
+              <h3><em>04</em>Telemetry export</h3>
+            </div>
+            <div>
+              <p>
+                Diffs, tokens, and transcripts, exportable per task as CSV or
+                ZIP.
+              </p>
+            </div>
           </div>
         </div>
       </section>
@@ -607,8 +979,9 @@
 
         <table>
           <caption>
-            Cross-model pass rate and cost-efficiency on RefactorBench (100
-            tasks), descriptive prompts.
+            <strong>Table 1.</strong> Cross-model pass rate and
+            cost-efficiency on RefactorBench (100 tasks), descriptive
+            prompts.
           </caption>
           <thead>
             <tr>
@@ -667,9 +1040,9 @@
 
         <table>
           <caption>
-            qwen3.6-flash — full ablation on RefactorBench: LSP enforcement
-            (S<sub>1</sub>) and chunking strategy (S<sub>2</sub>), by prompt
-            mode.
+            <strong>Table 2.</strong> qwen3.6-flash — full ablation on
+            RefactorBench: LSP enforcement (S<sub>1</sub>) and chunking
+            strategy (S<sub>2</sub>), by prompt mode.
           </caption>
           <thead>
             <tr>
