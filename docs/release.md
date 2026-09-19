@@ -102,7 +102,7 @@ start and finish times per task, so the gap does not recur.
 
 The platform records the model string it was given and the provider's reported
 usage for every task, which is what a rerun can be compared against. It cannot
-pin a hosted checkpoint — no harness calling a hosted API can — so the date is
+pin a hosted checkpoint (no harness calling a hosted API can), so the date is
 what carries that information, and it is why the table above exists.
 
 ## What this release cannot reconstruct
@@ -116,9 +116,8 @@ Stated plainly, because a version page that overclaims is worse than none.
   deterministic; they do not retroactively identify what produced the archive.
 - **Hosted model checkpoints are not pinned**, for the reason above.
 - **One archived run's task-level record is missing.** The `kimi-k2.6` S1
-  descriptive rerun reported in the paper has no per-task export; the archived
-  run under that configuration is the earlier one. See
-  [`results.md`](results.md).
+  descriptive run reported in the paper ships no per-task export; only its
+  summary table survives. See [`results.md`](results.md).
 
 ## Cutting the next release
 

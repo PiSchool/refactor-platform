@@ -3,7 +3,7 @@
 One of several extension points; [Extending](extending.md) is the overview.
 
 A benchmark is a directory under `plugins/benchmarks/<key>/`. The minimum is a
-`plugin.yaml` and a `tasks.yaml`. Python hooks are optional — a YAML-only
+`plugin.yaml` and a `tasks.yaml`. Python hooks are optional; a YAML-only
 benchmark works if the core presets cover its evaluation.
 
 The core never learns your benchmark's name. You compose it from the platform's
@@ -40,7 +40,7 @@ Every name is a metric installed under `plugins/evaluation/`, referenced by its
 directory name: `workspace_changed`, `git_diff`, `events_metrics`,
 `file_artifact`, `python_tests`, `pytest_suite`, `java_build`,
 `refactoring_miner`, `pyrefactor`, `codebleu`. Your benchmark configures them; it
-does not define one — a measurement of your own is [its own
+does not define one; a measurement of your own is [its own
 directory](evaluation.md#adding-a-metric), where every other benchmark can use it
 too.
 
@@ -66,7 +66,7 @@ tasks:
 ```
 
 Generate this file from your raw dataset in `data_bootstrap.py` /
-`generate_tasks.py` — commit `tasks.yaml`, gitignore the heavy data.
+`generate_tasks.py`; commit `tasks.yaml`, gitignore the heavy data.
 
 ## 3. `data_bootstrap.py` (optional)
 
@@ -76,7 +76,7 @@ def bootstrap(data_dir: Path) -> None:
     # `.ready` sentinel on success, `.error` on failure. No network at task time.
 ```
 
-Provisioning happens ahead of runs — either in the background at startup or via
+Provisioning happens ahead of runs: either in the background at startup or via
 `cd server && uv run python -m app.catalog.bootstrap <key>` for a local
 development checkout. In Docker, use
 `docker compose exec backend python -m app.catalog.bootstrap <key>`.
@@ -160,7 +160,7 @@ public repositories, verdict from two plugin metrics) and
 `plugins/benchmarks/swe` (custom stages + shared-state handoff) as references.
 
 `pyrefactor-live` is the shortest complete example: four tasks over `toolz` and
-`more-itertools`, each requiring one named refactoring, each verified twice — the
+`more-itertools`, each requiring one named refactoring, each verified twice: the
 structural check that the change *is* that refactoring, and the project's own
 suite to show it survived. Its bootstrap reads the clone URLs and pinned commits
 out of `tasks.yaml`, so adding a task is the only step needed to add a project.
@@ -171,7 +171,7 @@ The platform verifies what an *agent* produced; it does not verify what a task
 *claims*. Authoring-time checking that a task's reference ("gold") commit really
 is a behaviour-preserving refactoring is a deliberate future extension point and
 is not implemented. Validate reference commits before declaring a task file
-`ready` — an unsound task silently becomes an unsound benchmark result.
+`ready`; an unsound task silently becomes an unsound benchmark result.
 
 For `pyrefactor-live` this was done by hand: each of the four tasks was solved,
 the detector was checked to name the requested refactoring, and the project's

@@ -139,8 +139,8 @@ equivalent expression is shown, or an expression over stage names combined with
 or switched off is reported as invalid before it can be saved, in the same terms
 the server would refuse it.
 
-Each stage arrives with what it measures, what it records, where it comes from —
-the platform, a metric plugin, or the benchmark itself — and its options as typed
+Each stage arrives with what it measures, what it records, where it comes from
+(the platform, a metric plugin, or the benchmark itself), and its options as typed
 fields behind a fold. A switch decides whether it runs; a field shows the
 metric's own default until a value is entered, and one control restores that
 default. A stage that declares nothing is still listed and still configurable, by
@@ -159,7 +159,7 @@ is listed separately; adding one is a manifest edit
 ## Prompt templates
 
 **Settings → Prompts** lists each template with the tasks that select it. A
-benchmark declares the values it substitutes — in `prompt.variables` in its
+benchmark declares the values it substitutes: in `prompt.variables` in its
 manifest, or per template from Python when it builds the prompt itself. The
 editor marks each one present or missing and inserts a missing one at the cursor,
 and a save that drops a required value is refused rather than producing a prompt
@@ -176,14 +176,14 @@ toolchain probed inside the backend container with what each is needed for, and
 the retrieval pipeline stage by stage with the models and candidate counts each
 stage uses. Probe results are cached for five minutes and re-probed on request.
 
-Commands that belong to a plugin — the agent CLIs, the language servers — are
+Commands that belong to a plugin (the agent CLIs, the language servers) are
 reported under **Settings → Plugins**, beside the plugin that declares them,
 with the version the command itself answers with and the install command when it
 is absent. Each tool appears in one place.
 
 The deployment group reports a fingerprint of the source each image was built
-from — the server package, the plugins and `config.yaml` for the backend, the
-dashboard source for the frontend — plus the build time and `RP_BUILD_REV` when
+from (the server package, the plugins and `config.yaml` for the backend, the
+dashboard source for the frontend), plus the build time and `RP_BUILD_REV` when
 one was recorded. `GET /api/health` carries the backend's under `build`, and
 `scripts/deployment_status.py` compares both against the working tree. See
 [Confirm what is deployed](deployment.md#confirm-what-is-deployed).

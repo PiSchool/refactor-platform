@@ -36,7 +36,7 @@ them. Setups are deliberately not extensible, for the reason given below.
 
 | Package | Responsibility |
 |---|---|
-| `catalog/` | Discover plugins from `plugins/`, validate manifests, sync catalog rows, bootstrap benchmark data. Invalid plugins are collected into an error list — never crash the platform. |
+| `catalog/` | Discover plugins from `plugins/`, validate manifests, sync catalog rows, bootstrap benchmark data. Invalid plugins are collected into an error list; the platform never crashes. |
 | `execution/` | `pty_host` (owned PTY), `workspace` (materialize + diff), `setups` (fixed profiles), `taskloop` (per-task orchestration), `worker`/queue (sequential runs), and `evaltool` (self-check installer). |
 | `retrieval/` | AST-aware Python/Java chunking, strict index identity, hybrid search (pgvector/BM25) with fusion and cross-encoder reranking, deterministic or generative query expansion, prompt context, MCP tools, selectable model profiles, health, and provenance. |
 | `evaluation/` | `engine` resolves an ordered stage list, runs each over a shared `EvalContext`, and computes `passed` from a boolean expression over stage names. `presets/` holds the core stages; `registry` holds those contributed by metric plugins. |
@@ -58,7 +58,7 @@ them. Setups are deliberately not extensible, for the reason given below.
 
 ## Setups (platform core)
 
-Setups are **not** plugins — they are fixed profiles in `execution/setups.py`. A
+Setups are **not** plugins: they are fixed profiles in `execution/setups.py`. A
 plugin only *declares compatibility* (`setups:` in its manifest) and *may
 contribute a prompt block*.
 
@@ -79,7 +79,7 @@ flowchart LR
 | `s1_lsp` | Language-server config handed to the agent (via an `LSPPlugin`). |
 | `s2_rag_naive` | Mandatory Retrieval (S2) over fixed line windows; hybrid search with pre-injected context plus optional read-only MCP tools. |
 | `s2_rag_ast` | The same search pipeline over Python/Java class and method definitions parsed from syntax trees. |
-| `s1_eval` | An in-workspace `eval.sh` the agent may call to self-check. **In-session only** — the platform never drives feedback rounds. |
+| `s1_eval` | An in-workspace `eval.sh` the agent may call to self-check. **In-session only**: the platform never drives feedback rounds. |
 | `s3` | Sub-agent delegation enabled (agent-native), with a guiding prompt block. |
 
 A setup only *offers* LSP, self-evaluation, or sub-agents, so those profiles are
@@ -102,7 +102,7 @@ a correct edit from becoming false evidence for a regime the model did not use.
 benchmark's own `prepare` hook, then the `capture` metrics, then the `verify`
 metrics, then the verdict. Every stage name is a metric id, resolved through
 `evaluation/registry.py`, and every metric is one directory under
-`plugins/evaluation/` whose name is that id — the core defines none. Each returns
+`plugins/evaluation/` whose name is that id; the core defines none. Each returns
 a `StageResult` recorded under the metric's id; `passed` is a boolean expression
 over the verify stages (`"refactoring_miner and java_build"`). Values pass from
 the preparation step to the metrics through `EvalContext.shared`, which is how
@@ -111,7 +111,7 @@ SWE-Refactor hands `rm_args` to `refactoring_miner` and its reference text to
 
 This is why "refbench and swe are plugins that configure the platform's generic
 capabilities": each benchmark picks core capture/verify stages, supplies its own
-where needed, and declares the pass expression — no benchmark logic lives in the
+where needed, and declares the pass expression; no benchmark logic lives in the
 core.
 
 Operators may retune a stage's config, disable a stage, or replace the `passed`
@@ -160,7 +160,7 @@ and each now has a regression test.
   are capped and persisted; native sub-agent use is proven from agent events.
 
 Before trusting any `java_build` verdict, confirm the unmodified checkout builds
-green — see the *baseline gate* in [replication.md](replication.md).
+green; see the *baseline gate* in [replication.md](replication.md).
 
 The Compose topology is `frontend` + `backend` + an internal PostgreSQL/pgvector
 service, which holds both structured run state and retrieval chunks and

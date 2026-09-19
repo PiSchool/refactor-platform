@@ -158,7 +158,7 @@ experiment. See [Retrieval (S2)](retrieval.md).
   **Settings → Services** and the backend logs.
 
 If the unchanged baseline fails under the same command, JDK, locale, and user,
-the result is a harness/dataset failure—not an agent verdict.
+the result is a harness/dataset failure, not an agent verdict.
 
 ## Python evaluation fails before tests run
 

@@ -69,7 +69,7 @@ RETRIEVAL_DB_READER_PASSWORD=REPLACE_WITH_A_DIFFERENT_RANDOM_VALUE
 The dashboard loads the selected provider's catalogue and offers every model
 with text output and tool support; the wizard also accepts a model id typed by
 hand, and each run persists the model it actually used. Adding a provider is an
-entry in `config.yaml` and a key here — see [Extending](extending.md#model-providers).
+entry in `config.yaml` and a key here; see [Extending](extending.md#model-providers).
 
 See [Configuration](configuration.md) for all variables and credential-handling
 rules.
@@ -195,8 +195,8 @@ for the full threat model.
 
 ## Track a second upstream repository
 
-A deployment checkout can keep its own remote while adding another repository —
-for example the Pi School one — as an update source. This is safer than
+A deployment checkout can keep its own remote while adding another repository
+(for example the Pi School one) as an update source. This is safer than
 overwriting remotes before reviewing branch differences:
 
 ```bash

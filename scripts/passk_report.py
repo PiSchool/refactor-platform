@@ -113,8 +113,8 @@ def main() -> int:
         lines += [f"**{flips_total} task-verdict flips** across repeats. Repeats do "
                   f"carry information here: pass@k exceeds pass@1, so a single run "
                   f"understates what the configuration can do, and the paper's "
-                  f"single-run rates carry run-to-run uncertainty on top of the "
-                  f"task-sampling uncertainty already reported."]
+                  f"single-run rates combine task-sampling noise with run-to-run "
+                  f"variation."]
     if secs:
         lines += ["", f"Cost: {len(secs)} task-runs, median "
                       f"{statistics.median(secs):.0f}s each, "

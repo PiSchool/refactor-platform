@@ -33,15 +33,15 @@ the benchmark catalog reports `ready`. See [Deployment](deployment.md) first.
 
 Select **New run** from Workflows. The wizard has five steps:
 
-1. **Benchmark** — select a discovered, ready benchmark.
-2. **Tasks** — filter by project and benchmark-defined facets, then select one or
+1. **Benchmark**: select a discovered, ready benchmark.
+2. **Tasks**: filter by project and benchmark-defined facets, then select one or
    more tasks.
-3. **Coding tool** — select the agent plugin and model. Custom model identifiers
+3. **Coding tool**: select the agent plugin and model. Custom model identifiers
    are accepted when the provider supports them. A tool whose CLI is absent from
    the backend cannot be selected, and its install command is shown instead.
-4. **Setup** — choose one setup compatible with both the benchmark and agent. A
+4. **Setup**: choose one setup compatible with both the benchmark and agent. A
    setup the chosen tool cannot run names the capability it lacks.
-5. **Review** — check the configuration and set the per-task wall-clock timeout.
+5. **Review**: check the configuration and set the per-task wall-clock timeout.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="figures/ui-wizard-dark.png">

@@ -423,7 +423,8 @@ h2 {
   margin: 0;
 }
 
-.approach .dek {
+.approach .dek,
+.architecture .dek {
   color: var(--fg);
   font-size: 1.02rem;
   line-height: 1.65;
@@ -431,7 +432,8 @@ h2 {
   margin: 0 0 2.5rem;
 }
 
-.approach .figure-intro h3 {
+.approach .figure-intro h3,
+.architecture .figure-intro h3 {
   font-family: var(--serif);
   font-size: 1.25rem;
   font-weight: 500;
@@ -439,7 +441,8 @@ h2 {
   margin: 0 0 0.5rem;
 }
 
-.approach .figure-intro p {
+.approach .figure-intro p,
+.architecture .figure-intro p {
   font-size: 0.98rem;
   color: var(--fg);
   margin: 0 0 1rem;
@@ -447,7 +450,8 @@ h2 {
 }
 
 /* ---------- pipeline figure ---------- */
-.approach figure {
+.approach figure,
+.architecture figure {
   width: 100vw;
   max-width: 1080px;
   margin: 0 0 2.5rem 50%;
@@ -456,19 +460,22 @@ h2 {
   box-sizing: border-box;
 }
 
-.approach .scroller {
+.approach .scroller,
+.architecture .scroller {
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 }
 
-.approach svg {
+.approach svg,
+.architecture svg {
   display: block;
   width: 100%;
   min-width: 900px;
   height: auto;
 }
 
-.approach .hint {
+.approach .hint,
+.architecture .hint {
   display: none;
   font-family: var(--sans);
   font-size: 0.78rem;
@@ -482,30 +489,35 @@ h2 {
   }
 }
 
-.approach .t-stage {
+.approach .t-stage,
+.architecture .t-stage {
   font-family: var(--serif);
   font-size: 16px;
   font-weight: 600;
   fill: var(--fg);
 }
 
-.approach .t-num {
+.approach .t-num,
+.architecture .t-num {
   font-family: var(--sans);
   font-size: 13px;
   fill: var(--stage-hair);
 }
 
-.approach .t-node {
+.approach .t-node,
+.architecture .t-node {
   font-family: var(--sans);
   font-size: 12.5px;
   fill: var(--fg);
 }
 
-.approach .t-node.b {
+.approach .t-node.b,
+.architecture .t-node.b {
   font-weight: 600;
 }
 
-.approach .t-node.q {
+.approach .t-node.q,
+.architecture .t-node.q {
   fill: var(--muted);
 }
 
@@ -523,46 +535,76 @@ h2 {
   fill: var(--muted);
 }
 
-.approach .t-small {
+.approach .t-small,
+.architecture .t-small {
   font-family: var(--sans);
   font-size: 11px;
   letter-spacing: 0.02em;
   fill: var(--muted);
 }
 
-.approach .flow {
+.approach .flow,
+.architecture .flow {
   stroke: #5a616c;
   stroke-width: 1.1;
   fill: none;
 }
 
-.approach .rule {
+.approach .rule,
+.architecture .rule {
   stroke: var(--stage-hair);
   stroke-width: 1;
 }
 
-.approach .plain {
+.approach .plain,
+.architecture .plain {
   fill: #fff;
   stroke: var(--stage-hair);
   stroke-width: 1;
 }
 
-.approach .node {
+.approach .node,
+.architecture .node {
   fill: #fff;
   stroke: #cdd3db;
   stroke-width: 1;
 }
 
-.approach .node.on {
+.approach .node.on,
+.architecture .node.on {
   stroke: #a6adb8;
 }
 
-.approach .bar {
+.approach .bar,
+.architecture .bar {
   stroke: none;
 }
 
-.approach .bar.q {
+.approach .bar.q,
+.architecture .bar.q {
   opacity: 0.38;
+}
+
+/* ---------- architecture figure ---------- */
+/* The architecture section draws with the same system as the evaluation
+   pipeline above; the rules above are shared via the .architecture selectors.
+   Two additions are specific to it: the plugin-boundary arrows and label. */
+.architecture .flow.plugin {
+  stroke: var(--stage-purple-d);
+  stroke-dasharray: 4 3;
+}
+
+.architecture .t-plugin {
+  font-family: var(--sans);
+  font-size: 11px;
+  letter-spacing: 0.02em;
+  fill: var(--stage-purple-d);
+}
+
+.architecture .plugin-node {
+  fill: #fff;
+  stroke: var(--stage-purple);
+  stroke-width: 1;
 }
 
 /* ---------- written steps ---------- */

@@ -1,8 +1,8 @@
 # Replication
 
 The acceptance suite includes **12 single-task end-to-end
-runs** — each benchmark (RefactorBench, SWE-Refactor) across S1, S1-LSP,
-S1-eval, S3, S2-naive, and S2-AST — on the composed Docker stack with real BYOK
+runs**, each benchmark (RefactorBench, SWE-Refactor) across S1, S1-LSP,
+S1-eval, S3, S2-naive, and S2-AST, on the composed Docker stack with real BYOK
 credentials.
 
 The completed 21 July 2026 campaign, including exact accepted run IDs and
@@ -63,7 +63,7 @@ the benchmark, **one** task, `copilot` + `openrouter/free`, and the setup:
 | 7 | SWE-Refactor | s1_eval |
 | 8 | SWE-Refactor | s3 |
 
-Runs are sequential — launch them and they queue.
+Runs are sequential; launch them and they queue.
 
 Paid models must not be substituted for failed rows. Provider/rate-limit
 failures remain failed observations and must be retried later with
@@ -112,42 +112,42 @@ The run detail view has **Agent**, **Repository**, **Output**, **Prompt**, and
 - **Live**: the Agent tab streams the agent's own PTY. Toggle *Steps* for a
   grouped, GitHub-Actions-style log, or *Terminal* for the raw bytes.
   Status flips queued → running → completed.
-- **Replay**: reload the run after completion — the terminal replays the exact
+- **Replay**: reload the run after completion: the terminal replays the exact
   same bytes from `terminal.log`; nothing is reconstructed.
 - **Repository**: the exact checkout the agent works in. *Changes* renders the
   diff (files → hunks → lines); *All files* is a navigable tree of the whole
-  repo with changed files badged. Both update **while the agent is running** —
+  repo with changed files badged. Both update **while the agent is running**:
   the diff is recomputed from the working tree through a throwaway git index,
   so the agent's own index is never touched.
 - **Output**: the raw build/test output per evaluation stage (`python_tests`,
-  `java_build`, `refactoring_miner`) — the evidence behind the verdict.
+  `java_build`, `refactoring_miner`): the evidence behind the verdict.
 - **Checks** (Results column): the benchmark's verify pipeline, shown as
   pending from the moment the run starts and filled in as stages complete.
-  Test stages report counts, e.g. `python_tests — 4/5 tests passed.`
+  Test stages report counts, e.g. `python_tests: 4/5 tests passed.`
   The footer shows where the wall-clock went: agent time vs evaluation time.
 - **Result**: a pass/fail with a machine reason. A *failure* here is a valid
-  outcome — the agent's edit didn't pass the benchmark's real tests / AST
+  outcome: the agent's edit didn't pass the benchmark's real tests / AST
   check, not that the platform misbehaved. See "Verifying a failure is real".
 - **Export**: `Export ZIP` yields `summary.json` + `results.csv` + artifacts;
   `CSV` exports one run, `/api/runs.csv` exports every task of every run.
 
 Browsing a *finished* task's repository requires `Keep task workspaces`
-(Settings → General, on by default). Turning it off reclaims disk — a guava
-checkout is hundreds of MB — at the cost of post-hoc navigation.
+(Settings → General, on by default). Turning it off reclaims disk (a guava
+checkout is hundreds of MB) at the cost of post-hoc navigation.
 
 ## Notes on outcomes
 
 Pass/fail depends on the model. With a weak/free model, agent edits often fail
 the real RefactorBench pytest suite or the SWE-Refactor RefactoringMiner+build
-gate — correctly classified (`test_failed`, `compile_test_failed`,
+gate, correctly classified (`test_failed`, `compile_test_failed`,
 `ast_verification_failed`). The platform claim under test is **reproducible
 execution and evaluation**, not agent success rate.
 
 ### The baseline gate
 
 Before trusting any `java_build` verdict, confirm the **unmodified** checkout
-builds green in the container. If a clean tree fails, the harness — not the
-agent — is at fault:
+builds green in the container. If a clean tree fails, the harness, not the
+agent, is at fault:
 
 ```bash
 docker compose exec backend bash -lc '
@@ -165,12 +165,12 @@ checkout fail, blaming the agent):
 |---|---|
 | Build ran as `root` | root bypasses `chmod`; permission-denial tests (`testCanRead`, `testThrowsOnCannotDeleteFile`) fail |
 | No locale set | Java default charset `ANSI_X3.4-1968`; accented-text assertions fail |
-| `env` never passed to `subprocess.run` | per-task `JAVA_HOME` had no effect — JDK selection was inert |
+| `env` never passed to `subprocess.run` | per-task `JAVA_HOME` had no effect; JDK selection was inert |
 | Agent ran as `root`, build as `runner` | the agent shells out to `mvn`, leaving root-owned scratch in `/tmp` that the build cannot delete → phantom `Cannot delete file` errors |
 
 The agent session and the evaluation build now share **one** unprivileged
 identity (`runner`, see `app/execution/sandbox.py`) with `LANG=C.UTF-8`.
-`java.io.tmpdir` is **not** overridden — `FilesUncheckTest` asserts
+`java.io.tmpdir` is **not** overridden: `FilesUncheckTest` asserts
 on its value.
 
 ### Verifying a failure is real, not a harness bug
@@ -188,7 +188,7 @@ $RM -scr src/A.java before.java before.java "Extract Method"  # → "false false
 
 Worked example from the acceptance suite (SWE-Refactor / commons-io, S1): the
 agent edited the target file, but introduced `Files.readString(Path, Charset)`
-— a Java 11+ API — into a module whose pom pins `maven.compiler.release=8`.
+(a Java 11+ API) into a module whose pom pins `maven.compiler.release=8`.
 Maven rejected it (`compile_test_failed`) and RefactoringMiner
 reported no Extract Method (`false false`). Both verdicts are the
 agent's fault, not the harness's: the JDK selection, Maven run, and detector
@@ -234,7 +234,7 @@ Runs are queued and execute one at a time.
 
 Verdicts vary between runs: `openrouter/free` routes to whichever free model is
 available, and free models are rate-limited. A run that ends `provider_error`
-with `workspace_changed=false` means the agent never got to work — not that it
+with `workspace_changed=false` means the agent never got to work, not that it
 failed the task. The evaluation reports that distinctly.
 
 ### Baseline verification

@@ -10,7 +10,7 @@ project still builds and passes its own test suite.
 [![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB.svg)](server/pyproject.toml)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15-000000.svg)](web/package.json)
 
-Accepted to **[EMNLP 2026 — System Demonstrations](https://pischool.github.io/refactor-platform/)**.
+Accepted to **[EMNLP 2026 System Demonstrations](https://pischool.github.io/refactor-platform/)**.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="docs/figures/ui-run-detail-dark.png">
@@ -23,8 +23,8 @@ A refactoring is correct only when it preserves behaviour *and* performs the
 transformation that was asked for. Either can hold without the other: an agent
 can turn a suite green by deleting the difficult behaviour, and a textbook
 Extract Method can fail to compile. The platform therefore evaluates both for
-every task — the project's own build and test suite, and a structural reading of
-the diff by [RefactoringMiner](https://github.com/tsantalis/RefactoringMiner) —
+every task (the project's own build and test suite, and a structural reading of
+the diff by [RefactoringMiner](https://github.com/tsantalis/RefactoringMiner))
 and retains everything the verdict rests on: prompt, raw terminal bytes, agent
 events, diff, evaluation logs and a machine-readable result.
 
@@ -106,10 +106,10 @@ Copyable examples are in [`examples/plugins/`](examples/plugins/), and
 
 | | |
 |---|---|
-| **Benchmarks** | **RefactorBench** — 100 Python tasks in three prompt modes; **SWE-Refactor** — 1,099 Java tasks, including the 177-task compound subset the study reports; **Python Refactorings (live repositories)** — 4 tasks over `toolz` and `more-itertools` at pinned commits |
+| **Benchmarks** | **RefactorBench**: 100 Python tasks in three prompt modes; **SWE-Refactor**: 1,099 Java tasks, including the 177-task compound subset the study reports; **Python Refactorings (live repositories)**: 4 tasks over `toolz` and `more-itertools` at pinned commits |
 | **Agent CLIs** | **GitHub Copilot CLI**, **OpenAI Codex CLI**, **Aider**, **Claude Code**, **opencode** and **Junie CLI**, all six installed in the image. Each declares the setups it can honestly run and the request format it sends, so an agent paired with an endpoint that cannot serve it is refused before the run rather than failing inside one |
 | **Evaluation metrics** | Ten, each its own directory under `plugins/evaluation/`: Java build and RefactoringMiner detection; for Python, `pyrefactor` names the refactoring by comparing parse trees and `pytest_suite` runs the repository's own suite. A benchmark references any of them by id and defines none itself |
-| **Model providers** | OpenRouter, OpenAI, DeepSeek, Groq and Together are declared out of the box, as is any other OpenAI-compatible endpoint — a hosted gateway, vLLM, Ollama or an internal service. The model identifier is free text, so a run is not restricted to a curated list |
+| **Model providers** | OpenRouter, OpenAI, DeepSeek, Groq and Together are declared out of the box, as is any other OpenAI-compatible endpoint: a hosted gateway, vLLM, Ollama or an internal service. The model identifier is free text, so a run is not restricted to a curated list |
 | **Retrieval (S2)** | AST-aware chunking, code embeddings in pgvector, exact lexical search, rank fusion, cross-encoder reranking, prompt pre-injection and read-only search tools over MCP, with the resolved index identity recorded per run |
 | **Language servers** | `pylsp` for Python, Eclipse **JDT.LS** for Java |
 | **Storage** | PostgreSQL with pgvector for run state and retrieval indexes |
@@ -180,11 +180,11 @@ evidence without the deployment.
 
 ## Contributors
 
-- [Aziz Ben Amor](https://www.linkedin.com/in/aziz-benamor/) — Pi School (equal contribution)
-- [Drish Mali](https://www.linkedin.com/in/drish-mali/) — Pi School (equal contribution)
-- [Mann Acharya](https://mannacharya.com) — Pi School (equal contribution)
-- [Vijayasri Iyer](https://www.linkedin.com/in/vijayasriiyer/) — Pi School (corresponding author)
-- [Sébastien Bratières](https://www.linkedin.com/in/sebastien-bratieres/) — Pi School, Translated
+- [Aziz Ben Amor](https://www.linkedin.com/in/aziz-benamor/), Pi School (equal contribution)
+- [Drish Mali](https://www.linkedin.com/in/drish-mali/), Pi School (equal contribution)
+- [Mann Acharya](https://mannacharya.com), Pi School (equal contribution)
+- [Vijayasri Iyer](https://www.linkedin.com/in/vijayasriiyer/), Pi School (corresponding author)
+- [Sébastien Bratières](https://www.linkedin.com/in/sebastien-bratieres/), Pi School, Translated
 
 [![Pi School](web/public/brand/pischool-wordmark.png)](https://picampus-school.com/)
 

@@ -68,8 +68,8 @@ make browser
 its own state directory, its own port, the test fixture plugins, and no provider
 key. It shares nothing with a running deployment.
 
-The target reports one line and succeeds where Chromium cannot start — a missing
-browser or a missing system library — because that is an absent dependency
+The target reports one line and succeeds where Chromium cannot start (a missing
+browser or a missing system library), because that is an absent dependency
 rather than a failing dashboard. Install it once:
 
 ```bash

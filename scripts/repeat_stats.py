@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """Score a repeated-run campaign: is the effect stable, or was one run lucky?
 
-`scripts/uncertainty.py` quantifies sampling uncertainty over the benchmark
-tasks while holding the run fixed. That is the wrong tool for a different
-question — whether a stochastic agent produces the same answer twice — so this
-scores the other axis: variation *between* repeated runs of the same
-configuration.
+A single run answers one question only: how those benchmark tasks went that
+day. This scores the other axis, variation between repeated runs of the same
+configuration, which is what separates "the model" from "one run of the model".
 
 Four things, because each answers a different objection:
 
-* **Per-run rates, mean and standard deviation** — the spread a single number hides.
-* **A 95 % interval on the mean**, from Student's t with n-1 degrees of freedom.
-  With five runs the normal approximation is optimistic; t is the honest choice.
-* **pass@k** — the share of tasks solved in at least one of k runs. The gap
+* **Per-run rates, mean and standard deviation**: the spread a single number
+  hides.
+* **A 95 % interval on the mean**, from Student's t with n-1 degrees of
+  freedom. With five runs the normal approximation is optimistic; t is the
+  honest choice.
+* **pass@k**: the share of tasks solved in at least one of k runs. The gap
   between pass@1 and pass@k is exactly how much of the score is luck.
-* **Per-task flip rate** — how many tasks change verdict between runs. A large
+* **Per-task flip rate**: how many tasks change verdict between runs. A large
   effect built on tasks that flip every run is not a stable effect.
 
 Consumes the JSON that `scripts/repeat_campaign.py` writes.
@@ -28,10 +28,20 @@ import json
 import math
 import pathlib
 import statistics
-import sys
 
-sys.path.insert(0, str(pathlib.Path(__file__).parent))
-from uncertainty import wilson  # noqa: E402
+#: Two-sided 95 % normal quantile, for the Wilson interval on a single run.
+Z95 = 1.959963984540054
+
+
+def wilson(passed: int, total: int, z: float = Z95) -> tuple[float, float]:
+    """95 % Wilson score interval for a binomial proportion, as percentages."""
+    if total == 0:
+        return (0.0, 0.0)
+    p, z2 = passed / total, z * z
+    centre = (p + z2 / (2 * total)) / (1 + z2 / total)
+    half = z * math.sqrt(p * (1 - p) / total + z2 / (4 * total * total)) / (1 + z2 / total)
+    return (100 * max(0.0, centre - half), 100 * min(1.0, centre + half))
+
 
 #: Two-sided 95 % critical values of Student's t, by degrees of freedom. Small
 #: campaigns only; beyond this the normal value is close enough.
