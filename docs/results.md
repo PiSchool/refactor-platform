@@ -163,7 +163,7 @@ retrieval scores below no retrieval at all.
 </picture>
 
 Four models, same benchmark, same descriptive prompt: AST retrieval helps every
-one of them, by `+5` to `+13` points. Model choice matters independently: the
+one of them, by `+6` to `+13` points. Model choice matters independently: the
 same benchmark and setup with a lazy prompt scores `48` on `qwen3.6-flash` and
 `7` on whatever free model the `openrouter/free` router happened to serve
 ([`exports/csv/refbench_lazy_openrouter_free_s1.csv`](exports/csv/refbench_lazy_openrouter_free_s1.csv)).

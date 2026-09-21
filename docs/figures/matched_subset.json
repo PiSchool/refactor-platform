@@ -1,7 +1,7 @@
 {
   "swe": [
     {
-      "config": "gpt-5-mini S1-eval",
+      "config": "gpt-5-mini\nS1-eval",
       "full": {
         "passed": 28,
         "total": 33,
@@ -14,7 +14,7 @@
       }
     },
     {
-      "config": "gpt-5-mini S1",
+      "config": "gpt-5-mini\nS1",
       "full": {
         "passed": 15,
         "total": 75,
@@ -27,7 +27,7 @@
       }
     },
     {
-      "config": "minimax-m3 S1",
+      "config": "minimax-m3\nS1",
       "full": {
         "passed": 52,
         "total": 177,
@@ -40,7 +40,7 @@
       }
     },
     {
-      "config": "qwen3.6-flash S1",
+      "config": "qwen3.6-flash\nS1",
       "full": {
         "passed": 32,
         "total": 155,
@@ -55,7 +55,7 @@
   ],
   "refbench": [
     {
-      "config": "S3 sub-agents (crashed)",
+      "config": "S3 sub-agents\n(crashed)",
       "full": {
         "passed": 20,
         "total": 26,
@@ -94,5 +94,6 @@
       }
     }
   ],
+  "sweSharedTasks": 31,
   "s3TasksExecuted": 26
 }

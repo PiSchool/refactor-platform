@@ -35,10 +35,14 @@ PRICES = {
 }
 
 #: Archive run -> the configuration whose per-task cost it measures.
+#: Run 3 is the naive run under the *base* prompt, not the descriptive one its
+#: appendix title says; the all-modes naive table (Run 2) carries the published
+#: descriptive 57. The key names the prompt so the row is not read as matching
+#: the descriptive S1 row above it.
 MEASURED = {
     "S1 (descriptive)": "Run 1: qwen3.6-flash S1 descriptive RefactorBench",
     "S1 (base, +LSP)": "qwen3.6-flash S1 base+LSP RefactorBench",
-    "S2 (naive chunking)": "Run 3: qwen3.6-flash S2-naive desc",
+    "S2 (naive chunking, base prompt)": "Run 3: qwen3.6-flash S2-naive desc",
 }
 
 
@@ -80,7 +84,7 @@ def main() -> int:
     measured = {}
     print("Measured per-task cost on qwen3.6-flash "
           f"(${PRICES['qwen3.6-flash'][0]}/M in, ${PRICES['qwen3.6-flash'][1]}/M out)\n")
-    print(f"  {'configuration':22s} {'in/task':>10s} {'out/task':>9s} {'$/task':>8s}")
+    print(f"  {'configuration':34s} {'in/task':>10s} {'out/task':>9s} {'$/task':>8s}")
     for label, title in MEASURED.items():
         if title not in runs:
             continue
@@ -88,11 +92,11 @@ def main() -> int:
         if not tokens:
             continue
         measured[label] = cost(tokens)
-        print(f"  {label:22s} {tokens[0]/1e3:9.1f}k {tokens[1]/1e3:8.1f}k "
+        print(f"  {label:34s} {tokens[0]/1e3:9.1f}k {tokens[1]/1e3:8.1f}k "
               f"{measured[label]:8.3f}")
 
     s1 = measured.get("S1 (descriptive)", 0.125)
-    s2 = measured.get("S2 (naive chunking)", 0.137)
+    s2 = measured.get("S2 (naive chunking, base prompt)", 0.137)
     # No qwen S3 run recorded tokens. The one multi-agent run that did
     # (deepseek, Run 13) spent 1.7x the input and 2.7x the output of its
     # single-agent counterpart; that ratio is applied here and is the least

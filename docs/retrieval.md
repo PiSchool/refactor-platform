@@ -131,6 +131,35 @@ Above 2000 dimensions pgvector cannot build an HNSW or IVFFlat index, so the
 is total and the cost grows with the corpus; the published study searched its
 index the same way.
 
+## Relation to the Tipico prototype
+
+This pipeline descends from the retrieval stack built during the Pi School
+Tipico challenge
+([PiSchool/Tipico---Multi-Agent-for-Code-Refactoring](https://github.com/PiSchool/Tipico---Multi-Agent-for-Code-Refactoring),
+`rag/`). The study numbers in [Results](results.md) were produced on that stack.
+What carried over unchanged, and what did not:
+
+| Stage | Tipico prototype | Here |
+|---|---|---|
+| Embedding | `nomic-embed-code-GGUF:Q4_K_M`, 3584-d, via Ollama `/api/embed` | same model, same dimension, same transport |
+| Vector store | pgvector, cosine (`<=>`) | same |
+| Reranking | `cross-encoder/ms-marco-MiniLM-L-6-v2` | `Xenova/ms-marco-MiniLM-L-6-v2`, the ONNX port of that checkpoint |
+| Query expansion | one generative rewrite | deterministic planner, plus a generative rewrite on top |
+| Chunking | CocoIndex `SplitRecursively`, tree-sitter grammars, 2000-char target | tree-sitter and Python `ast` directly, whole definitions, no size target |
+| Lexical search | none | exact BM25 over identifier-aware tokens |
+| Rank fusion | candidate union, capped | reciprocal rank fusion |
+
+The first three rows are why a Tipico-era result and a result from this
+repository are comparable at all. The last three are additions, and they are the
+reason [Results](results.md) says the study ran on the retrieval stack of its
+time: **the published AST-versus-window comparison contains no BM25 and no rank
+fusion**, because neither existed when it ran.
+
+That does not weaken the comparison. `strategy` enters the pipeline only at the
+index identity and the chunker (`server/app/retrieval/service.py`); every stage
+after chunking is identical in both arms, so a lexical stage present in both, or
+absent from both, cannot produce a difference between them.
+
 ## Failure behaviour
 
 | Condition | Result |
