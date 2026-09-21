@@ -49,7 +49,7 @@ plugins/evaluation/java_build/
   plugin.py       # class Plugin(EvaluationPlugin)
 ```
 
-Ids are therefore bare — `java_build`, `codebleu`, `pytest_suite` — and unique by
+Ids are therefore bare (`java_build`, `codebleu`, `pytest_suite`) and unique by
 construction. A benchmark **references** a metric by id and configures it; it
 never defines one. The loader refuses a benchmark that tries, and names the
 directory to move the measurement to. There is no second place a metric can live.
@@ -69,7 +69,7 @@ directory to move the measurement to. There is no second place a metric can live
 | [`git_diff`](../plugins/evaluation/git_diff/plugin.py) | no | records the diff and its size | nothing |
 | [`events_metrics`](../plugins/evaluation/events_metrics/plugin.py) | no | records tokens, model and self-check iterations | an agent session |
 
-A metric that cannot run here says so — on the Plugins screen before a run, and
+A metric that cannot run here says so: on the Plugins screen before a run, and
 in its stage result during one. It never reports success it did not establish.
 
 `python_tests` and `pytest_suite` are different measurements. The first runs one
@@ -117,8 +117,8 @@ Without this, harness defects are recorded as model failures. This gate caught:
 * the agent ran as `root` while the build ran as `runner`, leaving undeletable
   scratch files;
 * a `-Djava.io.tmpdir` override of ours broke `FilesUncheckTest`;
-* 93 rows of the SWE-Refactor dataset ship a truncated build command —
-  `-Dtest='!A,!B` with no closing quote — which dies in `/bin/sh` before Maven
+* 93 rows of the SWE-Refactor dataset ship a truncated build command,
+  `-Dtest='!A,!B` with no closing quote, which dies in `/bin/sh` before Maven
   starts.
 
 The last is repaired at ingest, and a command the shell cannot parse fails with
@@ -197,8 +197,8 @@ benchmarks whose fields differ.
 * Test counts are read only from a runner's own summary line. Maven prints
   `[INFO] 14 errors` on a *compile* failure; that is not fourteen tests.
 * Cost is computed from the provider's published per-token prices. A model with
-  no published price yields no cost, and a negative rate — OpenRouter's `-1`
-  sentinel for "depends which model the router picks" — is not a price.
+  no published price yields no cost, and a negative rate (OpenRouter's `-1`
+  sentinel for "depends which model the router picks") is not a price.
 * The agent reports output tokens per message but prompt tokens and true context
   occupancy only at `session.shutdown`. Mid-run the dashboard shows what was
   measured and marks the rest as not yet reported. It does not extrapolate.

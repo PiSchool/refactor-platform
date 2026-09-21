@@ -36,16 +36,16 @@ The platform never names a vendor to an agent. It resolves the active provider
 and exports `RP_PROVIDER`, `RP_PROVIDER_BASE_URL`, `RP_PROVIDER_API_KEY`,
 `RP_PROVIDER_PROTOCOLS`, and `RP_PROVIDER_ANTHROPIC_BASE_URL` where it applies.
 Translate that into whatever the CLI reads, and clear the variable that would let
-it authenticate against its own vendor instead — otherwise a run reports one
+it authenticate against its own vendor instead; otherwise a run reports one
 provider while the request is billed to another:
 
 | CLI | Reads | Cleared |
 |---|---|---|
 | Copilot | `COPILOT_PROVIDER_BASE_URL`, `COPILOT_PROVIDER_API_KEY` | `COPILOT_GITHUB_TOKEN` |
-| Aider | `OPENAI_API_BASE`, `OPENAI_API_KEY` | — |
-| Codex | `CODEX_HOME/config.toml` provider block | — |
+| Aider | `OPENAI_API_BASE`, `OPENAI_API_KEY` | - |
+| Codex | `CODEX_HOME/config.toml` provider block | - |
 | Claude Code | `ANTHROPIC_BASE_URL`, `ANTHROPIC_AUTH_TOKEN` | `ANTHROPIC_API_KEY`, `CLAUDE_CODE_OAUTH_TOKEN` |
-| opencode | generated `opencode.json` provider block | — |
+| opencode | generated `opencode.json` provider block | - |
 | Junie | `JUNIE_HOME` model profile reading `${RP_PROVIDER_API_KEY}` | `JUNIE_API_KEY` |
 
 Junie's profile stores `${RP_PROVIDER_API_KEY}` rather than the key: a profile
@@ -101,7 +101,7 @@ class Plugin(AgentPlugin):
         "eval_tool": True, "retrieval": True,
     }
     # Paths the adapter writes *inside the workspace*. The platform excludes
-    # them from the captured diff — they are scaffolding, not the agent's change.
+    # them from the captured diff: they are scaffolding, not the agent's change.
     # Omit them and `workspace_changed` can pass on your config file alone.
     workspace_artifacts = (".github/lsp.json",)
 

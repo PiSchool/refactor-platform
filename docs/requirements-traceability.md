@@ -25,7 +25,7 @@ docker compose config --quiet              # deployment topology
 |---|---|---|---|---|
 | 1 | FastAPI + Uvicorn, async | Done | `server/app/main.py` | `tests/test_api.py` |
 | 2 | PostgreSQL is the source of truth | Done | `docker-compose.yml`, `server/app/db/engine.py` | `tests/test_migrations.py::test_postgres_migrates_to_head_with_jsonb` |
-| 3 | Multi-file specification set | Done | predecessor repository `docs/srs/` | — |
+| 3 | Multi-file specification set | Done | predecessor repository `docs/srs/` | - |
 | 4 | In-process worker, no `state.json`, append-only blobs | Done | `server/app/execution/worker.py`, `execution/taskloop.py` | `tests/test_queue.py`, `tests/test_taskloop.py` |
 | 5 | Directory + manifest plugin discovery at startup | Done | `server/app/catalog/loader.py`, `catalog/manifest.py` | `tests/test_catalog.py::test_invalid_manifest_is_skipped` |
 | 6 | S3 uses the agent CLI's native sub-agent tool | Done | `server/app/execution/setups.py`, `plugins/agents/copilot` | `tests/test_setup_conformance.py::test_setup_execution_conformance_matrix` |

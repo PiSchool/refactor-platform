@@ -10,7 +10,12 @@ row the study itself recorded. A mismatch raises instead of rendering.
 Each figure is written twice — `<name>-light.png` and `<name>-dark.png` — so the
 docs can serve the variant that matches the reader's GitHub theme.
 
+With `--site`, the four figures the landing page ships are drawn in the page's
+own palette, straight into `site/assets/` under the names it links. The
+cross-checks run the same way; a wrong number refuses to render there too.
+
     uv run --with matplotlib --no-project python scripts/figures.py
+    uv run --with matplotlib --no-project python scripts/figures.py --site
 """
 from __future__ import annotations
 
@@ -56,6 +61,17 @@ LIGHT = Theme("light", "#ffffff", "#1f2328", "#59636e", "#d1d9e0",
 DARK = Theme("dark", "#0d1117", "#e6edf3", "#9198a1", "#30363d",
              "#6e7681", "#db6d28", "#58a6ff", "#3fb950", "#484f58")
 THEMES = (LIGHT, DARK)
+
+# The landing page serves figures inside white cards, styled by
+# site/styles.css. This theme uses that sheet's tokens: muted grays for the
+# frame, and the palette's base tones for series fills, the same fills the
+# pipeline diagram and footer band use (the "-d" variants are text/border
+# colours on the page, not fills). The neutral series (S1 agent bars) uses
+# the sheet's soft hairline gray so it sits quietly beside those fills.
+# It renders under the name "light" because
+# the page links the figures as "<stem>-light.png".
+SITE = Theme("light", "#ffffff", "#1a1a1a", "#5b5b5b", "#e2e2e2",
+             "#c3c9d2", "#f2789e", "#a8d24c", "#8ecdf0", "#c3c9d2")
 
 
 # --------------------------------------------------------------------------- #
@@ -425,7 +441,27 @@ def main() -> int:
     global FIGURES
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=pathlib.Path, default=FIGURES)
-    FIGURES = parser.parse_args().out
+    parser.add_argument("--site", action="store_true",
+                        help="draw the four figures the landing page ships, in its "
+                             "palette, into site/assets (the page links them as "
+                             "<stem>-light.png)")
+    args = parser.parse_args()
+    FIGURES = args.out
+
+    if args.site:
+        FIGURES = REPO / "site" / "assets"
+        prompt_modes = refactorbench_by_prompt_mode()
+        models = refactorbench_by_model()
+        stages, total, _by_type = swe_verification_funnel()
+        frontier = chunking_frontier()
+        written = [
+            draw_prompt_modes(SITE, prompt_modes),
+            draw_models(SITE, models),
+            draw_funnel(SITE, stages, total),
+            draw_chunking_frontier(SITE, frontier),
+        ]
+        print(f"wrote {len(written)} site figures to {FIGURES}")
+        return 0
 
     prompt_modes = refactorbench_by_prompt_mode()
     models = refactorbench_by_model()

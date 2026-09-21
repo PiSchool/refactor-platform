@@ -35,8 +35,8 @@ dependencies.
 
 ### Chunking
 
-`ast` parses each file and emits whole definitions — classes, methods,
-functions — with their symbol name, path and line range. A unit is therefore
+`ast` parses each file and emits whole definitions (classes, methods,
+functions) with their symbol name, path and line range. A unit is therefore
 something a refactoring can be applied to. Files that fail to parse fall back to
 windows, and the count of such files is recorded in the index report.
 
@@ -56,14 +56,14 @@ the exact index it was produced against.
 ### Query planning
 
 The deterministic planner derives several complementary views of the task from
-its own text — a broad natural-language query, an identifier query built from
+its own text: a broad natural-language query, an identifier query built from
 symbols and paths mentioned in the instructions, and a target query for files
 named in the task parameters. It is reproducible: the same task always plans the
 same queries.
 
 Generative expansion runs on top of it. A small instruction-tuned code
 model rewrites the task into further queries, which recovers vocabulary the
-instructions never use — the name of the helper the code actually calls, rather
+instructions never use: the name of the helper the code actually calls, rather
 than the paraphrase in the prompt. Expanded queries are added to the
 deterministic ones, never substituted for them, and each query is recorded with
 its origin in `queries.json`.

@@ -826,7 +826,7 @@
             <div>
               <p>
                 Every run executes in its own workspace, escalated across
-                three cumulative execution regimes — each a strict superset
+                three cumulative execution regimes, each a strict superset
                 of the last, so the three runs differ by exactly one
                 capability at a time.
               </p>
@@ -838,7 +838,7 @@
                       >S<sub>1</sub> <span>Baseline</span></span
                     >
                   </div>
-                  <p>A terminal coding assistant — no retrieval, no delegation.</p>
+                  <p>A terminal coding assistant: no retrieval, no delegation.</p>
                 </div>
 
                 <div class="regime">
@@ -902,6 +902,352 @@
         </div>
       </section>
 
+      <section class="architecture">
+        <h2>Architecture</h2>
+        <p class="dek">
+          The platform separates three concerns: what to run (benchmarks), what
+          runs it (agent CLIs), and how a run is executed and judged (the
+          fixed core). Benchmarks, agent CLIs, evaluation metrics and language
+          servers are plugins behind a single SDK boundary, and the core never
+          names a specific benchmark or agent. Each task runs one at a time in
+          a clean workspace at a pinned commit, under a terminal the platform
+          owns, so the live stream and the replay are the same bytes. Retrieval
+          indexes live outside the workspace and are injected into the prompt;
+          verification runs the project's own build, tests and structural
+          detection; and every artifact a verdict rests on is exported per
+          task.
+        </p>
+
+        <div class="figure-intro">
+          <h3>System design</h3>
+          <p>
+            One task at a time, from configuration to evidence. The same color
+            language as the pipeline above: pink for execution, green for
+            retrieval, yellow for verification, blue for evidence.
+          </p>
+        </div>
+
+        <figure>
+          <p class="hint">Scroll sideways to see the whole figure.</p>
+          <div class="scroller">
+            <svg
+              viewBox="0 0 1120 460"
+              role="img"
+              aria-labelledby="archFigTitle archFigDesc"
+            >
+              <title id="archFigTitle">System design</title>
+              <desc id="archFigDesc">
+                The web dashboard talks to a platform core that queues one
+                task at a time and discovers plugins from their manifests.
+                Each run happens in an isolated workspace: retrieval injects
+                context into a prompt, and the agent CLI runs under a
+                terminal the platform owns. The evaluation engine resolves
+                its stages from plugins and computes the verdict, and the
+                evidence column exports what the verdict rests on. A dashed
+                group marks the plugin boundary: benchmarks, agent CLIs,
+                metrics, and language servers.
+              </desc>
+
+              <defs>
+                <marker
+                  id="archArrow"
+                  viewBox="0 0 8 8"
+                  refX="7.2"
+                  refY="4"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M0 0 L8 4 L0 8 Z" fill="#5A616C" />
+                </marker>
+                <marker
+                  id="archPluginArrow"
+                  viewBox="0 0 8 8"
+                  refX="7.2"
+                  refY="4"
+                  markerWidth="7"
+                  markerHeight="7"
+                  orient="auto"
+                >
+                  <path d="M0 0 L8 4 L0 8 Z" fill="#646497" />
+                </marker>
+              </defs>
+
+              <!-- stage titles -->
+              <text class="t-num" x="8" y="60">1</text>
+              <text class="t-stage" x="24" y="60">Operator</text>
+              <text class="t-num" x="176" y="60">2</text>
+              <text class="t-stage" x="192" y="60">Platform core</text>
+              <text class="t-num" x="456" y="60">3</text>
+              <text class="t-stage" x="472" y="60">Isolated workspace</text>
+              <text class="t-num" x="748" y="60">4</text>
+              <text class="t-stage" x="764" y="60">Verification gate</text>
+              <text class="t-num" x="944" y="60">5</text>
+              <text class="t-stage" x="960" y="60">Evidence</text>
+
+              <!-- 1 · operator -->
+              <rect class="plain" x="8" y="150" width="140" height="84" rx="2" />
+              <text class="t-node b" x="78" y="179" text-anchor="middle">
+                web dashboard
+              </text>
+              <text class="t-node q" x="78" y="198" text-anchor="middle">
+                configure · watch
+              </text>
+              <text class="t-node q" x="78" y="215" text-anchor="middle">
+                inspect verdicts
+              </text>
+              <line
+                class="flow"
+                x1="148"
+                y1="196"
+                x2="176"
+                y2="196"
+                marker-end="url(#archArrow)"
+              />
+
+              <!-- 2 · platform core -->
+              <rect class="node on" x="176" y="176" width="118" height="44" rx="2" />
+              <rect
+                class="bar"
+                x="177"
+                y="177"
+                width="4"
+                height="42"
+                fill="var(--stage-pink)"
+              />
+              <text class="t-node b" x="235" y="196" text-anchor="middle">
+                run queue
+              </text>
+              <text class="t-node q" x="235" y="211" text-anchor="middle">
+                one task at a time
+              </text>
+              <rect class="node" x="176" y="248" width="118" height="44" rx="2" />
+              <rect
+                class="bar q"
+                x="177"
+                y="249"
+                width="4"
+                height="42"
+                fill="var(--stage-purple)"
+              />
+              <text class="t-node b" x="235" y="268" text-anchor="middle">
+                plugin catalog
+              </text>
+              <text class="t-node q" x="235" y="283" text-anchor="middle">
+                reads manifests
+              </text>
+              <line
+                class="flow"
+                x1="294"
+                y1="198"
+                x2="456"
+                y2="198"
+                marker-end="url(#archArrow)"
+              />
+
+              <!-- 3 · isolated workspace -->
+              <rect class="node on" x="472" y="84" width="108" height="44" rx="2" />
+              <rect
+                class="bar"
+                x="473"
+                y="85"
+                width="4"
+                height="42"
+                fill="var(--stage-green)"
+              />
+              <text class="t-node b" x="526" y="104" text-anchor="middle">
+                AST retrieval
+              </text>
+              <text class="t-node q" x="526" y="119" text-anchor="middle">
+                pgvector · BM25
+              </text>
+              <rect
+                x="456"
+                y="148"
+                width="268"
+                height="160"
+                rx="3"
+                fill="none"
+                stroke="#C6CCD5"
+                stroke-width="1"
+                stroke-dasharray="5 4"
+              />
+              <line
+                class="flow"
+                x1="526"
+                y1="128"
+                x2="526"
+                y2="186"
+                marker-end="url(#archArrow)"
+              />
+              <rect class="node" x="472" y="186" width="108" height="44" rx="2" />
+              <rect
+                class="bar q"
+                x="473"
+                y="187"
+                width="4"
+                height="42"
+                fill="var(--stage-green)"
+              />
+              <text class="t-node b" x="526" y="206" text-anchor="middle">
+                prompt
+              </text>
+              <text class="t-node q" x="526" y="221" text-anchor="middle">
+                exact bytes
+              </text>
+              <rect class="node on" x="600" y="186" width="108" height="44" rx="2" />
+              <rect
+                class="bar"
+                x="601"
+                y="187"
+                width="4"
+                height="42"
+                fill="var(--stage-pink)"
+              />
+              <text class="t-node b" x="654" y="206" text-anchor="middle">
+                agent CLI
+              </text>
+              <text class="t-node q" x="654" y="221" text-anchor="middle">
+                under owned PTY
+              </text>
+              <line
+                class="flow"
+                x1="580"
+                y1="208"
+                x2="600"
+                y2="208"
+                marker-end="url(#archArrow)"
+              />
+              <text class="t-small" x="472" y="262">
+                clean workspace at a pinned ref
+              </text>
+              <text class="t-small" x="472" y="278">
+                one unprivileged identity throughout
+              </text>
+              <line
+                class="flow"
+                x1="708"
+                y1="208"
+                x2="748"
+                y2="208"
+                marker-end="url(#archArrow)"
+              />
+
+              <!-- 4 · verification gate -->
+              <rect class="node" x="748" y="140" width="168" height="200" rx="2" />
+              <rect
+                class="bar"
+                x="749"
+                y="141"
+                width="4"
+                height="198"
+                fill="var(--stage-yellow)"
+              />
+              <text class="t-node b" x="764" y="170">evaluation engine</text>
+              <line class="rule" x1="764" y1="190" x2="902" y2="190" />
+              <text class="t-small" x="764" y="216">PYTHON</text>
+              <text class="t-node" x="764" y="236">AST unit tests</text>
+              <text class="t-small" x="764" y="262">JAVA</text>
+              <text class="t-node" x="764" y="282">extract · build · test</text>
+              <text class="t-node" x="764" y="300">RefactoringMiner</text>
+              <text class="t-small" x="764" y="326">stage list · verdict</text>
+              <line
+                class="flow"
+                x1="916"
+                y1="240"
+                x2="944"
+                y2="240"
+                marker-end="url(#archArrow)"
+              />
+
+              <!-- 5 · evidence -->
+              <rect class="node" x="944" y="148" width="132" height="160" rx="2" />
+              <rect
+                class="bar"
+                x="945"
+                y="149"
+                width="4"
+                height="158"
+                fill="var(--stage-blue)"
+              />
+              <text class="t-node" x="960" y="176">prompt · diffs</text>
+              <text class="t-node" x="960" y="194">terminal bytes</text>
+              <text class="t-node" x="960" y="212">token counts</text>
+              <line class="rule" x1="960" y1="232" x2="1060" y2="232" />
+              <text class="t-small" x="960" y="252">CSV or ZIP, per task</text>
+
+              <!-- plugin boundary -->
+              <rect
+                x="176"
+                y="384"
+                width="726"
+                height="72"
+                rx="3"
+                fill="none"
+                stroke="#C6CCD5"
+                stroke-width="1"
+                stroke-dasharray="5 4"
+              />
+              <text class="t-plugin" x="190" y="404">
+                plugins · one SDK boundary · server/app/catalog/sdk.py
+              </text>
+              <rect class="plugin-node" x="190" y="412" width="118" height="32" rx="2" />
+              <text class="t-node b" x="249" y="425" text-anchor="middle">
+                benchmarks
+              </text>
+              <text class="t-node q" x="249" y="437" text-anchor="middle">
+                tasks · verdicts
+              </text>
+              <rect class="plugin-node" x="324" y="412" width="118" height="32" rx="2" />
+              <text class="t-node b" x="383" y="425" text-anchor="middle">
+                agent CLIs
+              </text>
+              <text class="t-node q" x="383" y="437" text-anchor="middle">
+                six supported
+              </text>
+              <rect class="plugin-node" x="458" y="412" width="118" height="32" rx="2" />
+              <text class="t-node b" x="517" y="425" text-anchor="middle">
+                metrics
+              </text>
+              <text class="t-node q" x="517" y="437" text-anchor="middle">
+                stages by id
+              </text>
+              <rect class="plugin-node" x="592" y="412" width="118" height="32" rx="2" />
+              <text class="t-node b" x="651" y="425" text-anchor="middle">
+                language servers
+              </text>
+              <text class="t-node q" x="651" y="437" text-anchor="middle">
+                pylsp · JDT.LS
+              </text>
+              <line
+                class="flow plugin"
+                x1="235"
+                y1="384"
+                x2="235"
+                y2="292"
+                marker-end="url(#archPluginArrow)"
+              />
+              <line
+                class="flow plugin"
+                x1="560"
+                y1="384"
+                x2="560"
+                y2="308"
+                marker-end="url(#archPluginArrow)"
+              />
+              <line
+                class="flow plugin"
+                x1="832"
+                y1="384"
+                x2="832"
+                y2="340"
+                marker-end="url(#archPluginArrow)"
+              />
+            </svg>
+          </div>
+        </figure>
+      </section>
+
       <section class="results">
         <h2>Results</h2>
 
@@ -918,7 +1264,9 @@
           </div>
           <div class="stat">
             <span class="stat-value">$0.13</span>
-            <span class="stat-label">Cost per successful refactor</span>
+            <span class="stat-label"
+              >Cost per successful refactor<br />(qwen3.6-flash)</span
+            >
           </div>
         </div>
 
@@ -1031,7 +1379,8 @@
 
         <p class="note">
           A single lean retrieval-augmented agent (86%) also outperforms
-          sub-agent delegation (66%, S<sub>3</sub>, Copilot sub-agents), with no
+          sub-agent delegation (66%, S<sub>3</sub>, Copilot sub-agents on
+          qwen3.6-flash), with no
           task passing under delegation that fails under retrieval, and
           retrieval's accuracy gains absorb its token overhead: cost per
           successful refactoring shifts by no more than $0.01 across all four
@@ -1040,7 +1389,7 @@
 
         <table>
           <caption>
-            <strong>Table 2.</strong> qwen3.6-flash — full ablation on
+            <strong>Table 2.</strong> qwen3.6-flash: full ablation on
             RefactorBench: LSP enforcement (S<sub>1</sub>) and chunking
             strategy (S<sub>2</sub>), by prompt mode.
           </caption>
@@ -1079,8 +1428,9 @@
         </table>
 
         <p class="note">
-          S<sub>3</sub> (Copilot sub-agents, native delegation) was run once
-          under descriptive prompting and scored 66% — behind S<sub>2</sub>'s
+          S<sub>3</sub> (Copilot sub-agents, native delegation, qwen3.6-flash)
+          was run once
+          under descriptive prompting and scored 66%, behind S<sub>2</sub>'s
           86% and roughly matching S<sub>1</sub>'s 73%. AST-aware chunking beats
           naive fixed-line-window chunking by 25&ndash;30pp at every prompt
           mode, and beats the no-retrieval S<sub>1</sub> baseline by

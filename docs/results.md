@@ -2,9 +2,9 @@
 
 Two kinds of numbers are reported here, and they are kept apart.
 
-* **Platform acceptance** — produced by this repository and reproducible today
+* **Platform acceptance**: produced by this repository and reproducible today
   with [replication.md](replication.md).
-* **Study results** — produced with the same evaluation pipeline during a larger
+* **Study results**: produced with the same evaluation pipeline during a larger
   campaign. They motivate the tool; they are not re-run by acceptance.
 
 Every figure below is redrawn from the per-task CSVs in
@@ -83,7 +83,7 @@ a truncated build command shipped inside the benchmark data itself.
 SWE-Refactor compound set, 177 Java tasks, `qwen3.6-flash`, single agent, single
 pass. Nine tasks in ten produce code. Six in ten produce something
 RefactoringMiner recognises as the requested refactoring. Fewer than three in ten
-survive the project's own build and test suite — and only `43` do all three.
+survive the project's own build and test suite, and only `43` do all three.
 
 A harness that inspects only the target file reports `59 %`; running the
 project's real build reports `24 %`. Both numbers describe the same runs.
@@ -113,7 +113,7 @@ Prompt specificity moves the baseline agent from `48` to `73`: stating what,
 where and how is worth `+25` points over stating what alone.
 
 Retrieval strategy decides whether context helps at all. Chunking the repository
-along its parse tree — whole function and class definitions — adds `+8` to `+13`
+along its parse tree (whole function and class definitions) adds `+8` to `+13`
 points on top of every prompt mode. Chunking it into fixed line windows scores
 below no retrieval at all, `57` against `73` on the descriptive prompt: a window
 that straddles a definition boundary supplies part of a function without the
@@ -133,8 +133,8 @@ nine repositories under each strategy and measures two properties of every
 function and class definition, enumerated from the file's own parse tree so that
 neither chunker is scored against its own notion of a unit:
 
-* **integrity** — does some unit hold the whole definition?
-* **purity** — of the tightest unit that does, how much *is* the definition? This
+* **integrity**: does some unit hold the whole definition?
+* **purity**: of the tightest unit that does, how much *is* the definition? This
   is what retrieval spends: pulling one function drags in everything sharing its
   window.
 
@@ -150,8 +150,8 @@ integrity by `+29` points, and no window setting reaches AST's corner: a window
 can exceed AST on integrity only by growing until it swallows everything, which
 costs seven times the purity and a thirteen times larger payload.
 
-At the 80-line default the two are almost tied on integrity — `90.8` against
-`91.9` — and differ `5.7x` on purity. So windows do not fail to *contain* the
+At the 80-line default the two are almost tied on integrity (`90.8` against
+`91.9`) and differ `5.7x` on purity. So windows do not fail to *contain* the
 code; they fail to deliver it without noise, which is the same reason window
 retrieval scores below no retrieval at all.
 
@@ -163,7 +163,7 @@ retrieval scores below no retrieval at all.
 </picture>
 
 Four models, same benchmark, same descriptive prompt: AST retrieval helps every
-one of them, by `+5` to `+13` points. Model choice matters independently — the
+one of them, by `+5` to `+13` points. Model choice matters independently: the
 same benchmark and setup with a lazy prompt scores `48` on `qwen3.6-flash` and
 `7` on whatever free model the `openrouter/free` router happened to serve
 ([`exports/csv/refbench_lazy_openrouter_free_s1.csv`](exports/csv/refbench_lazy_openrouter_free_s1.csv)).
@@ -192,8 +192,8 @@ sub-agent run crashed after 26 of 100. A pass rate over 33 tasks does not belong
 on the same axis as one over 177 unless they are the *same* 33 tasks.
 
 So every configuration is scored twice: as reported, and restricted to the `31`
-tasks all four actually ran. Those 31 are easier than the full set — every other
-configuration gains `18` to `26` points on them — and `gpt-5-mini` still leads at
+tasks all four actually ran. Those 31 are easier than the full set: every other
+configuration gains `18` to `26` points on them, and `gpt-5-mini` still leads at
 `87 %`.
 
 `scripts/matched_subset_analysis.py` computes this and writes

@@ -40,8 +40,8 @@ from . import events        # this plugin's events.py
 import events               # wrong: a name every plugin competes for
 ```
 
-Two installed plugins may ship a module of the same name — all three shipped
-adapters keep their parser in `events.py` — and the loader keeps each one's
+Two installed plugins may ship a module of the same name (all three shipped
+adapters keep their parser in `events.py`), and the loader keeps each one's
 own. Tests that import a plugin's file directly bypass that isolation and will
 pass while the installed set is broken; use
 `app.catalog.loader.import_plugin_module(plugin_dir, "events")`, which is the
@@ -81,8 +81,8 @@ dot.
 Three benchmarks ship: **RefactorBench** (100 Python tasks), **SWE-Refactor**
 (1,099 Java tasks) and **Python Refactorings (live repositories)**, four tasks
 over `toolz` and `more-itertools` at pinned commits. The third is the shortest
-worked example of the whole contract — tasks that clone real repositories,
-verdicts that come from two plugin metrics — in
+worked example of the whole contract (tasks that clone real repositories,
+verdicts that come from two plugin metrics) in
 `plugins/benchmarks/pyrefactor-live/`. Full walkthrough:
 [Adding a benchmark](adding-a-benchmark.md).
 
@@ -256,7 +256,7 @@ facets:
 
 An operator selects tasks in the wizard by facet, by search, or individually,
 and can inspect the resolved list under **Settings → Tasks**. Adding tasks means
-editing the benchmark's task file — there is no separate upload endpoint for a
+editing the benchmark's task file; there is no separate upload endpoint for a
 task list; a private task set is a small benchmark plugin of its own, which is
 also what keeps its provenance attached to its results.
 

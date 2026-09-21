@@ -3,7 +3,7 @@
 The project landing page (paper info, demo screenshots, results) served at
 [pischool.github.io/refactor-platform](https://pischool.github.io/refactor-platform/).
 
-Static HTML/CSS/JS — no build step, no dependencies.
+Static HTML/CSS/JS: no build step, no dependencies.
 
 ## Structure
 
@@ -31,6 +31,6 @@ publishes this directory as-is to GitHub Pages.
 ## CI
 
 PRs and pushes that only touch `site/**` are excluded (via `paths-ignore`)
-from [`.github/workflows/ci.yml`](../.github/workflows/ci.yml) — the
+from [`.github/workflows/ci.yml`](../.github/workflows/ci.yml); the
 backend/frontend/docs/browser/container checks don't apply to a static
 page and won't run.

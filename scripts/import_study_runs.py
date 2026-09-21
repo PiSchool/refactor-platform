@@ -598,16 +598,14 @@ def main() -> int:
     print(f"parsed {len(runs)} study runs\n")
 
     # Tables whose totals don't match the published plots are dropped rather than
-    # shown — a demo that contradicts the paper is worse than a smaller demo.
+    # shown: a demo that contradicts the paper is worse than a smaller demo.
     #  - Run 3: S2-naive desc sources a *_detailed.csv scoring 44/100, superseded
     #    by the all-modes naive table (Run 2), which carries the published 57.
-    #  - Run 1: qwen S1 desc totals 73; the plot reports 71 (a 2-task source gap).
-    #  - Run 6: kimi S1 desc totals 61 from the surviving per-task data; the plot
-    #    reports 71 from a rerun whose per-task records were lost.
+    #  - Run 1: an early full export of the S1 descriptive run; the curated
+    #    s1_descriptive_lsp export is the record behind the published 73.
     SKIP_TITLES = {
         "Run 3: qwen3.6-flash S2-naive desc",
         "Run 1: qwen3.6-flash S1 descriptive RefactorBench",
-        "Run 6: kimi-k2.6 S1 desc RefactorBench",
     }
     csv_dir = args.appendix.parent / "csv"
     existing = set() if args.dry_run else imported_source_ids(args.api)
@@ -617,7 +615,7 @@ def main() -> int:
     eligible = 0
     for info in runs:
         if info["title"] in SKIP_TITLES:
-            print(f"{info['title'][:58]:60} (SKIP: superseded by all-modes table)")
+            print(f"{info['title'][:58]:60} (SKIP: superseded export)")
             continue
         summary, skipped = build_summary(info, info["rows"], catalog, agent)
         n = len(summary["tasks"])
