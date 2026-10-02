@@ -1,0 +1,18 @@
+# GPU for the model server.
+#
+# The base compose file reserves no device, so ollama falls back to CPU and an
+# S2 or S3 task spends minutes building its index instead of seconds. Apply this
+# override on a host with an NVIDIA GPU and the container toolkit installed:
+#
+#   docker compose -f docker-compose.yml -f docker-compose.gpu.yml up -d
+#
+# Nothing else changes: the same models, the same volume, the same healthcheck.
+services:
+  ollama:
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
