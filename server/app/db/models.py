@@ -15,6 +15,7 @@ from sqlalchemy import (
     DateTime,
     Float,
     ForeignKey,
+    Index,
     Integer,
     String,
     Text,
@@ -95,12 +96,15 @@ class Run(Base):
 
     run_tasks: Mapped[list["RunTask"]] = relationship(back_populates="run", cascade="all, delete-orphan")
 
+    # The worker asks for the oldest queued run every time it looks for work.
+    __table_args__ = (Index("ix_run_status_queued_at", "status", "queued_at"),)
+
 
 class RunTask(Base):
     __tablename__ = "run_task"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
-    run_id: Mapped[str] = mapped_column(ForeignKey("run.id"), nullable=False)
-    task_id: Mapped[str] = mapped_column(ForeignKey("task.id"), nullable=False)
+    run_id: Mapped[str] = mapped_column(ForeignKey("run.id"), nullable=False, index=True)
+    task_id: Mapped[str] = mapped_column(ForeignKey("task.id"), nullable=False, index=True)
     ordinal: Mapped[int] = mapped_column(Integer, nullable=False)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="pending")
     timeout_seconds: Mapped[int] = mapped_column(Integer, nullable=False)
@@ -142,7 +146,7 @@ class TaskResult(Base):
 class AgentSession(Base):
     __tablename__ = "agent_session"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=new_id)
-    run_task_id: Mapped[str] = mapped_column(ForeignKey("run_task.id"), nullable=False)
+    run_task_id: Mapped[str] = mapped_column(ForeignKey("run_task.id"), nullable=False, index=True)
     pid: Mapped[int | None] = mapped_column(Integer)
     status: Mapped[str] = mapped_column(String(16), nullable=False, default="running")
     terminal_path: Mapped[str | None] = mapped_column(Text)
