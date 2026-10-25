@@ -17,6 +17,7 @@ Stdlib only: imported by the adapter and by the wrapper process.
 from __future__ import annotations
 
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Iterator
@@ -45,6 +46,38 @@ def installed_version(binary: str) -> str:
     return lines[0].strip()[:40] if lines else ""
 
 
+def transcript_context(claude_dir: Path | None) -> int:
+    """Prompt size of the last main-thread request, read from Claude Code's own
+    session transcript under its config directory.
+
+    The stream-json frames carry a usage snapshot taken before the response is
+    final, and through some providers its input count is 0, which left context
+    unreported for most sessions. The transcript holds the final figures.
+    """
+    if not claude_dir:
+        return 0
+    last: tuple[str, int] | None = None
+    for transcript in Path(claude_dir).glob("projects/*/*.jsonl"):
+        try:
+            lines = transcript.read_text(encoding="utf-8", errors="replace").splitlines()
+        except OSError:
+            continue
+        for line in lines:
+            try:
+                record = json.loads(line)
+            except ValueError:
+                continue
+            if record.get("type") != "assistant" or record.get("isSidechain"):
+                continue
+            usage = (record.get("message") or {}).get("usage") or {}
+            prompt = sum(int(usage.get(k) or 0) for k in
+                         ("input_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"))
+            stamp = str(record.get("timestamp") or "")
+            if prompt and (last is None or stamp >= last[0]):
+                last = (stamp, prompt)
+    return last[1] if last else 0
+
+
 def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
 
@@ -58,6 +91,10 @@ class Translator:
         self.tokens_input = 0
         self.tokens_output = 0
         self.tokens_cache_read = 0
+        #: prompt size of the latest model request: what the context holds now.
+        #: The tokens_* counters are session totals, which exceed the window.
+        self.context_tokens = 0
+        self.message_id = ""
         self.last_message = ""
         self.errors: list[str] = []
         self.eval_tool_invocations = 0
@@ -128,6 +165,19 @@ class Translator:
         # A synthetic message carries no usage and is Claude Code speaking for
         # itself (a transport error, for instance), not the model answering.
         synthetic = str(message.get("model") or "") == "<synthetic>"
+        # Claude Code emits one frame per content block, so a response made of
+        # reasoning, text and a tool call arrives as three frames sharing one
+        # id. One response is one turn: it closes when the next response
+        # starts, not at each frame without a tool call, which split a response
+        # into several 0 ms turns and counted 84 turns for 26 requests.
+        message_id = str(message.get("id") or "")
+        if message_id and message_id != self.message_id:
+            yield from self._close_turn()
+            self.message_id = message_id
+        prompt = sum(int(usage.get(k) or 0) for k in
+                     ("input_tokens", "cache_read_input_tokens", "cache_creation_input_tokens"))
+        if prompt and not synthetic:
+            self.context_tokens = prompt
         blocks = message.get("content")
         if not isinstance(blocks, list):
             return
@@ -173,7 +223,8 @@ class Translator:
                     "turnId": str(self.turn), "toolCallId": call_id,
                     "toolName": name, "arguments": arguments,
                 })
-        if not called and not synthetic:
+        # Without ids a frame is the only boundary there is.
+        if not called and not synthetic and not message_id:
             yield from self._close_turn()
 
     def _results(self, message: dict) -> Iterator[dict[str, Any]]:
@@ -197,7 +248,8 @@ class Translator:
         yield from self._close_turn()
         yield self._event("session.shutdown", {
             "shutdownType": shutdown_type,
-            "currentTokens": self.tokens_input + self.tokens_output,
+            "currentTokens": transcript_context(os.environ.get("CLAUDE_CONFIG_DIR"))
+                             or self.context_tokens,
             "modelMetrics": {self.model or "model": {"usage": {
                 "inputTokens": self.tokens_input,
                 "outputTokens": self.tokens_output,
@@ -219,7 +271,7 @@ def parse(events_path: Path | None, terminal_log_path: Path, requested_model: st
         "tokens_input": 0, "tokens_output": 0, "tokens_cache_read": 0,
         "tokens_reasoning": 0, "context_tokens": 0, "model": requested_model,
         "response_text": "", "readable_transcript": "", "flags": set(),
-        "eval_tool_invocations": 0, "retrieval_invocations": 0,
+        "eval_tool_invocations": 0, "retrieval_invocations": 0, "subagent_invocations": 0,
     }
     rows: list[dict[str, Any]] = []
     if events_path and events_path.is_file():
@@ -243,6 +295,10 @@ def parse(events_path: Path | None, terminal_log_path: Path, requested_model: st
                 lines.append(content)
         elif kind == "tool.execution_start":
             name = str(data.get("toolName") or "")
+            # A sub-agent launch is what setup conformance checks for: without
+            # counting it, delegation in a single-agent run read as conformant.
+            if name in ("Agent", "Task"):
+                info["subagent_invocations"] += 1
             arguments = json.dumps(data.get("arguments") or {})[:400]
             lines.append(f"→ {name}({arguments})")
             if "eval.sh" in arguments:

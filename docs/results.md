@@ -213,6 +213,46 @@ deployment; the models and the pipeline are listed in
 
 ---
 
+## 3. Agent CLIs on the same tasks
+
+Produced by this release, not the study. Three agent CLIs ran the same ten
+RefactorBench tasks with the same model (`qwen/qwen3.6-flash`, through
+OpenRouter) and the same setup (`s1`), so the CLI is the only variable. The ten
+are the descriptive-mode tasks that no S1 configuration of the study solved and
+retrieval solved at least once: hard for a plain agent, and shown to be
+solvable. One run each, October 2026.
+
+| CLI | Passed | Input tokens | Output tokens | Cost | Agent time |
+|---|---|---|---|---|---|
+| OpenAI Codex CLI | 3/10 | 6.33M | 90.6k | $1.29 | 19 min |
+| Claude Code | 2/10 | 7.10M | 84.9k | $1.43 | 17 min |
+| opencode | 3/10 | 6.62M | 46.9k | $1.29 | 15 min |
+
+| Task | Codex | Claude Code | opencode |
+|---|---|---|---|
+| scrapy / rename-description-commands | pass | 6/7 | 5/7 |
+| fastapi / openapi-get-utils | pass | pass | pass |
+| requests / combine-from-key-to-key | pass | 4/5 | pass |
+| celery / combine-unpickle-task | 5/6 | pass | 5/6 |
+| django / new-timezone-class | 1/4 | 1/4 | pass |
+| the other five | fail | fail | fail |
+
+A failure reads as the tests the task's suite passed. Each CLI solved a
+different set; only the FastAPI task was solved by all three. That task could not be passed at all before the test grader
+stopped running from inside the package directory (see
+[Evaluation](evaluation.md)).
+
+Ten tasks and one run per CLI cannot rank the CLIs: a difference of a task or
+two is within what repeating a run changes. The tasks were chosen for failing
+an earlier configuration, so these pass rates are not comparable with the S1
+rates in section 2. Cost is at the provider's list price and ignores prompt
+caching, so it is an upper bound.
+
+`scripts/cli_compare.py` launches the three runs through the API and prints this
+comparison.
+
+---
+
 ## Reproducing
 
 Acceptance results: [replication.md](replication.md). Study results were produced

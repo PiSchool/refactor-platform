@@ -239,7 +239,10 @@ class Translator:
         yield from self._close_turn()
         yield self._event("session.shutdown", {
             "shutdownType": shutdown_type,
-            "currentTokens": self.tokens_input + self.tokens_output,
+            # Junie reports session totals only, never one request's prompt, so
+            # what the context holds is unknown. The sum of the totals is not it:
+            # it grows past the model's window.
+            "currentTokens": 0,
             "modelMetrics": {self.model or "model": {"usage": {
                 "inputTokens": self.tokens_input,
                 "outputTokens": self.tokens_output,

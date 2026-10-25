@@ -79,9 +79,20 @@ class Plugin(EvaluationPlugin):
             if hint and (ctx.workspace / hint).is_dir():
                 cwd = ctx.workspace / hint
 
-        header = ""
+        # `python script.py` puts the script's own directory first on sys.path,
+        # and the runner lives in `cwd`. When `cwd` is a package (tornado/,
+        # fastapi/), its modules shadow the standard library: fastapi/types.py
+        # replaces `types`, tornado/concurrent.py replaces `concurrent`, and the
+        # interpreter fails inside `enum` before a single test runs, which reads
+        # as the agent's failure. So the interpreter runs with -P, and `cwd`
+        # goes on sys.path only when it is a source root (src/, lib/); a package
+        # is imported through the repository root above it.
+        paths = []
         if config.get("sys_path_repo_root", True):
-            header += f"import sys; sys.path.insert(0, {str(ctx.workspace)!r})\n"
+            paths.append(str(ctx.workspace))
+        if not (cwd / "__init__.py").exists() and str(cwd) not in paths:
+            paths.append(str(cwd))
+        header = f"import sys; sys.path[0:0] = {paths!r}\n"
         if config.get("compat_shim") == "py39_ast":
             header += _AST_SHIM
         runner = cwd / "_rp_test_runner.py"
@@ -92,7 +103,7 @@ class Plugin(EvaluationPlugin):
         try:
             outcome = run_in_workspace(
                 cwd,
-                [sys.executable, "-W", "ignore::DeprecationWarning", str(runner)],
+                [sys.executable, "-P", "-W", "ignore::DeprecationWarning", str(runner)],
                 timeout=int(config.get("timeout", 300)),
                 demote=False,
             )

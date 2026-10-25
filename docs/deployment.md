@@ -179,7 +179,8 @@ For a single-host deployment such as EC2:
 1. Restrict SSH to trusted source addresses and use key-based login.
 2. Keep `RP_API_BIND=127.0.0.1`.
 3. Put the frontend behind a VPN or reverse proxy that provides TLS and real
-   authentication. If temporarily exposing a host port, restrict the security
+   authentication; [Password-protected hosting](#password-protected-hosting)
+   below is one. If temporarily exposing a host port, restrict the security
    group/firewall to known addresses.
 4. Use a dedicated, least-privilege provider key. Do not attach broad AWS
    credentials or the Docker socket to the backend.
@@ -192,6 +193,46 @@ For a single-host deployment such as EC2:
 The backend container executes untrusted agent/build workloads. Do not colocate
 the demo with unrelated sensitive services. Read [SECURITY.md](../SECURITY.md)
 for the full threat model.
+
+### Password-protected hosting
+
+The platform has no login of its own, and anyone who can reach the dashboard
+can start runs that spend the provider key. To share a remote instance, put
+`docker-compose.proxy.yml` in front of it: Caddy asks for a password on every
+request (the UI, the API and the live terminal stream all pass through it) and
+obtains a certificate automatically, so the password is never sent in clear.
+
+```bash
+# in .env
+PROXY_SITE=203-0-113-10.sslip.io        # any name resolving to the host
+PROXY_USER=demo
+PROXY_PASSWORD_HASH='$2a$14$...'          # single quotes: keep compose off the $ signs
+
+docker run --rm caddy:2 caddy hash-password --plaintext 'the-password'
+docker compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+```
+
+Without a domain, `sslip.io` turns the IP into a name a certificate can be
+issued for. Open 80 and 443 in the firewall; 8000 and 8787 stay bound to
+localhost. The name follows the IP, so stopping and starting an EC2 instance
+changes both unless it holds an Elastic IP.
+
+### Launching an EC2 host
+
+`scripts/deploy_gpu_host.sh` launches an instance in its own security group,
+open to SSH from the caller's address only, and prints the steps to start the
+platform on it. It never reads or modifies an existing instance or group.
+`TYPE` picks the instance; GPU types (`g*`, `p*`) also get the GPU override.
+
+```bash
+AWS_PROFILE=pischool TYPE=m6i.xlarge ./scripts/deploy_gpu_host.sh --dry-run
+```
+
+A dry run checks permissions, not quotas. An account whose quota for *Running
+On-Demand G and VT instances* is 0 fails at launch with `VcpuLimitExceeded`;
+raising it is a Service Quotas request by someone allowed to make one. Without
+a GPU every setup runs, but S2 and S3 embed the repository on CPU, about twenty
+minutes per task against seconds on a GPU.
 
 ## Track a second upstream repository
 

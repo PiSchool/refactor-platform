@@ -166,6 +166,29 @@ RefactorBench tasks can target older Python AST APIs. Confirm the task uses the
 `py39_ast` compatibility shim declared in the plugin and inspect the raw
 `python_tests` log. Distinguish import/setup errors from assertion failures.
 
+A log ending in `cannot import name 'Enum' from partially initialized module
+'enum'` means the package directory was on `sys.path` and one of its modules
+shadowed the standard library. The grader no longer does this (see
+[Evaluation](evaluation.md)); if it appears, the deployment is running an older
+`python_tests` plugin, and every task in that repository is failing whatever
+the agent did.
+
+## An agent's own test run imports the wrong package
+
+When an agent runs tests itself, mid-session, it uses the interpreter the
+platform runs on. For a repository whose package the platform also depends on
+(`requests`, `fastapi`), a plain `python -m pytest` can import the platform's
+installed copy instead of the edited workspace, and `pip` is not available to
+install the workspace over it. Agents usually notice and set `PYTHONPATH`. The
+verdict is not affected: the grader imports from the workspace explicitly.
+
+## EC2 launch fails with `VcpuLimitExceeded`
+
+The account's quota for that instance family is too low, typically 0 for GPU
+types. A dry run does not catch it, since dry runs check permissions only.
+Request an increase for *Running On-Demand G and VT instances* in Service
+Quotas, or launch a CPU type: every setup still runs, with S2 and S3 slow.
+
 ## Disk usage grows
 
 The largest consumers are benchmark data, repository mirrors, retained task

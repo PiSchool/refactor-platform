@@ -71,6 +71,10 @@ class Plugin(AgentPlugin):
             "autoupdate": False,
             "share": "disabled",
         }
+        # Delegation is what S3 measures; a single-agent run must not keep
+        # opencode's task tool, which launches a sub-agent.
+        if not getattr(session.setup, "subagents", True):
+            config["tools"] = {"task": False}
         servers = {
             name: {
                 "type": "local",
@@ -145,4 +149,5 @@ class Plugin(AgentPlugin):
             flags=set(parsed["flags"]),
             eval_tool_invocations=parsed["eval_tool_invocations"],
             retrieval_invocations=parsed["retrieval_invocations"],
+            subagent_invocations=parsed["subagent_invocations"],
         )

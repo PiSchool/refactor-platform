@@ -204,6 +204,136 @@ def test_a_translated_stream_produces_bounded_turns(key, tmp_path, shipped):
     assert parsed["readable_transcript"]
 
 
+#: What each CLI's context held at the end of the sample stream: the prompt of
+#: its last request. Codex and Junie report session totals only, so for them it
+#: is unknown (0) rather than a number.
+_CONTEXT_AT_END = {"claude": 600, "opencode": 400, "codex": 0, "junie": 0}
+
+
+@pytest.mark.parametrize("key", STREAMED)
+def test_context_is_the_last_request_not_the_session_total(key, tmp_path):
+    """Claude Code, opencode and Junie reported input plus output summed over the
+    whole session as context occupancy, which the run view drew as 1.09M of a
+    1.00M window: more than the model can hold."""
+    module = _events_module(key)
+    translator = module.Translator("openrouter/free")
+    produced = [translator.start(), translator.prompt("do the thing")]
+    for line in _SAMPLE[key]:
+        produced.extend(translator.feed(json.dumps(line)))
+    produced.extend(translator.shutdown("completed"))
+    path = tmp_path / f"{key}.jsonl"
+    path.write_text("".join(json.dumps(event) + "\n" for event in produced), encoding="utf-8")
+    parsed = module.parse(path, tmp_path / "absent.log", "openrouter/free")
+    assert parsed["context_tokens"] == _CONTEXT_AT_END[key]
+    assert parsed["context_tokens"] < parsed["tokens_input"] + parsed["tokens_output"]
+
+
+def test_claude_counts_one_turn_per_response_not_per_frame():
+    """Claude Code emits a frame per content block: reasoning, text and a tool
+    call from one response share a message id. Closing a turn at every frame
+    without a tool call split one response into several 0 ms turns."""
+    module = _events_module("claude")
+    translator = module.Translator("qwen/qwen3.6-flash")
+    frames = [
+        {"type": "assistant", "message": {"id": "m1", "content": [{"type": "thinking", "thinking": "plan"}]}},
+        {"type": "assistant", "message": {"id": "m1", "content": [{"type": "text", "text": "editing"}]}},
+        {"type": "assistant", "message": {"id": "m1", "content": [
+            {"type": "tool_use", "id": "c1", "name": "Edit", "input": {"file_path": "a.py"}}]}},
+        {"type": "user", "message": {"content": [{"type": "tool_result", "tool_use_id": "c1", "content": "ok"}]}},
+        {"type": "assistant", "message": {"id": "m2", "content": [{"type": "text", "text": "done"}]}},
+        {"type": "result", "is_error": False, "result": "done", "usage": {"input_tokens": 9, "output_tokens": 3}},
+    ]
+    produced = []
+    for frame in frames:
+        produced.extend(translator.feed(json.dumps(frame)))
+    produced.extend(translator.shutdown("completed"))
+    kinds = [event["type"] for event in produced]
+    assert kinds.count("assistant.turn_start") == 2
+    assert kinds.count("assistant.turn_end") == 2
+
+
+def test_claude_context_comes_from_its_own_transcript(tmp_path, monkeypatch):
+    """Through some providers the streamed usage carries no input count, which
+    reported no context for 9 of 10 sessions; the transcript Claude Code writes
+    under its config directory has the final figures of every request."""
+    module = _events_module("claude")
+    transcript = tmp_path / ".claude" / "projects" / "p" / "s.jsonl"
+    transcript.parent.mkdir(parents=True)
+    rows = [
+        {"type": "assistant", "timestamp": "2026-10-25T01:00:00Z", "message": {"usage": {
+            "input_tokens": 1426, "cache_creation_input_tokens": 21110}}},
+        {"type": "assistant", "timestamp": "2026-10-25T01:05:00Z", "isSidechain": True, "message": {"usage": {
+            "input_tokens": 999999}}},
+        {"type": "assistant", "timestamp": "2026-10-25T01:04:00Z", "message": {"usage": {
+            "input_tokens": 35383, "cache_read_input_tokens": 20723}}},
+    ]
+    transcript.write_text("".join(json.dumps(row) + "\n" for row in rows), encoding="utf-8")
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / ".claude"))
+    shutdown = list(module.Translator("m").shutdown("completed"))[-1]
+    # the latest main-thread request; a sub-agent's request is not this context
+    assert shutdown["data"]["currentTokens"] == 35383 + 20723
+
+
+def _with_setup(session, subagents: bool):
+    from app.catalog.sdk import SetupProfile
+    session.setup = SetupProfile(key="s3" if subagents else "s1", name="", description="", subagents=subagents)
+    return session
+
+
+def test_single_agent_claude_cannot_delegate_and_still_gets_its_prompt(tmp_path, shipped):
+    """S1 kept Claude Code's Agent tool and it launched sub-agents in 3 of 10
+    tasks. The flag takes a list and run.py appends the prompt last, so placed
+    at the end it would swallow the prompt as a tool name."""
+    plugin = shipped["claude"].impl
+    single = _with_setup(_session(tmp_path / "s1"), subagents=False)
+    plugin.prepare(single)
+    argv = plugin.command(single).argv
+    tool = argv[argv.index("--") + 1:]
+    at = tool.index("--disallowedTools")
+    assert tool[at + 1:at + 3] == ["Agent", "Task"]
+    assert tool[at + 3].startswith("--"), "a positional prompt after the list would be read as a tool"
+
+    delegating = _with_setup(_session(tmp_path / "s3"), subagents=True)
+    plugin.prepare(delegating)
+    assert "--disallowedTools" not in plugin.command(delegating).argv
+
+
+def test_single_agent_opencode_cannot_delegate(tmp_path, shipped):
+    plugin = shipped["opencode"].impl
+    single = _with_setup(_session(tmp_path / "s1"), subagents=False)
+    plugin.prepare(single)
+    config = json.loads((single.config_dir / "opencode.json").read_text())
+    assert config.get("tools") == {"task": False}
+
+    delegating = _with_setup(_session(tmp_path / "s3"), subagents=True)
+    plugin.prepare(delegating)
+    assert "tools" not in json.loads((delegating.config_dir / "opencode.json").read_text())
+
+
+@pytest.mark.parametrize("key,tool", [("claude", "Agent"), ("opencode", "task")])
+def test_a_sub_agent_launch_is_counted_for_setup_conformance(key, tool, tmp_path):
+    """Only Copilot's parser counted delegation, so conformance read every
+    Claude Code and opencode session as never having delegated."""
+    module = _events_module(key)
+    events = [{"type": "tool.execution_start", "data": {"toolName": tool, "arguments": {}}},
+              {"type": "tool.execution_start", "data": {"toolName": "Read", "arguments": {}}}]
+    path = tmp_path / "events.jsonl"
+    path.write_text("".join(json.dumps(e) + "\n" for e in events), encoding="utf-8")
+    assert module.parse(path, tmp_path / "absent.log", "m")["subagent_invocations"] == 1
+
+
+def test_opencode_keeps_the_reason_a_tool_call_failed():
+    """A failed call carries its message in `state.error`; reading only `output`
+    recorded every failure as "null"."""
+    module = _events_module("opencode")
+    translator = module.Translator("m")
+    frame = {"type": "tool_use", "part": {"type": "tool", "tool": "read", "callID": "c1", "state": {
+        "status": "error", "input": {"filePath": "a.py"}, "error": "File not found: a.py"}}}
+    done = [e for e in translator.feed(json.dumps(frame)) if e["type"] == "tool.execution_complete"]
+    assert done[0]["data"]["success"] is False
+    assert done[0]["data"]["result"]["content"] == "File not found: a.py"
+
+
 @pytest.mark.parametrize("key", STREAMED)
 def test_a_translated_session_records_the_version_of_the_tool_that_ran(key):
     """The run view labels a session with the tool and its version. It used to
@@ -250,13 +380,13 @@ def _events_module(key: str):
 _SAMPLE = {
     "claude": [
         {"type": "system", "subtype": "init", "model": "openrouter/free"},
-        {"type": "assistant", "message": {"usage": {"output_tokens": 3}, "content": [
+        {"type": "assistant", "message": {"usage": {"input_tokens": 300, "output_tokens": 3}, "content": [
             {"type": "text", "text": "first answer"}]}},
-        {"type": "assistant", "message": {"usage": {"output_tokens": 5}, "content": [
+        {"type": "assistant", "message": {"usage": {"input_tokens": 450, "output_tokens": 5}, "content": [
             {"type": "tool_use", "id": "c1", "name": "Edit", "input": {"file_path": "a.py"}}]}},
         {"type": "user", "message": {"content": [
             {"type": "tool_result", "tool_use_id": "c1", "content": "edited"}]}},
-        {"type": "assistant", "message": {"usage": {"output_tokens": 7}, "content": [
+        {"type": "assistant", "message": {"usage": {"input_tokens": 600, "output_tokens": 7}, "content": [
             {"type": "text", "text": "second answer"}]}},
         {"type": "result", "is_error": False, "num_turns": 2, "result": "second answer",
          "usage": {"input_tokens": 900, "output_tokens": 12}},

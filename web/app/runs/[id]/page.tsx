@@ -172,9 +172,18 @@ export default function RunDetailPage({ params }: { params: Promise<{ id: string
                 </pre>
               </div>
             ) : (
-              <pre className="h-full min-h-0 overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-canvas-inset p-3 text-xs text-fg-muted">
-                {loadingText ? 'Loading…' : text || emptyHint(tab, Boolean(current.result))}
-              </pre>
+              <div className="flex h-full min-h-0 flex-col gap-2">
+                {/* The redaction is for viewers of the dashboard; read without
+                    this note it looks like the agent was given a broken path. */}
+                {tab === 'Prompt' && text.includes('[PRIVATE_PATH]') && (
+                  <p className="shrink-0 text-xs text-fg-subtle">
+                    Server paths are shown as [PRIVATE_PATH] here. The agent received the real path.
+                  </p>
+                )}
+                <pre className="min-h-0 flex-1 overflow-auto whitespace-pre-wrap break-words rounded-md border border-border bg-canvas-inset p-3 text-xs text-fg-muted">
+                  {loadingText ? 'Loading…' : text || emptyHint(tab, Boolean(current.result))}
+                </pre>
+              </div>
             )}
           </div>
         </Card>
@@ -228,7 +237,8 @@ function ToggleBtn({ active, onClick, icon, children }: { active: boolean; onCli
 function contextNote(result: any): string | null {
   const m = result?.metrics ?? {};
   const bits: string[] = [];
-  if (m.contextTokens) bits.push(`${m.contextTokens.toLocaleString()} tokens used`);
+  // What the context held at the end, not tokens spent: the job list shows those.
+  if (m.contextTokens) bits.push(`${m.contextTokens.toLocaleString()} tokens in context at the end`);
   if (m.compactionCount) bits.push(`${m.compactionCount} compaction${m.compactionCount === 1 ? '' : 's'}`);
   if (m.contextOverflowCount) bits.push(`${m.contextOverflowCount} overflow${m.contextOverflowCount === 1 ? '' : 's'}`);
   return bits.length ? bits.join(' · ') : null;

@@ -91,6 +91,10 @@ ID="$(aws ec2 run-instances \
   --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$NAME},{Key=Project,Value=refactor-platform-gpu},{Key=Owner,Value=aziz}]" \
   --query 'Instances[0].InstanceId' --output text)"
 
+# GPU families start with g or p; anything else has no device to reserve.
+case "$TYPE" in g*|p*) COMPOSE="-f docker-compose.yml -f docker-compose.gpu.yml" ;;
+                 *)    COMPOSE="-f docker-compose.yml" ;; esac
+
 echo "launched $ID, waiting for it to run"
 aws ec2 wait instance-running --instance-ids "$ID"
 IP="$(aws ec2 describe-instances --instance-ids "$ID" \
@@ -98,12 +102,12 @@ IP="$(aws ec2 describe-instances --instance-ids "$ID" \
 
 cat <<EOF
 
-  instance $ID at $IP (\$0.58/hr compute: stop it when you are not demoing)
+  instance $ID ($TYPE) at $IP. Billed while running: stop it when you are not demoing.
 
   1. ssh -i ~/.ssh/$KEY.pem ubuntu@$IP
   2. git clone https://github.com/PiSchool/refactor-platform && cd refactor-platform
      cp .env.example .env && \$EDITOR .env        # OPENROUTER_API_KEY, DB passwords
-     docker compose -f docker-compose.yml -f docker-compose.gpu.yml up --build -d
+     docker compose $COMPOSE up --build -d
      docker compose exec backend python -m app.catalog.bootstrap
   3. From your laptop, tunnel instead of exposing a port:
        ssh -i ~/.ssh/$KEY.pem -L 8787:localhost:8787 ubuntu@$IP

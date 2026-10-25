@@ -18,7 +18,9 @@ import { useCatalog } from '@/lib/api';
 import type { Facet } from '@/lib/types';
 import { getJson, Note, Panel } from './kit';
 
-interface TaskRow { taskKey: string; title: string; params: Record<string, any>; disabled: boolean }
+interface TaskRow {
+  taskKey: string; title: string; params: Record<string, any>; instructions?: string; disabled: boolean;
+}
 const PAGE = 100;
 
 /** The declared facet values this task has, in declaration order. */
@@ -70,7 +72,8 @@ export function TasksSection({ benchmark }: { benchmark: string }) {
     const q = search.trim().toLowerCase();
     return (rows ?? []).filter((t) => {
       for (const [k, v] of Object.entries(facetSel)) if (v && String(t.params?.[k] ?? '') !== v) return false;
-      return !q || t.taskKey.toLowerCase().includes(q) || (t.title ?? '').toLowerCase().includes(q);
+      return !q || t.taskKey.toLowerCase().includes(q) || (t.title ?? '').toLowerCase().includes(q)
+        || (t.instructions ?? '').toLowerCase().includes(q);
     });
   }, [rows, facetSel, search]);
 
@@ -109,7 +112,7 @@ export function TasksSection({ benchmark }: { benchmark: string }) {
               <span className="text-[11px] uppercase tracking-wide text-fg-subtle">Search</span>
               <div className="relative">
                 <Search className="pointer-events-none absolute left-2 top-2 h-3.5 w-3.5 text-fg-subtle" aria-hidden="true" />
-                <input value={search} onChange={(e) => { setSearch(e.target.value); setLimit(PAGE); }} placeholder="task key or title…"
+                <input value={search} onChange={(e) => { setSearch(e.target.value); setLimit(PAGE); }} placeholder="task key, title or instruction…"
                   className="h-8 w-full rounded-md border border-border bg-canvas-inset pl-7 pr-2 text-xs text-fg outline-none focus:border-accent-fg" />
               </div>
             </label>
@@ -134,19 +137,31 @@ export function TasksSection({ benchmark }: { benchmark: string }) {
           <div className="max-h-96 overflow-auto rounded-md border border-border">
             <ul className="divide-y divide-border">
               {filtered.slice(0, limit).map((t) => (
-                <li key={t.taskKey} className="flex items-center gap-2 px-2 py-1.5 text-xs hover:bg-neutral-subtle">
-                  <Switch checked={!t.disabled}
-                    onChange={(enabled) => toggle([t.taskKey], !enabled)}
-                    label={`Run ${t.taskKey}`} />
-                  <span className={`truncate font-mono text-xs ${t.disabled ? 'text-fg-subtle line-through' : 'text-fg'}`}
-                    title={t.title || t.taskKey}>
-                    {t.taskKey}
-                  </span>
-                  <span className="ml-auto flex shrink-0 items-center gap-1">
-                    {facetChips(t, facets).map((chip) => (
-                      <Chip key={chip.key} title={`${chip.label}: ${chip.value}`}>{chip.value}</Chip>
-                    ))}
-                  </span>
+                <li key={t.taskKey} className="text-xs">
+                  {/* The instruction is what the agent is asked to do; the run's
+                      Prompt tab shows the full text sent, template included. */}
+                  <details className="group">
+                    <summary className="flex cursor-pointer list-none items-center gap-2 px-2 py-1.5 hover:bg-neutral-subtle">
+                      {/* Toggling a task must not also expand its row. */}
+                      <span onClick={(e) => e.preventDefault()} className="flex">
+                        <Switch checked={!t.disabled}
+                          onChange={(enabled) => toggle([t.taskKey], !enabled)}
+                          label={`Run ${t.taskKey}`} />
+                      </span>
+                      <span className={`truncate font-mono text-xs ${t.disabled ? 'text-fg-subtle line-through' : 'text-fg'}`}
+                        title={t.title || t.taskKey}>
+                        {t.taskKey}
+                      </span>
+                      <span className="ml-auto flex shrink-0 items-center gap-1">
+                        {facetChips(t, facets).map((chip) => (
+                          <Chip key={chip.key} title={`${chip.label}: ${chip.value}`}>{chip.value}</Chip>
+                        ))}
+                      </span>
+                    </summary>
+                    <p className="whitespace-pre-wrap border-t border-border bg-canvas-inset px-3 py-2 font-mono text-xs text-fg-muted">
+                      {t.instructions || 'No instruction recorded for this task.'}
+                    </p>
+                  </details>
                 </li>
               ))}
             </ul>

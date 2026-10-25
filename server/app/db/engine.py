@@ -18,7 +18,11 @@ def get_engine():
     global _engine
     if _engine is None:
         url = get_settings().resolved_database_url()
-        kwargs: dict = {}
+        # A pooled connection the database has since closed was handed to a
+        # request as if alive, and the request failed with `connection is
+        # closed`: a 500 on a plain GET. Checking each connection on checkout
+        # replaces a dead one before it is used.
+        kwargs: dict = {"pool_pre_ping": True}
         if url.startswith("sqlite"):
             kwargs["connect_args"] = {"timeout": 30}
         _engine = create_async_engine(url, **kwargs)

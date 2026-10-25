@@ -13,7 +13,10 @@ from app.db.models import Base
 
 config = context.config
 if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+    # Migrations run inside the server at startup. fileConfig's default disables
+    # every logger that already exists, which silenced uvicorn's access and
+    # error logs for the life of the process: a 500 left no traceback anywhere.
+    fileConfig(config.config_file_name, disable_existing_loggers=False)
 
 config.set_main_option(
     "sqlalchemy.url",

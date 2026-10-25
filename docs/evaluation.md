@@ -77,6 +77,16 @@ file that ships with the benchmark, outside the repository, so the agent cannot
 weaken it; the second runs the tests inside the repository under test, which is
 what catches a refactoring that changes behaviour.
 
+`python_tests` imports the package from the agent's workspace, never from the
+platform's own environment. The repository root goes first on `sys.path`, and
+the task's working directory (`cwd_hint`) goes there only when it is a source
+root such as `src/` or `lib/`. When it is the package itself (`tornado/`,
+`fastapi/`) it stays off the path, and the interpreter runs with `-P` so it is
+not added implicitly either: otherwise the package's own modules shadow the
+standard library (`fastapi/types.py` replaces `types`, `tornado/concurrent.py`
+replaces `concurrent`) and the test fails before it starts. Every RefactorBench
+repository is checked to run its tests rather than fail on import.
+
 ## Two gates, neither sufficient
 
 `refactoring_miner` and `java_build` overlap deliberately. A build can go green

@@ -83,7 +83,9 @@ The run-detail page has three working areas:
   available, and structured events. The Agent view is a summary: one disclosure
   per turn, and a long reply is shown up to a bound with a note stating how much
   is not displayed. Output holds the reply in full and Terminal holds the raw
-  session.
+  session. The Prompt tab shows the exact text the agent received, except that
+  server paths read `[PRIVATE_PATH]`: they are redacted for whoever views the
+  dashboard, and the stored prompt and the agent both have the real path.
 - **Results** shows benchmark verification stages as pending, running, passed,
   or failed, then displays the final machine-readable outcome.
 
@@ -133,6 +135,14 @@ than an agent or benchmark verdict.
   when the matching benchmark and agent plugins are installed. The hashed
   `manifest.json` is mandatory; archives in any other shape are rejected.
 
+## Browse a benchmark's tasks
+
+**Settings → Tasks** lists every task of the selected benchmark. Click a task to
+read its instruction, which is what the agent is asked to do; search matches
+instruction text as well as task keys. A disabled task is hidden from the run
+wizard. The full prompt a run actually sent, template included, is on that
+run's Prompt tab.
+
 ## Run defaults and retention
 
 **Settings → General** holds the values applied to new runs: default and
@@ -160,6 +170,20 @@ Token and context fields are shown only when the agent's event stream reports
 them. Mid-session and routed-model fields may be incomplete. Missing data is
 left missing rather than estimated. Cost is calculated only when a valid model
 price is available.
+
+Two token figures mean different things:
+
+* **Tokens** in the job list is what the session spent: input plus output,
+  summed over every request. A long session re-sends its history on each
+  request, so this grows well past the model's context window.
+* **Context** is what the window held at the end: the prompt of the agent's
+  last request. It can never exceed the window. Codex and Junie report session
+  totals only, never one request's prompt, so for them context reads *not
+  reported by this agent* rather than a number.
+
+Output tokens and cost use the agent's measured totals once the session ends.
+Some agents report output per message and some only per step, so the live count
+during a session can lag the final one.
 
 For the exact pass criteria, see [Evaluation](evaluation.md). For known provider
 and toolchain issues, see [Troubleshooting](troubleshooting.md).

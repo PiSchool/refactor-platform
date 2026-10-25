@@ -61,7 +61,7 @@ async def benchmark_tasks(benchmark_id: str, includeDisabled: bool = False):
         tasks = (await s.execute(select(Task).where(Task.benchmark_id == bench.id))).scalars().all()
     off = await disabled_tasks(bench.key)
     rows = [{"taskKey": t.task_key, "title": t.title, "params": t.params,
-             "disabled": t.task_key in off} for t in tasks]
+             "instructions": t.instructions, "disabled": t.task_key in off} for t in tasks]
     if not includeDisabled:
         rows = [r for r in rows if not r["disabled"]]
     return {"tasks": rows, "facets": bench.manifest.get("facets", []), "disabledCount": len(off)}

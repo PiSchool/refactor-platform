@@ -136,13 +136,22 @@ export interface FinalUsage {
  *  null and callers show nothing rather than a guess. */
 export function liveUsage(events: AgentEvent[]): LiveUsage {
   const usage: LiveUsage = { outputTokens: 0, compactions: 0, turns: 0, final: null };
+  // A turn is what the Agent view shows as one: a turn_start. Messages are not
+  // turns: an agent's reasoning and its answer arrive as separate messages in
+  // one turn, which counted 17 turns for a session the view showed as 8.
+  // Streams without turn markers fall back to counting messages.
+  let turnStarts = 0;
+  let messages = 0;
 
   for (const ev of events) {
     const d = ev.data ?? {};
     switch (ev.type) {
+      case 'assistant.turn_start':
+        turnStarts += 1;
+        break;
       case 'assistant.message':
         usage.outputTokens += Number(d.outputTokens ?? 0);
-        usage.turns += 1;
+        messages += 1;
         break;
       case 'session.compaction_complete':
         if (d.success !== false) usage.compactions += 1;
@@ -156,10 +165,16 @@ export function liveUsage(events: AgentEvent[]): LiveUsage {
         }
         final.contextTokens = Number(d.currentTokens ?? 0);
         usage.final = final;
+        // Only some agents report output per message; every agent reports the
+        // measured total at shutdown, so that total wins once it exists.
+        const measuredOut = Object.values((d.modelMetrics ?? {}) as Record<string, any>)
+          .reduce((sum, m) => sum + Number(m?.usage?.outputTokens ?? 0), 0);
+        if (measuredOut > 0) usage.outputTokens = measuredOut;
         break;
       }
     }
   }
+  usage.turns = turnStarts > 0 ? turnStarts : messages;
   return usage;
 }
 

@@ -1,0 +1,39 @@
+# Password and HTTPS in front of a remote deployment.
+#
+#   docker compose -f docker-compose.yml -f docker-compose.proxy.yml up -d
+#
+# The platform has no login of its own, so a host reachable from the internet
+# needs one in front of it: anyone who can open the dashboard can start runs
+# against the provider key. Caddy asks for a password on every request (UI,
+# API and the live terminal stream all pass through the frontend) and obtains
+# a certificate for PROXY_SITE, so the password never crosses the network in
+# clear text. Set in .env:
+#
+#   PROXY_SITE=203-0-113-10.sslip.io     # any hostname resolving to the host
+#   PROXY_USER=demo
+#   PROXY_PASSWORD_HASH='$2a$14$...'       # single quotes: compose must not
+#                                          # read the $ signs as variables
+#
+# Generate the hash with:
+#   docker run --rm caddy:2 caddy hash-password --plaintext 'your-password'
+#
+# The security group must allow 80 (certificate issuance, redirect) and 443.
+services:
+  proxy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      PROXY_SITE: ${PROXY_SITE:?set PROXY_SITE in .env}
+      PROXY_USER: ${PROXY_USER:-demo}
+      PROXY_PASSWORD_HASH: ${PROXY_PASSWORD_HASH:?set PROXY_PASSWORD_HASH in .env}
+    volumes:
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+    depends_on:
+      - frontend
+
+volumes:
+  caddy-data:

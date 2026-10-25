@@ -86,6 +86,15 @@ class Plugin(AgentPlugin):
             "claude", "--print",
             "--output-format", "stream-json", "--verbose",
             "--dangerously-skip-permissions",
+        ]
+        # Delegation is what S3 measures. Without this, a single-agent run kept
+        # Claude Code's Agent tool and launched sub-agents with it, as Copilot is
+        # prevented from doing by --excluded-tools task. The flag takes a list,
+        # and run.py appends the prompt last, so it must sit before another flag
+        # or it swallows the prompt as one more tool name.
+        if not getattr(session.setup, "subagents", True):
+            argv += ["--disallowedTools", "Agent", "Task"]
+        argv += [
             "--model", session.model,
             "--add-dir", str(session.workspace),
             "--settings", str(self._home(session) / "settings.json"),
@@ -152,4 +161,5 @@ class Plugin(AgentPlugin):
             flags=set(parsed["flags"]),
             eval_tool_invocations=parsed["eval_tool_invocations"],
             retrieval_invocations=parsed["retrieval_invocations"],
+            subagent_invocations=parsed["subagent_invocations"],
         )

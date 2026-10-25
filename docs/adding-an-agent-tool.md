@@ -63,6 +63,24 @@ the CLI's own step boundary; `plugins/agents/claude/events.py`,
 this for a different vocabulary. A translation that never closes a turn shows the
 whole session as one unreadable step.
 
+## Token accounting
+
+`session.shutdown` carries two kinds of number, and they must not be mixed:
+
+| Field | Means | Typical size |
+|---|---|---|
+| `modelMetrics.*.usage` | session totals: every request's input and output, summed | can be millions |
+| `currentTokens` | what the context held at the end: the **last request's** prompt (input plus cache read plus cache write) | below the model's window |
+
+Track the last request's prompt as the stream goes and report that. Where the
+CLI reports only session totals (Codex, Junie), set `currentTokens` to `0`,
+which the dashboard shows as *not reported*. Summing the totals into it was a
+real defect: the run view drew 1.09M tokens in a 1.00M window.
+
+Report output tokens in the totals even if the CLI never attaches them to
+individual messages; the dashboard takes the measured total once the session
+ends, so cost does not read as zero output.
+
 ## 1. `plugin.yaml`
 
 ```yaml

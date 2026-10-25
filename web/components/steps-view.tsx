@@ -47,12 +47,28 @@ export function toSteps(events: AgentEvent[]): Step[] {
   const steps: Step[] = [];
   const byTurn = new Map<string, Step>();
   let setup: Step | null = null;
+  // Session events after the agent has started (the shutdown) close the
+  // session; filed under setup they stretched "Set up session" over the whole
+  // run, which read as minutes spent setting up.
+  let teardown: Step | null = null;
+  let agentStarted = false;
   let turnOrdinal = 0;
   const pendingTools = new Map<string, { name: string; at?: string; step?: Step }>();
 
   for (const ev of events) {
     const d = ev.data ?? {};
     const type = ev.type;
+
+    if (type.startsWith('session.') && agentStarted) {
+      if (!teardown) {
+        teardown = { id: 'end', title: 'End session', detail: '', status: 'ok', startedAt: ev.timestamp, lines: [] };
+        steps.push(teardown);
+      }
+      teardown.endedAt = ev.timestamp;
+      if (type === 'session.shutdown') teardown.detail ||= String(d.shutdownType ?? '');
+      teardown.lines.push({ at: ev.timestamp, text: `${type}  ${summarize(ev)}`, tone: 'muted' });
+      continue;
+    }
 
     if (type.startsWith('session.') || type === 'system.message' || type === 'user.message') {
       if (!setup) {
@@ -67,6 +83,7 @@ export function toSteps(events: AgentEvent[]): Step[] {
     }
 
     if (type === 'assistant.turn_start') {
+      agentStarted = true;
       // Copilot resets its raw turnId after some internal transitions (for
       // example before task_complete). UI identity must follow chronology,
       // otherwise duplicate React keys also couple both disclosure controls.

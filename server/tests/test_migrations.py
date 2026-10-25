@@ -65,6 +65,28 @@ async def test_fresh_database_is_upgraded_to_alembic_head(tmp_env, monkeypatch):
     assert PLATFORM_TABLES <= await _table_names(engine)
 
 
+def test_the_pool_checks_a_connection_before_handing_it_out(tmp_env):
+    """A connection the database had closed was given to a GET as if alive and
+    the request failed with `connection is closed`."""
+    from app.db import engine as db_engine
+
+    assert db_engine.get_engine().pool._pre_ping is True
+
+
+@pytest.mark.asyncio
+async def test_migrating_at_startup_leaves_the_server_logs_on(tmp_env):
+    """Alembic's logging setup used fileConfig's default, which disables every
+    logger already created. Migrations run inside the server, so from startup
+    on uvicorn logged neither requests nor tracebacks, and a 500 left no trace."""
+    import logging
+
+    from app.db import engine as db_engine
+
+    loggers = [logging.getLogger(name) for name in ("uvicorn.error", "uvicorn.access", "app")]
+    await db_engine.migrate()
+    assert [logger.name for logger in loggers if logger.disabled] == []
+
+
 @pytest.mark.asyncio
 async def test_existing_stamped_database_is_adopted_without_data_loss(tmp_env):
     from app.db import engine as db_engine

@@ -1,0 +1,6 @@
+{$PROXY_SITE} {
+	basic_auth {
+		{$PROXY_USER} {$PROXY_PASSWORD_HASH}
+	}
+	reverse_proxy frontend:3000
+}

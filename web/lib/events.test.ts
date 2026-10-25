@@ -25,6 +25,31 @@ describe('liveUsage', () => {
     expect(liveUsage([ev('session.compaction_complete', { success: false })]).compactions).toBe(0);
   });
 
+  it('counts a turn once however many messages it holds', () => {
+    const u = liveUsage([
+      ev('assistant.turn_start', { turnId: '0' }),
+      ev('assistant.message', { turnId: '0', content: 'reasoning: plan', outputTokens: 0 }),
+      ev('assistant.message', { turnId: '0', content: 'answer', outputTokens: 0 }),
+      ev('assistant.turn_end', { turnId: '0' }),
+      ev('assistant.turn_start', { turnId: '1' }),
+      ev('assistant.message', { turnId: '1', content: 'done', outputTokens: 0 }),
+    ]);
+    expect(u.turns).toBe(2);
+  });
+
+  it('takes output from the measured total when messages carry none', () => {
+    // opencode reports output per step, not per message: the bar read "out 0"
+    // and priced the session as if nothing had been generated.
+    const u = liveUsage([
+      ev('assistant.message', { outputTokens: 0 }),
+      ev('session.shutdown', {
+        currentTokens: 40000,
+        modelMetrics: { m: { usage: { inputTokens: 744401, outputTokens: 5723 } } },
+      }),
+    ]);
+    expect(u.outputTokens).toBe(5723);
+  });
+
   it('takes exact prompt tokens and context occupancy from session.shutdown', () => {
     const u = liveUsage([
       ev('assistant.message', { outputTokens: 6200 }),

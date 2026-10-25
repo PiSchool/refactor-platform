@@ -54,6 +54,9 @@ class Translator:
         self.tokens_input = 0
         self.tokens_output = 0
         self.tokens_cache_read = 0
+        #: prompt size of the latest step: what the context holds now. The
+        #: tokens_* counters are session totals, which exceed the window.
+        self.context_tokens = 0
         self.tokens_reasoning = 0
         self.last_message = ""
         self.errors: list[str] = []
@@ -122,6 +125,9 @@ class Translator:
             self.tokens_output += int(tokens.get("output") or 0)
             self.tokens_reasoning += int(tokens.get("reasoning") or 0)
             self.tokens_cache_read += int(cache.get("read") or 0)
+            prompt = int(tokens.get("input") or 0) + int(cache.get("read") or 0) + int(cache.get("write") or 0)
+            if prompt:
+                self.context_tokens = prompt
             if str(part.get("reason") or "") == "error":
                 self.errors.append("model step ended in an error")
             yield from self._close_turn()
@@ -148,7 +154,10 @@ class Translator:
                 "toolName": name, "arguments": arguments,
             })
         if status in {"completed", "error"}:
-            output = state.get("output")
+            # A failed call carries its message in `error`, not `output`; reading
+            # only `output` recorded every failure as "null", without its reason.
+            output = state.get("output") if status == "completed" else (
+                state.get("error") or state.get("output"))
             text = output if isinstance(output, str) else json.dumps(output, ensure_ascii=False)
             yield self._event("tool.execution_complete", {
                 "turnId": str(self.turn), "toolCallId": call_id, "toolName": name,
@@ -159,7 +168,7 @@ class Translator:
         yield from self._close_turn()
         yield self._event("session.shutdown", {
             "shutdownType": shutdown_type,
-            "currentTokens": self.tokens_input + self.tokens_output,
+            "currentTokens": self.context_tokens,
             "modelMetrics": {self.model or "model": {"usage": {
                 "inputTokens": self.tokens_input,
                 "outputTokens": self.tokens_output,
@@ -181,7 +190,7 @@ def parse(events_path: Path | None, terminal_log_path: Path, requested_model: st
         "tokens_input": 0, "tokens_output": 0, "tokens_cache_read": 0,
         "tokens_reasoning": 0, "context_tokens": 0, "model": requested_model,
         "response_text": "", "readable_transcript": "", "flags": set(),
-        "eval_tool_invocations": 0, "retrieval_invocations": 0,
+        "eval_tool_invocations": 0, "retrieval_invocations": 0, "subagent_invocations": 0,
     }
     rows: list[dict[str, Any]] = []
     if events_path and events_path.is_file():
@@ -205,6 +214,10 @@ def parse(events_path: Path | None, terminal_log_path: Path, requested_model: st
                 lines.append(content)
         elif kind == "tool.execution_start":
             name = str(data.get("toolName") or "")
+            # A sub-agent launch is what setup conformance checks for: without
+            # counting it, delegation in a single-agent run read as conformant.
+            if name in ("task",):
+                info["subagent_invocations"] += 1
             arguments = json.dumps(data.get("arguments") or {})[:400]
             lines.append(f"\u2192 {name}({arguments})")
             if "eval.sh" in arguments:

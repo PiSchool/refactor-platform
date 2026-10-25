@@ -105,6 +105,49 @@ def test_python_tests_pass_and_fail(tmp_path):
     assert res2.reason == "test_failed"
 
 
+def test_python_tests_run_from_a_package_that_shadows_the_standard_library(tmp_path):
+    """RefactorBench runs tornado and fastapi tests from inside the package
+    directory. fastapi ships types.py and tornado ships concurrent.py; with that
+    directory first on sys.path they replaced the standard library modules and
+    the interpreter failed inside `enum` before any test ran, so every such task
+    was graded a failure whatever the agent did."""
+    python_tests = metric("python_tests")
+    data = tmp_path / "data"
+    (data / "tests").mkdir(parents=True)
+    (data / "tests" / "t.py").write_text(
+        "import enum, unittest\n"
+        "from pkg.mod import add\n"
+        "class T(unittest.TestCase):\n"
+        "    def test(self):\n"
+        "        assert add(1, 2) == 3\n"
+        "if __name__ == '__main__':\n"
+        "    unittest.main()\n"
+    )
+
+    def grade(ws, hint):
+        ctx = EvalContext(task=_task({"test_file": "tests/t.py", "cwd_hint": hint}), workspace=ws,
+                          artifacts_dir=tmp_path, data_root=data, session=SessionInfo(),
+                          diff_text="x", advisory=False)
+        return python_tests.measure(ctx, {"test_from": "params.test_file",
+                                          "cwd_hint_from": "params.cwd_hint",
+                                          "sys_path_repo_root": True})
+
+    package_layout = tmp_path / "pkg-layout"
+    (package_layout / "pkg").mkdir(parents=True)
+    (package_layout / "pkg" / "__init__.py").write_text("")
+    (package_layout / "pkg" / "mod.py").write_text("def add(a, b):\n    return a + b\n")
+    (package_layout / "pkg" / "types.py").write_text("from enum import Enum\n")
+    (package_layout / "pkg" / "concurrent.py").write_text("raise ImportError('shadowed')\n")
+    assert grade(package_layout, "pkg").ok is True
+
+    # A source root is not a package, so it still has to be importable from.
+    src_layout = tmp_path / "src-layout"
+    (src_layout / "src" / "pkg").mkdir(parents=True)
+    (src_layout / "src" / "pkg" / "__init__.py").write_text("")
+    (src_layout / "src" / "pkg" / "mod.py").write_text("def add(a, b):\n    return a + b\n")
+    assert grade(src_layout, "src").ok is True
+
+
 def test_workspace_changed():
     workspace_changed = metric("workspace_changed")
 

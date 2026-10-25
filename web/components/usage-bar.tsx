@@ -28,7 +28,10 @@ export function UsageBar({ sessionId, model }: { sessionId: string; model: strin
 
   const { final } = usage;
   const window = used?.contextLength ?? null;
-  const pct = final && window ? Math.min(100, (final.contextTokens / window) * 100) : null;
+  // 0 means the agent cannot report what its context holds (Codex and Junie
+  // give session totals only), which is not the same as an empty context.
+  const contextKnown = !!final && final.contextTokens > 0;
+  const pct = contextKnown && window ? Math.min(100, (final!.contextTokens / window) * 100) : null;
   const nearLimit = pct != null && pct >= 80;
 
   const tokens = final && { inputTokens: final.inputTokens, outputTokens: usage.outputTokens, cacheReadTokens: final.cacheReadTokens };
@@ -40,7 +43,9 @@ export function UsageBar({ sessionId, model }: { sessionId: string; model: strin
       <div className="flex items-center gap-2 text-xs">
         <Gauge className="h-3.5 w-3.5 shrink-0 text-fg-muted" />
         <span className="text-fg-muted">Context</span>
-        {final ? (
+        {final && !contextKnown ? (
+          <span className="text-fg-subtle">not reported by this agent</span>
+        ) : final ? (
           <span className={`font-mono tabular-nums ${nearLimit ? 'text-attention-fg' : 'text-fg'}`}>
             {formatTokens(final.contextTokens)}
             {window && <span className="text-fg-subtle"> / {formatTokens(window)}</span>}
